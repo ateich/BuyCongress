@@ -1,1 +1,13 @@
+---
 language: objective-c
+before_script:
+- ./scripts/travis/add-key.sh
+after_script:
+- ./scripts/travis/remove-key.sh
+after_success:
+- ./scripts/travis/testflight.sh
+env:
+global:
+- APPNAME="OneBusAway"
+- 'CERT_NAME="iPhone Distribution: Cybellion LLC"'
+- PROFILE_UUID=80e29acc-dc71-469b-816c-3185901716eb

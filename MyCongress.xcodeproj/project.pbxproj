@@ -176,6 +176,7 @@
 				TargetAttributes = {
 					952DCE661A3A678B0000DCF5 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = E458ZXH77A;
 					};
 					952DCE821A3A678B0000DCF5 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -424,6 +425,7 @@
 				952DCE8F1A3A678B0000DCF5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		952DCE901A3A678B0000DCF5 /* Build configuration list for PBXNativeTarget "MyCongressTests" */ = {
 			isa = XCConfigurationList;
@@ -432,6 +434,7 @@
 				952DCE921A3A678B0000DCF5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
