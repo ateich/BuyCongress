@@ -7,6 +7,7 @@
 //
 
 #import "FirstViewController.h"
+#import "SunlightFactory.h"
 
 @interface FirstViewController ()
 
@@ -17,6 +18,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    //TEST OF SUNLIGHT API CALLS
+    SunlightFactory *sunlight = [[SunlightFactory alloc] init];
+    NSArray *lawmakers = [sunlight getAllLawmakers];
+    NSLog(@"Lawmakers: %@", lawmakers);
 }
 
 - (void)didReceiveMemoryWarning {

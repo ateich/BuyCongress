@@ -16,6 +16,7 @@
 		952DCE7E1A3A678B0000DCF5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 952DCE7C1A3A678B0000DCF5 /* LaunchScreen.xib */; };
 		952DCE8A1A3A678B0000DCF5 /* MyCongressTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE891A3A678B0000DCF5 /* MyCongressTests.m */; };
 		952DCE961A3A71920000DCF5 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 952DCE951A3A71920000DCF5 /* .travis.yml */; };
+		9564E3291A570A9A0040F1D6 /* SunlightFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3281A570A9A0040F1D6 /* SunlightFactory.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,8 @@
 		952DCE881A3A678B0000DCF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		952DCE891A3A678B0000DCF5 /* MyCongressTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyCongressTests.m; sourceTree = "<group>"; };
 		952DCE951A3A71920000DCF5 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
+		9564E3271A570A9A0040F1D6 /* SunlightFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SunlightFactory.h; sourceTree = "<group>"; };
+		9564E3281A570A9A0040F1D6 /* SunlightFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunlightFactory.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +96,8 @@
 				952DCE721A3A678B0000DCF5 /* FirstViewController.m */,
 				952DCE741A3A678B0000DCF5 /* SecondViewController.h */,
 				952DCE751A3A678B0000DCF5 /* SecondViewController.m */,
+				9564E3271A570A9A0040F1D6 /* SunlightFactory.h */,
+				9564E3281A570A9A0040F1D6 /* SunlightFactory.m */,
 				952DCE771A3A678B0000DCF5 /* Main.storyboard */,
 				952DCE7A1A3A678B0000DCF5 /* Images.xcassets */,
 				952DCE7C1A3A678B0000DCF5 /* LaunchScreen.xib */,
@@ -229,6 +234,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9564E3291A570A9A0040F1D6 /* SunlightFactory.m in Sources */,
 				952DCE761A3A678B0000DCF5 /* SecondViewController.m in Sources */,
 				952DCE701A3A678B0000DCF5 /* AppDelegate.m in Sources */,
 				952DCE731A3A678B0000DCF5 /* FirstViewController.m in Sources */,
