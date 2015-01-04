@@ -11,6 +11,8 @@ NSString *sunlightKey = @"?apikey=d5ac2a8391d94345b8e93d5c69dd8739";
 NSString *sunlightURL = @"http://congress.api.sunlightfoundation.com";
 NSString *transparencyURL = @"transparencydata.com";
 NSMutableDictionary *sectorCodes;
+NSMutableDictionary *asyncCalls;
+NSMutableDictionary *asyncDataStore;
 
 
 @implementation SunlightFactory
@@ -36,6 +38,14 @@ NSMutableDictionary *sectorCodes;
        @"Administrative Use", @"Z",
        nil];
     
+    asyncCalls = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                  nil, @"getAllLawmakers",
+                  nil];
+    
+    asyncDataStore = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                  [[NSMutableData alloc] init], @"getAllLawmakers",
+                  nil];
+    
     return self;
 }
 
@@ -44,64 +54,56 @@ NSMutableDictionary *sectorCodes;
 }
 
 -(NSArray *)getAllLawmakers{
-    NSData *data = [self getRequest:[NSString stringWithFormat:@"%@%@%@%@", sunlightURL, @"/legislators", sunlightKey, @"&per_page=all"]];
-    
-    NSError *error;
-    NSArray *jsonObjects = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    
-    if(error){
-        NSLog(@"ERROR PARSING JSON FROM GET ALL LAWMAKERS: %@", error);
-        return nil;
-    }
-    
-    return jsonObjects;
+    [self getRequest:[NSString stringWithFormat:@"%@%@%@%@", sunlightURL, @"/legislators", sunlightKey, @"&per_page=all"] withCallingMethod:@"getAllLawmakers"];
+    NSLog(@"%@", [NSString stringWithFormat:@"%@%@%@%@", sunlightURL, @"/legislators", sunlightKey, @"&per_page=all"]);
+    return nil;
 }
 
-//CONSIDER MOVING TO ASYNC TO PREVENT UI LOCKING
--(NSData *)getRequest:(NSString*)url{
+-(void)getRequest:(NSString*)url withCallingMethod:(NSString*)callingMethod{
     NSLog(@"URL: %@", url);
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60.0];
     
-//    [request setHTTPMethod:@"GET"];
-//    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    
-    NSURLResponse *response;
-    NSError *error;
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    
-    if(!error){
-        return data;
-    } else{
-        NSLog(@"ERROR: %@", [error description]);
-    }
-    return nil;
+    [request setHTTPMethod:@"GET"];
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [asyncCalls setObject:connection forKey:callingMethod];
 }
 
-//FOR ASYNC CALLS, if needed
-//
-//- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
-//    _responseData = [[NSMutableData alloc] init];
-//}
-//
-//- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
-//    [_responseData appendData:data];
-//}
-//
-//- (void)connection:(NSURLConnection *)connection{
-//    
-//}
-//
-//- (void)connectionDidFinishLoading:(NSURLConnection *)connection{
-//    //PARSE RESPONSE DATA HERE
-//}
-//
-//- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-//    // Uh oh...
-//}
-//
-//- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse*)cachedResponse {
-//    return nil;
-//}
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
+    _responseData = [[NSMutableData alloc] init];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
+    if(connection == asyncCalls[@"getAllLawmakers"]){
+        //NSLog(@"JSON: %@ - %@", data, [error description]);
+        [[asyncDataStore objectForKey:@"getAllLawmakers"] appendData:data];
+    }
+}
+
+- (void)connection:(NSURLConnection *)connection{
+    
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection{
+    NSLog(@"connection finished loading");
+    if(connection == asyncCalls[@"getAllLawmakers"]){
+        //NSLog(@"JSON: %@ - %@", data, [error description]);
+        NSError *error;
+        NSArray *jsonObjects = [NSJSONSerialization JSONObjectWithData:[asyncDataStore objectForKey:@"getAllLawmakers"] options:kNilOptions error:&error];
+        NSLog(@"JSON: %@", jsonObjects);
+        
+        //DATA IS NOT PARSED AS JSON
+        //HOW TO RETURN IT TO THE VIEW?
+        // --> OBSERVER MODEL
+    }
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    // Uh oh...
+}
+
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse*)cachedResponse {
+    return nil;
+}
 
 @end

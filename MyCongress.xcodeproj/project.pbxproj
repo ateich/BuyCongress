@@ -17,6 +17,7 @@
 		952DCE8A1A3A678B0000DCF5 /* MyCongressTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE891A3A678B0000DCF5 /* MyCongressTests.m */; };
 		952DCE961A3A71920000DCF5 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 952DCE951A3A71920000DCF5 /* .travis.yml */; };
 		9564E3291A570A9A0040F1D6 /* SunlightFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3281A570A9A0040F1D6 /* SunlightFactory.m */; };
+		9564E3311A5757ED0040F1D6 /* Politician.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3301A5757ED0040F1D6 /* Politician.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,8 @@
 		952DCE951A3A71920000DCF5 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		9564E3271A570A9A0040F1D6 /* SunlightFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SunlightFactory.h; sourceTree = "<group>"; };
 		9564E3281A570A9A0040F1D6 /* SunlightFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunlightFactory.m; sourceTree = "<group>"; };
+		9564E32F1A5757ED0040F1D6 /* Politician.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Politician.h; sourceTree = "<group>"; };
+		9564E3301A5757ED0040F1D6 /* Politician.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Politician.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,17 +93,13 @@
 		952DCE691A3A678B0000DCF5 /* MyCongress */ = {
 			isa = PBXGroup;
 			children = (
+				9564E32A1A57563D0040F1D6 /* Model */,
+				9564E32C1A5756480040F1D6 /* View */,
+				9564E32D1A57564C0040F1D6 /* Controller */,
+				9564E32E1A5756BB0040F1D6 /* Factory */,
 				952DCE6E1A3A678B0000DCF5 /* AppDelegate.h */,
 				952DCE6F1A3A678B0000DCF5 /* AppDelegate.m */,
-				952DCE711A3A678B0000DCF5 /* FirstViewController.h */,
-				952DCE721A3A678B0000DCF5 /* FirstViewController.m */,
-				952DCE741A3A678B0000DCF5 /* SecondViewController.h */,
-				952DCE751A3A678B0000DCF5 /* SecondViewController.m */,
-				9564E3271A570A9A0040F1D6 /* SunlightFactory.h */,
-				9564E3281A570A9A0040F1D6 /* SunlightFactory.m */,
-				952DCE771A3A678B0000DCF5 /* Main.storyboard */,
 				952DCE7A1A3A678B0000DCF5 /* Images.xcassets */,
-				952DCE7C1A3A678B0000DCF5 /* LaunchScreen.xib */,
 				952DCE6A1A3A678B0000DCF5 /* Supporting Files */,
 			);
 			path = MyCongress;
@@ -130,6 +129,44 @@
 				952DCE881A3A678B0000DCF5 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9564E32A1A57563D0040F1D6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9564E32F1A5757ED0040F1D6 /* Politician.h */,
+				9564E3301A5757ED0040F1D6 /* Politician.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		9564E32C1A5756480040F1D6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				952DCE771A3A678B0000DCF5 /* Main.storyboard */,
+				952DCE7C1A3A678B0000DCF5 /* LaunchScreen.xib */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		9564E32D1A57564C0040F1D6 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				952DCE711A3A678B0000DCF5 /* FirstViewController.h */,
+				952DCE721A3A678B0000DCF5 /* FirstViewController.m */,
+				952DCE741A3A678B0000DCF5 /* SecondViewController.h */,
+				952DCE751A3A678B0000DCF5 /* SecondViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		9564E32E1A5756BB0040F1D6 /* Factory */ = {
+			isa = PBXGroup;
+			children = (
+				9564E3271A570A9A0040F1D6 /* SunlightFactory.h */,
+				9564E3281A570A9A0040F1D6 /* SunlightFactory.m */,
+			);
+			name = Factory;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,6 +276,7 @@
 				952DCE701A3A678B0000DCF5 /* AppDelegate.m in Sources */,
 				952DCE731A3A678B0000DCF5 /* FirstViewController.m in Sources */,
 				952DCE6D1A3A678B0000DCF5 /* main.m in Sources */,
+				9564E3311A5757ED0040F1D6 /* Politician.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
