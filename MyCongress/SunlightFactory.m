@@ -15,10 +15,14 @@ NSMutableDictionary *asyncCalls;
 NSMutableDictionary *asyncDataStore;
 
 
-@implementation SunlightFactory
+@implementation SunlightFactory{
+    NSString *politicianDataChanged;
+}
 
 -(id)init{
     self = [super init];
+    
+    politicianDataChanged = @"SunlightFactoryDidReceivePoliticianDataNotification";
     
     sectorCodes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
        @"Agribusiness", @"A",
@@ -69,7 +73,7 @@ NSMutableDictionary *asyncDataStore;
     [asyncCalls setObject:connection forKey:callingMethod];
 }
 
-#pragma mark - NSURLConnection Delegate Methods
+#pragma mark - NSURLConnection delegate methods
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
     _responseData = [[NSMutableData alloc] init];
 }
@@ -96,7 +100,10 @@ NSMutableDictionary *asyncDataStore;
     
     // TO DO: Emit notification stating that data has been updated
     if(jsonObjects){
-        NSLog(@"JSON: %@", jsonObjects);
+//        NSLog(@"JSON: %@", jsonObjects);
+        NSLog(@"[SunlightFactory.m] About to emit politicianDataChangedNotification - N/A");
+        NSDictionary *userInfo = @{@"allPoliticiansResponse": jsonObjects};
+        [[NSNotificationCenter defaultCenter] postNotificationName:politicianDataChanged object:self userInfo:userInfo];
     }
 }
 
