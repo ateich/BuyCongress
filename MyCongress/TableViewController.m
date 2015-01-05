@@ -64,6 +64,11 @@
     NSLog(@"[TableViewController.m] Politician %@ at indexPath %@ - This politician was selected",[self.politicians objectAtIndex:indexPath.row],indexPath);
 }
 
+-(void)updateTableViewWithNewData:(NSMutableArray *)data{
+    self.politicians = data;
+    [self.tableView reloadData];
+}
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

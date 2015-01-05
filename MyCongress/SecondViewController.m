@@ -9,9 +9,11 @@
 #import "SecondViewController.h"
 #import "SunlightFactory.h"
 #import "TableViewController.h"
+#import "Politician.h"
 
 @interface SecondViewController (){
     NSString *politicianDataChanged;
+    TableViewController *tableVC;
 }
 
 @end
@@ -37,7 +39,7 @@
     NSLog(@"Lawmakers: %@", lawmakers);
     
     //Add table of all politicians to the view
-    TableViewController *tableVC = [[TableViewController alloc] initWithStyle:UITableViewStylePlain];
+    tableVC = [[TableViewController alloc] initWithStyle:UITableViewStylePlain];
     [self addChildViewController:tableVC];
     [tableVC didMoveToParentViewController:self];
     tableVC.view.frame = self.view.frame;
@@ -59,9 +61,42 @@
 
 - (void)didReceivePoliticianData:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
-    NSDictionary *politicianData = [[userInfo objectForKey:@"allPoliticiansResponse"] objectForKey:@"results"];
+    NSArray *politicianData = [[userInfo objectForKey:@"allPoliticiansResponse"] objectForKey:@"results"];
+//    tableVC.politicians = [self createPoliticiansFromDataArray:politicianData];
+    [tableVC updateTableViewWithNewData:[self createPoliticiansFromDataArray:politicianData]];
     
-    //Use the politicianData to create Politicians and display them in the tableView
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"Update TableView" object:self];
+    
+    //Use the politicianData to create Politicians √
+    //place them in tableView.politicians √
+    //and display them in the tableView
+    
+}
+
+-(NSMutableArray *)createPoliticiansFromDataArray:(NSArray *)politicianData{
+    NSMutableArray *politiciansFromData = [[NSMutableArray alloc] init];
+    
+    for(int i=0; i<politicianData.count; i++){
+        NSDictionary *thisPoliticiansData = [politicianData objectAtIndex:i];
+        Politician *aPolitician = [[Politician alloc] init];
+        
+        [aPolitician setFirstName: [thisPoliticiansData objectForKey:@"first_name"]];
+        [aPolitician setLastName: [thisPoliticiansData objectForKey:@"last_name"]];
+        [aPolitician setGender: [thisPoliticiansData objectForKey:@"gender"]]; //May have an issue, check this
+        
+        [aPolitician setEmail: [thisPoliticiansData objectForKey:@"oc_email"]];
+        [aPolitician setPhone: [thisPoliticiansData objectForKey:@"phone"]];
+        [aPolitician setEmail: [thisPoliticiansData objectForKey:@"oc_email"]];
+        [aPolitician setTwitter: [thisPoliticiansData objectForKey:@"twitter_id"]];
+        [aPolitician setYoutubeID: [thisPoliticiansData objectForKey:@"youtube_id"]];
+        
+        [aPolitician setParty: [thisPoliticiansData objectForKey:@"party"]];
+        [aPolitician setTitle: [thisPoliticiansData objectForKey:@"title"]];
+        [aPolitician setState: [thisPoliticiansData objectForKey:@"state"]];
+        
+        [politiciansFromData addObject:aPolitician];
+    }
+    return politiciansFromData;
 }
 
 - (void)didReceiveMemoryWarning {

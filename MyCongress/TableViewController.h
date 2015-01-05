@@ -11,4 +11,6 @@
 @interface TableViewController : UITableViewController
 @property (nonatomic,strong) NSMutableArray *politicians;
 
+-(void)updateTableViewWithNewData:(NSMutableArray*)data;
+
 @end
