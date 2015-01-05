@@ -69,40 +69,44 @@ NSMutableDictionary *asyncDataStore;
     [asyncCalls setObject:connection forKey:callingMethod];
 }
 
+#pragma mark - NSURLConnection Delegate Methods
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
     _responseData = [[NSMutableData alloc] init];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
     if(connection == asyncCalls[@"getAllLawmakers"]){
-        //NSLog(@"JSON: %@ - %@", data, [error description]);
         [[asyncDataStore objectForKey:@"getAllLawmakers"] appendData:data];
     }
 }
 
-- (void)connection:(NSURLConnection *)connection{
-    
-}
-
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection{
-    NSLog(@"connection finished loading");
+    
+    NSArray *jsonObjects;
+    
+    //Parse JSON data for the given connection
     if(connection == asyncCalls[@"getAllLawmakers"]){
-        //NSLog(@"JSON: %@ - %@", data, [error description]);
         NSError *error;
-        NSArray *jsonObjects = [NSJSONSerialization JSONObjectWithData:[asyncDataStore objectForKey:@"getAllLawmakers"] options:kNilOptions error:&error];
-        NSLog(@"JSON: %@", jsonObjects);
+        jsonObjects = [NSJSONSerialization JSONObjectWithData:[asyncDataStore objectForKey:@"getAllLawmakers"] options:kNilOptions error:&error];
+    } else if(connection == asyncCalls[@"some other connection to be implemented later"]){
         
-        //DATA IS NOT PARSED AS JSON
-        //HOW TO RETURN IT TO THE VIEW?
-        // --> OBSERVER MODEL
+    } else {
+        NSLog(@"[SunlightFactory.m] WARNING: Unexpected connection finished loading - Data will not be parsed");
+    }
+    
+    // TO DO: Emit notification stating that data has been updated
+    if(jsonObjects){
+        NSLog(@"JSON: %@", jsonObjects);
     }
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     // Uh oh...
+    NSLog(@"[SunlightFactory.m] ERROR: Connection Failed - %@", error);
 }
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse*)cachedResponse {
+    //Do not cache response
     return nil;
 }
 
