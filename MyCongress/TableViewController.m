@@ -7,6 +7,7 @@
 //
 
 #import "TableViewController.h"
+#import "Politician.h"
 
 @interface TableViewController ()
 
@@ -25,7 +26,7 @@
     
     //TEST DATA
     self.politicians = [[NSMutableArray alloc] init];
-    [self.politicians addObject:@"TEST"];
+//    [self.politicians addObject:@"TEST"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -51,14 +52,20 @@
     if(cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         
-        UITextView *name = [[UITextView alloc] init];
+        Politician *thisPolitician = (Politician*)[self.politicians objectAtIndex:indexPath.row];
+        int pictureWidth = 75;
+        
+        //Politician's Title and Name
+        UILabel *name = [[UILabel alloc] init];
         [name setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [name setBackgroundColor:[UIColor blueColor]];
-        name.text = @"TESTING";
+//        [name setBackgroundColor:[UIColor blueColor]];
+        name.text = @"NAME";
         [cell addSubview:name];
         
+        name.text = [NSString stringWithFormat:@"%@. %@ %@", thisPolitician.title, thisPolitician.firstName, thisPolitician.lastName];
+        
         //LEFT
-        NSLayoutConstraint *nameLeftConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeLeading multiplier:1.0 constant:0];
+        NSLayoutConstraint *nameLeftConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeLeading multiplier:1.0 constant:pictureWidth];
         
         //RIGHT
         NSLayoutConstraint *nameRightConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0];
@@ -66,13 +73,41 @@
         //TOP
         NSLayoutConstraint *nameTopConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeTop multiplier:1.0 constant:0];
         
-        //BOTTOM
-        NSLayoutConstraint *nameBottomConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
+        //HEIGHT
+        NSLayoutConstraint *nameHeightConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:cell.frame.size.height/2];
         
         [cell addConstraint:nameLeftConstraint];
         [cell addConstraint:nameRightConstraint];
         [cell addConstraint:nameTopConstraint];
-        [cell addConstraint:nameBottomConstraint];
+        [cell addConstraint:nameHeightConstraint];
+        
+        
+        //Politician's Party and State
+        UILabel *state = [[UILabel alloc] init];
+        [state setTranslatesAutoresizingMaskIntoConstraints:NO];
+//        [state setBackgroundColor:[UIColor greenColor]];
+        state.text = @"state";
+        [cell addSubview:state];
+        
+        state.text = [NSString stringWithFormat:@"%@ - %@", thisPolitician.party, thisPolitician.state];
+        
+        //LEFT
+        NSLayoutConstraint *stateLeftConstraint = [NSLayoutConstraint constraintWithItem:state attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeLeading multiplier:1.0 constant:pictureWidth];
+        
+        //RIGHT
+        NSLayoutConstraint *stateRightConstraint = [NSLayoutConstraint constraintWithItem:state attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0];
+        
+        //TOP
+        NSLayoutConstraint *stateTopConstraint = [NSLayoutConstraint constraintWithItem:state attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:name attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
+        
+        //HEIGHT
+        NSLayoutConstraint *stateHeightConstraint = [NSLayoutConstraint constraintWithItem:state attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:cell.frame.size.height/2];
+        
+        [cell addConstraint:stateLeftConstraint];
+        [cell addConstraint:stateRightConstraint];
+        [cell addConstraint:stateTopConstraint];
+        [cell addConstraint:stateHeightConstraint];
+        
     }
     
     return cell;

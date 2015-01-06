@@ -41,7 +41,9 @@
     tableVC = [[TableViewController alloc] initWithStyle:UITableViewStylePlain];
     [self addChildViewController:tableVC];
     [tableVC didMoveToParentViewController:self];
-    tableVC.view.frame = self.view.frame;
+    int topBarHeight = 20;
+    CGRect tableFrame = CGRectMake(self.view.frame.origin.x, topBarHeight, self.view.frame.size.width, self.view.frame.size.height-topBarHeight);
+    tableVC.view.frame = tableFrame;
     [self.view addSubview:tableVC.view];
     
     //TO DO: Show user something so that they know the data is loading
@@ -70,9 +72,16 @@
         [aPolitician setTwitter: [thisPoliticiansData objectForKey:@"twitter_id"]];
         [aPolitician setYoutubeID: [thisPoliticiansData objectForKey:@"youtube_id"]];
         
-        [aPolitician setParty: [thisPoliticiansData objectForKey:@"party"]];
+        NSString *party = [thisPoliticiansData objectForKey:@"party"];
+        if([party  isEqual: @"D"]){
+            party = @"Democrat";
+        } else {
+            party = @"Republican";
+        }
+        
+        [aPolitician setParty: party];
         [aPolitician setTitle: [thisPoliticiansData objectForKey:@"title"]];
-        [aPolitician setState: [thisPoliticiansData objectForKey:@"state"]];
+        [aPolitician setState: [thisPoliticiansData objectForKey:@"state_name"]];
         
         [politiciansFromData addObject:aPolitician];
     }
