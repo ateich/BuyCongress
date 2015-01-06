@@ -33,44 +33,24 @@
     politicianDataChanged = @"SunlightFactoryDidReceivePoliticianDataNotification";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianData:) name:politicianDataChanged object:nil];
     
-    //TEST OF SUNLIGHT API CALLS
+    //Get all politicians asynchronously
     SunlightFactory *sunlight = [[SunlightFactory alloc] init];
-    NSArray *lawmakers = [sunlight getAllLawmakers];
-    NSLog(@"Lawmakers: %@", lawmakers);
+    [sunlight getAllLawmakers];
     
-    //Add table of all politicians to the view
+    //Add table to display all politicians to the view
     tableVC = [[TableViewController alloc] initWithStyle:UITableViewStylePlain];
     [self addChildViewController:tableVC];
     [tableVC didMoveToParentViewController:self];
     tableVC.view.frame = self.view.frame;
     [self.view addSubview:tableVC.view];
     
-    
-//    tableVC.politicians = returned data from JSON emitted notification
-    
-    
-    
-    //Add Loading Pop-Up with Spinner
-    //Wait for data to load
-    //Remove Pop-up and Spinner
-    //Show Data
-    
-    //Need to breakout tableview and tableview cell into new classes
-    
+    //TO DO: Show user something so that they know the data is loading
 }
 
 - (void)didReceivePoliticianData:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
     NSArray *politicianData = [[userInfo objectForKey:@"allPoliticiansResponse"] objectForKey:@"results"];
-//    tableVC.politicians = [self createPoliticiansFromDataArray:politicianData];
     [tableVC updateTableViewWithNewData:[self createPoliticiansFromDataArray:politicianData]];
-    
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"Update TableView" object:self];
-    
-    //Use the politicianData to create Politicians √
-    //place them in tableView.politicians √
-    //and display them in the tableView
-    
 }
 
 -(NSMutableArray *)createPoliticiansFromDataArray:(NSArray *)politicianData{
@@ -101,7 +81,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
     NSLog(@"[SecondViewController.m] TEST: DID RECEIVE MEMORY WARNING - Testing Event Listening");
 }
 

@@ -50,18 +50,37 @@
     
     if(cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        
+        UITextView *name = [[UITextView alloc] init];
+        [name setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [name setBackgroundColor:[UIColor blueColor]];
+        name.text = @"TESTING";
+        [cell addSubview:name];
+        
+        //LEFT
+        NSLayoutConstraint *nameLeftConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeLeading multiplier:1.0 constant:0];
+        
+        //RIGHT
+        NSLayoutConstraint *nameRightConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0];
+        
+        //TOP
+        NSLayoutConstraint *nameTopConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeTop multiplier:1.0 constant:0];
+        
+        //BOTTOM
+        NSLayoutConstraint *nameBottomConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
+        
+        [cell addConstraint:nameLeftConstraint];
+        [cell addConstraint:nameRightConstraint];
+        [cell addConstraint:nameTopConstraint];
+        [cell addConstraint:nameBottomConstraint];
     }
-    
-    //Format politicians information for cell
-    
-    //TEST
-    [cell.textLabel setText:@"TEST"];
     
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"[TableViewController.m] Politician %@ at indexPath %@ - This politician was selected",[self.politicians objectAtIndex:indexPath.row],indexPath);
+    NSLog(@"[TableViewController.m] Politician %@ at indexPath %@ - This politician was selected",
+          [self.politicians objectAtIndex:indexPath.row],indexPath);
 }
 
 -(void)updateTableViewWithNewData:(NSMutableArray *)data{

@@ -59,12 +59,10 @@ NSMutableDictionary *asyncDataStore;
 
 -(NSArray *)getAllLawmakers{
     [self getRequest:[NSString stringWithFormat:@"%@%@%@%@", sunlightURL, @"/legislators", sunlightKey, @"&per_page=all"] withCallingMethod:@"getAllLawmakers"];
-    NSLog(@"%@", [NSString stringWithFormat:@"%@%@%@%@", sunlightURL, @"/legislators", sunlightKey, @"&per_page=all"]);
     return nil;
 }
 
 -(void)getRequest:(NSString*)url withCallingMethod:(NSString*)callingMethod{
-    NSLog(@"URL: %@", url);
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60.0];
     
@@ -98,10 +96,7 @@ NSMutableDictionary *asyncDataStore;
         NSLog(@"[SunlightFactory.m] WARNING: Unexpected connection finished loading - Data will not be parsed");
     }
     
-    // TO DO: Emit notification stating that data has been updated
     if(jsonObjects){
-//        NSLog(@"JSON: %@", jsonObjects);
-        NSLog(@"[SunlightFactory.m] About to emit politicianDataChangedNotification - N/A");
         NSDictionary *userInfo = @{@"allPoliticiansResponse": jsonObjects};
         [[NSNotificationCenter defaultCenter] postNotificationName:politicianDataChanged object:self userInfo:userInfo];
     }
