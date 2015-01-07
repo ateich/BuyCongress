@@ -8,8 +8,11 @@
 
 #import "TableViewController.h"
 #import "Politician.h"
+#import "PoliticianDetailViewController.h"
 
-@interface TableViewController ()
+@interface TableViewController (){
+    PoliticianDetailViewController *detailViewController;
+}
 
 @end
 
@@ -58,7 +61,6 @@
         //Politician's Title and Name
         UILabel *name = [[UILabel alloc] init];
         [name setTranslatesAutoresizingMaskIntoConstraints:NO];
-//        [name setBackgroundColor:[UIColor blueColor]];
         [cell addSubview:name];
         
         name.text = [NSString stringWithFormat:@"%@. %@ %@", thisPolitician.title, thisPolitician.firstName, thisPolitician.lastName];
@@ -84,7 +86,6 @@
         //Politician's Party and State
         UILabel *state = [[UILabel alloc] init];
         [state setTranslatesAutoresizingMaskIntoConstraints:NO];
-//        [state setBackgroundColor:[UIColor greenColor]];
         [cell addSubview:state];
         
         state.text = [NSString stringWithFormat:@"%@ - %@", thisPolitician.party, thisPolitician.state];
@@ -111,9 +112,11 @@
     return cell;
 }
 
+/* Show more details about the selected politician */
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"[TableViewController.m] Politician %@ at indexPath %@ - This politician was selected",
-          [self.politicians objectAtIndex:indexPath.row],indexPath);
+    detailViewController = [[PoliticianDetailViewController alloc] init];
+    [detailViewController setPolitician:[self.politicians objectAtIndex:indexPath.row]];
+    [[self navigationController] pushViewController:detailViewController animated:YES];
 }
 
 -(void)updateTableViewWithNewData:(NSMutableArray *)data{

@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Politician.h"
 
 @interface PoliticianDetailViewController : UIViewController
+
+-(void)setPolitician:(Politician *)newPolitician;
 
 @end

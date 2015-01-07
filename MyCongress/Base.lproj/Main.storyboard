@@ -44,7 +44,24 @@
             </objects>
             <point key="canvasLocation" x="750" y="-320"/>
         </scene>
-        <!--Browse Congress-->
+        <!--Members of Congress-->
+        <scene sceneID="Bio-0K-mHb">
+            <objects>
+                <navigationController title="Members of Congress" id="gqE-RR-z1q" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="mmQ-NL-F0M"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="NEv-Fo-OKy">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="8rJ-Kc-sve" kind="relationship" relationship="rootViewController" id="cOI-PC-JQg"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nDZ-3a-9ST" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="8" y="714"/>
+        </scene>
+        <!--Members of Congress-->
         <scene sceneID="wg7-f3-ORb">
             <objects>
                 <viewController id="8rJ-Kc-sve" customClass="SecondViewController" sceneMemberID="viewController">
@@ -79,6 +96,7 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Browse Congress" image="second" id="cPa-gy-q4n"/>
+                    <navigationItem key="navigationItem" title="Members of Congress" id="6GB-af-Eyh"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
@@ -96,7 +114,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="9pv-A4-QxB" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
-                        <segue destination="8rJ-Kc-sve" kind="relationship" relationship="viewControllers" id="lzU-1b-eKA"/>
+                        <segue destination="gqE-RR-z1q" kind="relationship" relationship="viewControllers" id="q6Q-F3-dVu"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
