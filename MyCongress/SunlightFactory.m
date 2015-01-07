@@ -57,9 +57,8 @@ NSMutableDictionary *asyncDataStore;
     return nil;
 }
 
--(NSArray *)getAllLawmakers{
+-(void)getAllLawmakers{
     [self getRequest:[NSString stringWithFormat:@"%@%@%@%@", sunlightURL, @"/legislators", sunlightKey, @"&per_page=all"] withCallingMethod:@"getAllLawmakers"];
-    return nil;
 }
 
 -(void)getRequest:(NSString*)url withCallingMethod:(NSString*)callingMethod{

@@ -18,6 +18,8 @@
 		952DCE961A3A71920000DCF5 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 952DCE951A3A71920000DCF5 /* .travis.yml */; };
 		9564E3291A570A9A0040F1D6 /* SunlightFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3281A570A9A0040F1D6 /* SunlightFactory.m */; };
 		9564E3311A5757ED0040F1D6 /* Politician.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3301A5757ED0040F1D6 /* Politician.m */; };
+		956F1D6A1A5CAE4900AAA14C /* PoliticianDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 956F1D691A5CAE4900AAA14C /* PoliticianDetailViewController.m */; };
+		956F1D6C1A5CB2B900AAA14C /* SunlightAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 956F1D6B1A5CB2B900AAA14C /* SunlightAPITests.m */; };
 		95DECD881A5B2CF100111AEC /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95DECD871A5B2CF100111AEC /* TableViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +54,9 @@
 		9564E3281A570A9A0040F1D6 /* SunlightFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunlightFactory.m; sourceTree = "<group>"; };
 		9564E32F1A5757ED0040F1D6 /* Politician.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Politician.h; sourceTree = "<group>"; };
 		9564E3301A5757ED0040F1D6 /* Politician.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Politician.m; sourceTree = "<group>"; };
+		956F1D681A5CAE4900AAA14C /* PoliticianDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PoliticianDetailViewController.h; path = ../PoliticianDetailViewController.h; sourceTree = "<group>"; };
+		956F1D691A5CAE4900AAA14C /* PoliticianDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PoliticianDetailViewController.m; path = ../PoliticianDetailViewController.m; sourceTree = "<group>"; };
+		956F1D6B1A5CB2B900AAA14C /* SunlightAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunlightAPITests.m; sourceTree = "<group>"; };
 		95DECD861A5B2CF100111AEC /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
 		95DECD871A5B2CF100111AEC /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -121,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				952DCE891A3A678B0000DCF5 /* MyCongressTests.m */,
+				956F1D6B1A5CB2B900AAA14C /* SunlightAPITests.m */,
 				952DCE871A3A678B0000DCF5 /* Supporting Files */,
 			);
 			path = MyCongressTests;
@@ -161,6 +167,8 @@
 				952DCE751A3A678B0000DCF5 /* SecondViewController.m */,
 				95DECD861A5B2CF100111AEC /* TableViewController.h */,
 				95DECD871A5B2CF100111AEC /* TableViewController.m */,
+				956F1D681A5CAE4900AAA14C /* PoliticianDetailViewController.h */,
+				956F1D691A5CAE4900AAA14C /* PoliticianDetailViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -278,6 +286,7 @@
 			files = (
 				9564E3291A570A9A0040F1D6 /* SunlightFactory.m in Sources */,
 				952DCE761A3A678B0000DCF5 /* SecondViewController.m in Sources */,
+				956F1D6A1A5CAE4900AAA14C /* PoliticianDetailViewController.m in Sources */,
 				952DCE701A3A678B0000DCF5 /* AppDelegate.m in Sources */,
 				952DCE731A3A678B0000DCF5 /* FirstViewController.m in Sources */,
 				952DCE6D1A3A678B0000DCF5 /* main.m in Sources */,
@@ -290,6 +299,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				956F1D6C1A5CB2B900AAA14C /* SunlightAPITests.m in Sources */,
 				952DCE8A1A3A678B0000DCF5 /* MyCongressTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

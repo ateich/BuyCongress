@@ -12,6 +12,6 @@
     NSMutableData *_responseData;
 }
 
--(NSArray *)getAllLawmakers;
+-(void)getAllLawmakers;
 
 @end

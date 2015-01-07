@@ -59,7 +59,6 @@
         UILabel *name = [[UILabel alloc] init];
         [name setTranslatesAutoresizingMaskIntoConstraints:NO];
 //        [name setBackgroundColor:[UIColor blueColor]];
-        name.text = @"NAME";
         [cell addSubview:name];
         
         name.text = [NSString stringWithFormat:@"%@. %@ %@", thisPolitician.title, thisPolitician.firstName, thisPolitician.lastName];
@@ -86,7 +85,6 @@
         UILabel *state = [[UILabel alloc] init];
         [state setTranslatesAutoresizingMaskIntoConstraints:NO];
 //        [state setBackgroundColor:[UIColor greenColor]];
-        state.text = @"state";
         [cell addSubview:state];
         
         state.text = [NSString stringWithFormat:@"%@ - %@", thisPolitician.party, thisPolitician.state];
