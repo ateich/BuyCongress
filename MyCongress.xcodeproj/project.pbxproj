@@ -20,6 +20,7 @@
 		9564E3311A5757ED0040F1D6 /* Politician.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3301A5757ED0040F1D6 /* Politician.m */; };
 		956F1D6A1A5CAE4900AAA14C /* PoliticianDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 956F1D691A5CAE4900AAA14C /* PoliticianDetailViewController.m */; };
 		956F1D6C1A5CB2B900AAA14C /* SunlightAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 956F1D6B1A5CB2B900AAA14C /* SunlightAPITests.m */; };
+		956F1D7B1A5CC9B100AAA14C /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 956F1D7A1A5CC9B100AAA14C /* libOCMock.a */; };
 		95DECD881A5B2CF100111AEC /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95DECD871A5B2CF100111AEC /* TableViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +58,16 @@
 		956F1D681A5CAE4900AAA14C /* PoliticianDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PoliticianDetailViewController.h; path = ../PoliticianDetailViewController.h; sourceTree = "<group>"; };
 		956F1D691A5CAE4900AAA14C /* PoliticianDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PoliticianDetailViewController.m; path = ../PoliticianDetailViewController.m; sourceTree = "<group>"; };
 		956F1D6B1A5CB2B900AAA14C /* SunlightAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunlightAPITests.m; sourceTree = "<group>"; };
+		956F1D701A5CC9B100AAA14C /* NSNotificationCenter+OCMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+OCMAdditions.h"; sourceTree = "<group>"; };
+		956F1D711A5CC9B100AAA14C /* OCMArg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMArg.h; sourceTree = "<group>"; };
+		956F1D721A5CC9B100AAA14C /* OCMConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMConstraint.h; sourceTree = "<group>"; };
+		956F1D731A5CC9B100AAA14C /* OCMLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMLocation.h; sourceTree = "<group>"; };
+		956F1D741A5CC9B100AAA14C /* OCMMacroState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMMacroState.h; sourceTree = "<group>"; };
+		956F1D751A5CC9B100AAA14C /* OCMock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMock.h; sourceTree = "<group>"; };
+		956F1D761A5CC9B100AAA14C /* OCMockObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMockObject.h; sourceTree = "<group>"; };
+		956F1D771A5CC9B100AAA14C /* OCMRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMRecorder.h; sourceTree = "<group>"; };
+		956F1D781A5CC9B100AAA14C /* OCMStubRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMStubRecorder.h; sourceTree = "<group>"; };
+		956F1D7A1A5CC9B100AAA14C /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOCMock.a; sourceTree = "<group>"; };
 		95DECD861A5B2CF100111AEC /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
 		95DECD871A5B2CF100111AEC /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -73,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				956F1D7B1A5CC9B100AAA14C /* libOCMock.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +137,7 @@
 		952DCE861A3A678B0000DCF5 /* MyCongressTests */ = {
 			isa = PBXGroup;
 			children = (
+				956F1D6D1A5CC9B100AAA14C /* usr */,
 				952DCE891A3A678B0000DCF5 /* MyCongressTests.m */,
 				956F1D6B1A5CB2B900AAA14C /* SunlightAPITests.m */,
 				952DCE871A3A678B0000DCF5 /* Supporting Files */,
@@ -180,6 +193,47 @@
 				9564E3281A570A9A0040F1D6 /* SunlightFactory.m */,
 			);
 			name = Factory;
+			sourceTree = "<group>";
+		};
+		956F1D6D1A5CC9B100AAA14C /* usr */ = {
+			isa = PBXGroup;
+			children = (
+				956F1D6E1A5CC9B100AAA14C /* include */,
+				956F1D791A5CC9B100AAA14C /* lib */,
+			);
+			path = usr;
+			sourceTree = "<group>";
+		};
+		956F1D6E1A5CC9B100AAA14C /* include */ = {
+			isa = PBXGroup;
+			children = (
+				956F1D6F1A5CC9B100AAA14C /* OCMock */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		956F1D6F1A5CC9B100AAA14C /* OCMock */ = {
+			isa = PBXGroup;
+			children = (
+				956F1D701A5CC9B100AAA14C /* NSNotificationCenter+OCMAdditions.h */,
+				956F1D711A5CC9B100AAA14C /* OCMArg.h */,
+				956F1D721A5CC9B100AAA14C /* OCMConstraint.h */,
+				956F1D731A5CC9B100AAA14C /* OCMLocation.h */,
+				956F1D741A5CC9B100AAA14C /* OCMMacroState.h */,
+				956F1D751A5CC9B100AAA14C /* OCMock.h */,
+				956F1D761A5CC9B100AAA14C /* OCMockObject.h */,
+				956F1D771A5CC9B100AAA14C /* OCMRecorder.h */,
+				956F1D781A5CC9B100AAA14C /* OCMStubRecorder.h */,
+			);
+			path = OCMock;
+			sourceTree = "<group>";
+		};
+		956F1D791A5CC9B100AAA14C /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				956F1D7A1A5CC9B100AAA14C /* libOCMock.a */,
+			);
+			path = lib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -444,8 +498,23 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/usr/include",
+				);
 				INFOPLIST_FILE = MyCongressTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MyCongressTests/usr/lib",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyCongress.app/MyCongress";
 			};
@@ -459,8 +528,23 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/usr/include",
+				);
 				INFOPLIST_FILE = MyCongressTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MyCongressTests/usr/lib",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyCongress.app/MyCongress";
 			};

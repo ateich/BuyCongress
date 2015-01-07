@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import "SunlightFactory.h"
+#import "OCMock.h"
 
-@interface SunlightAPITests : XCTestCase
+@interface SunlightAPITests : XCTestCase{
+    SunlightFactory *api;
+}
 
 @end
 
@@ -19,6 +22,7 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    api = [[SunlightFactory alloc] init];
 }
 
 - (void)tearDown {
@@ -40,20 +44,27 @@
 
 -(void)testGetAllLawmakers {
     NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticianDataNotification";
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianData:) name:politicianDataChanged object:nil];
-    XCTestExpectation *expectPoliticianDataToBeReturned = [self expectationForNotification:politicianDataChanged object:nil handler:^XCNotificationExpectation(NSNotification *notification){
-        NSLog(@"TEST GET LAWMAKER RETURNED");
-        NSDictionary *userInfo = [notification userInfo];
-        NSArray *politicianData = [[userInfo objectForKey:@"allPoliticiansResponse"] objectForKey:@"results"];
-        if(politicianData.count > 0){
-            [expectPoliticianDataToBeReturned fulfill];
-        };
-    }];
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianData:) name:politicianDataChanged object:nil];
+    
+    id observerMock = [OCMockObject observerMock];
+    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
+    [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg any]];
+    
+    [api getAllLawmakers];
+    [self waitForVerifiedMock:observerMock delay:3];
 }
 
-- (void)didReceivePoliticianData:(NSNotification*)notification {
-    NSDictionary *userInfo = [notification userInfo];
-    NSArray *politicianData = [[userInfo objectForKey:@"allPoliticiansResponse"] objectForKey:@"results"];
+- (void)waitForVerifiedMock:(OCMockObject *)inMock delay:(NSTimeInterval)inDelay {
+    NSTimeInterval i = 0;
+    while (i < inDelay){
+        @try{
+            [inMock verify];
+            return;
+        }
+        @catch (NSException *e) {}
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+        i+=0.5;
+    }
+    [inMock verify];
 }
 @end
