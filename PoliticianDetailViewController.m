@@ -21,6 +21,7 @@
 
 @implementation PoliticianDetailViewController
 
+//REFACTOR THIS TO BE SHORTER
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -46,10 +47,12 @@
     donorsHeader.text = @"Donors";
     [partyState setTextAlignment:NSTextAlignmentCenter];
     
+    
     /* LAYOUT CONSTRAINTS */
     int leftMargin = 25;
     int sectionVerticalMargin = 25;
     int headerHeight = 25;
+    
     
     //Photo Layout Constraints
     int photoWidth = 75;
@@ -64,6 +67,7 @@
     [self.view addConstraint:photoHeightConstraint];
     [self.view addConstraint:photoWidthConstraint];
     
+    
     //partyState Layout Constraints
     NSLayoutConstraint *partyStateTopConstraint = [NSLayoutConstraint constraintWithItem:partyState attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:photo attribute:NSLayoutAttributeBottom multiplier:1.0 constant:sectionVerticalMargin];
     NSLayoutConstraint *partyStateCenterConstraint = [NSLayoutConstraint constraintWithItem:partyState attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0];
@@ -75,6 +79,7 @@
     [self.view addConstraint:partyStateHeightConstraint];
     [self.view addConstraint:partyStateWidthConstraint];
     
+    
     //contactHeader Layout Constraints
     NSLayoutConstraint *contactHeaderTopConstraint = [NSLayoutConstraint constraintWithItem:contactHeader attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:partyState attribute:NSLayoutAttributeBottom multiplier:1.0 constant:sectionVerticalMargin];
     NSLayoutConstraint *contactHeaderLeftConstraint = [NSLayoutConstraint constraintWithItem:contactHeader attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeading multiplier:1.0 constant:leftMargin];
@@ -85,6 +90,7 @@
     [self.view addConstraint:contactHeaderLeftConstraint];
     [self.view addConstraint:contactHeaderWidthConstraint];
     [self.view addConstraint:contactHeaderHeightConstraint];
+    
     
     //donorsHeader Layout Constraints
     NSLayoutConstraint *donorsHeaderTopConstraint = [NSLayoutConstraint constraintWithItem:donorsHeader attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:contactHeader attribute:NSLayoutAttributeBottom multiplier:1.0 constant:sectionVerticalMargin];
@@ -98,6 +104,7 @@
     [self.view addConstraint:donorsHeaderHeightConstraint];
     
     /* END OF LAYOUT CONSTRAINTS */
+    
     
     //TESTING
     [photo setBackgroundColor:[UIColor blackColor]];

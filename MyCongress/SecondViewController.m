@@ -42,7 +42,7 @@
     [self addChildViewController:tableVC];
     [tableVC didMoveToParentViewController:self];
     int topBarHeight = 20 + self.navigationController.navigationBar.frame.size.height;
-    CGRect tableFrame = CGRectMake(self.view.frame.origin.x, topBarHeight, self.view.frame.size.width, self.view.frame.size.height-topBarHeight);
+    CGRect tableFrame = CGRectMake(self.view.frame.origin.x, topBarHeight, self.view.frame.size.width, self.view.frame.size.height-topBarHeight-self.tabBarController.tabBar.frame.size.height);
     tableVC.view.frame = tableFrame;
     [self.view addSubview:tableVC.view];
     
@@ -73,13 +73,12 @@
         [aPolitician setYoutubeID: [thisPoliticiansData objectForKey:@"youtube_id"]];
         
         NSString *party = [thisPoliticiansData objectForKey:@"party"];
-        if([party  isEqual: @"D"]){
-            party = @"Democrat";
+        if([party isEqual: @"D"]){
+            [aPolitician setParty: @"Democrat"];
         } else {
-            party = @"Republican";
+            [aPolitician setParty: @"Republican"];
         }
         
-        [aPolitician setParty: party];
         [aPolitician setTitle: [thisPoliticiansData objectForKey:@"title"]];
         [aPolitician setState: [thisPoliticiansData objectForKey:@"state_name"]];
         
