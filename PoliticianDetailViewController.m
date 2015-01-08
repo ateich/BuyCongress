@@ -11,12 +11,12 @@
 //May need to change this to a scrollview, or add a scrollview to it
 @interface PoliticianDetailViewController (){
     Politician *politician;
-    UIImageView *photo;
     
     /* LAYOUT CONSTRAINTS */
     int leftMargin;
     int sectionVerticalMargin;
     int subSectionVerticalMargin;
+    int topBarHeight;
 }
 
 @end
@@ -28,11 +28,7 @@
     [super viewDidLoad];
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    int topBarHeight = 20 + self.navigationController.navigationBar.frame.size.height;
-    
-    photo = [[UIImageView alloc] init];
-    [photo setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.view addSubview:photo];
+    topBarHeight = 20 + self.navigationController.navigationBar.frame.size.height;
     
     self.title = [NSString stringWithFormat:@"%@. %@ %@", politician.title, politician.firstName, politician.lastName];
     
@@ -42,11 +38,26 @@
     subSectionVerticalMargin = sectionVerticalMargin/2;
     
     //Photo Layout Constraints
+    id photo = [self createPhotoSectionBelow:self.view withImage:nil andLeftMargin:0 aligned:NSTextAlignmentCenter];
+    
+    id partyStateHeader = [self createHeaderSectionBelow:photo withName:[NSString stringWithFormat:@"%@ - %@", politician.party, politician.state] andLeftMargin:0 aligned:NSTextAlignmentCenter];
+    
+    id contactHeader = [self createHeaderSectionBelow:partyStateHeader withName:@"Contact" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+    id contactButtons = [self createContactButtonSection:contactHeader];
+
+    id donorHeader = [self createHeaderSectionBelow:contactButtons withName:@"Donors" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+}
+
+-(id)createPhotoSectionBelow:(id)itemAbove withImage:(UIImage*)image andLeftMargin:(int)leftHandMargin aligned:(NSTextAlignment)alignment {
+    UIImageView *photo = [[UIImageView alloc] init];
+    [photo setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:photo];
+    
     int photoWidth = 75;
     int photoTopPadding = 25;
     
     NSLayoutConstraint *photoTopConstraint = [NSLayoutConstraint constraintWithItem:photo attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.0 constant:topBarHeight + photoTopPadding];
-   
+    
     NSLayoutConstraint *photoCenterConstraint = [NSLayoutConstraint constraintWithItem:photo attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0];
     
     NSLayoutConstraint *photoHeightConstraint = [NSLayoutConstraint constraintWithItem:photo attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:photoWidth];
@@ -58,19 +69,15 @@
     [self.view addConstraint:photoHeightConstraint];
     [self.view addConstraint:photoWidthConstraint];
     
-    id partyStateHeader = [self createHeaderSectionBelow:photo withName:[NSString stringWithFormat:@"%@ - %@", politician.party, politician.state] andLeftMargin:0 aligned:NSTextAlignmentCenter];
-    
-    id contactHeader = [self createHeaderSectionBelow:partyStateHeader withName:@"Contact" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
-    id contactButtons = [self createContactButtonSection:contactHeader];
+    //If there isn't an image for the Congressman, show an alternate image
+    if(!image){
+        [photo setBackgroundColor:[UIColor blackColor]];
+    }
 
-    id donorHeader = [self createHeaderSectionBelow:contactButtons withName:@"Donors" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
-    
-    
-    //TESTING
-    [photo setBackgroundColor:[UIColor blackColor]];
+    return photo;
 }
 
--(id)createHeaderSectionBelow:(id)itemAbove withName:(NSString*)title andLeftMargin:(int)leftHandMargin aligned:(NSTextAlignment)alignment{
+-(id)createHeaderSectionBelow:(id)itemAbove withName:(NSString*)title andLeftMargin:(int)leftHandMargin aligned:(NSTextAlignment)alignment {
     UILabel *header = [[UILabel alloc] init];
     [header setTextAlignment:alignment];
     [self.view addSubview:header];
