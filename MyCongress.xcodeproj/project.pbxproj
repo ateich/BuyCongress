@@ -16,6 +16,11 @@
 		952DCE7E1A3A678B0000DCF5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 952DCE7C1A3A678B0000DCF5 /* LaunchScreen.xib */; };
 		952DCE8A1A3A678B0000DCF5 /* MyCongressTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE891A3A678B0000DCF5 /* MyCongressTests.m */; };
 		952DCE961A3A71920000DCF5 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 952DCE951A3A71920000DCF5 /* .travis.yml */; };
+		9548F6871A5EFC3700AC6565 /* twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6821A5EFC3700AC6565 /* twitter.png */; };
+		9548F6881A5EFC3700AC6565 /* youtube.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6831A5EFC3700AC6565 /* youtube.png */; };
+		9548F6891A5EFC3700AC6565 /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6841A5EFC3700AC6565 /* phone.png */; };
+		9548F68A1A5EFC3700AC6565 /* email.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6851A5EFC3700AC6565 /* email.png */; };
+		9548F68B1A5EFC3700AC6565 /* website.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6861A5EFC3700AC6565 /* website.png */; };
 		9564E3291A570A9A0040F1D6 /* SunlightFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3281A570A9A0040F1D6 /* SunlightFactory.m */; };
 		9564E3311A5757ED0040F1D6 /* Politician.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3301A5757ED0040F1D6 /* Politician.m */; };
 		956F1D6A1A5CAE4900AAA14C /* PoliticianDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 956F1D691A5CAE4900AAA14C /* PoliticianDetailViewController.m */; };
@@ -51,6 +56,11 @@
 		952DCE881A3A678B0000DCF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		952DCE891A3A678B0000DCF5 /* MyCongressTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyCongressTests.m; sourceTree = "<group>"; };
 		952DCE951A3A71920000DCF5 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
+		9548F6821A5EFC3700AC6565 /* twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twitter.png; sourceTree = "<group>"; };
+		9548F6831A5EFC3700AC6565 /* youtube.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youtube.png; sourceTree = "<group>"; };
+		9548F6841A5EFC3700AC6565 /* phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phone.png; sourceTree = "<group>"; };
+		9548F6851A5EFC3700AC6565 /* email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email.png; sourceTree = "<group>"; };
+		9548F6861A5EFC3700AC6565 /* website.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = website.png; sourceTree = "<group>"; };
 		9564E3271A570A9A0040F1D6 /* SunlightFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SunlightFactory.h; sourceTree = "<group>"; };
 		9564E3281A570A9A0040F1D6 /* SunlightFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunlightFactory.m; sourceTree = "<group>"; };
 		9564E32F1A5757ED0040F1D6 /* Politician.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Politician.h; sourceTree = "<group>"; };
@@ -113,6 +123,7 @@
 		952DCE691A3A678B0000DCF5 /* MyCongress */ = {
 			isa = PBXGroup;
 			children = (
+				9548F6801A5EFC2600AC6565 /* Images */,
 				9564E32A1A57563D0040F1D6 /* Model */,
 				9564E32C1A5756480040F1D6 /* View */,
 				9564E32D1A57564C0040F1D6 /* Controller */,
@@ -151,6 +162,26 @@
 				952DCE881A3A678B0000DCF5 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9548F6801A5EFC2600AC6565 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				9548F6811A5EFC3700AC6565 /* Icons */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		9548F6811A5EFC3700AC6565 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				9548F6821A5EFC3700AC6565 /* twitter.png */,
+				9548F6831A5EFC3700AC6565 /* youtube.png */,
+				9548F6841A5EFC3700AC6565 /* phone.png */,
+				9548F6851A5EFC3700AC6565 /* email.png */,
+				9548F6861A5EFC3700AC6565 /* website.png */,
+			);
+			path = Icons;
 			sourceTree = "<group>";
 		};
 		9564E32A1A57563D0040F1D6 /* Model */ = {
@@ -317,10 +348,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9548F68B1A5EFC3700AC6565 /* website.png in Resources */,
+				9548F6881A5EFC3700AC6565 /* youtube.png in Resources */,
 				952DCE791A3A678B0000DCF5 /* Main.storyboard in Resources */,
+				9548F68A1A5EFC3700AC6565 /* email.png in Resources */,
 				952DCE7E1A3A678B0000DCF5 /* LaunchScreen.xib in Resources */,
 				952DCE961A3A71920000DCF5 /* .travis.yml in Resources */,
+				9548F6891A5EFC3700AC6565 /* phone.png in Resources */,
 				952DCE7B1A3A678B0000DCF5 /* Images.xcassets in Resources */,
+				9548F6871A5EFC3700AC6565 /* twitter.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
