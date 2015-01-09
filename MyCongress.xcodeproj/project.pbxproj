@@ -21,6 +21,8 @@
 		9548F6891A5EFC3700AC6565 /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6841A5EFC3700AC6565 /* phone.png */; };
 		9548F68A1A5EFC3700AC6565 /* email.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6851A5EFC3700AC6565 /* email.png */; };
 		9548F68B1A5EFC3700AC6565 /* website.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6861A5EFC3700AC6565 /* website.png */; };
+		9548F68E1A5F3E6F00AC6565 /* ContactActionsFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9548F68D1A5F3E6F00AC6565 /* ContactActionsFactory.m */; };
+		9548F6901A5F3F8400AC6565 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9548F68F1A5F3F8400AC6565 /* MessageUI.framework */; };
 		9564E3291A570A9A0040F1D6 /* SunlightFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3281A570A9A0040F1D6 /* SunlightFactory.m */; };
 		9564E3311A5757ED0040F1D6 /* Politician.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3301A5757ED0040F1D6 /* Politician.m */; };
 		956F1D6A1A5CAE4900AAA14C /* PoliticianDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 956F1D691A5CAE4900AAA14C /* PoliticianDetailViewController.m */; };
@@ -61,6 +63,9 @@
 		9548F6841A5EFC3700AC6565 /* phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phone.png; sourceTree = "<group>"; };
 		9548F6851A5EFC3700AC6565 /* email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email.png; sourceTree = "<group>"; };
 		9548F6861A5EFC3700AC6565 /* website.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = website.png; sourceTree = "<group>"; };
+		9548F68C1A5F3E6F00AC6565 /* ContactActionsFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactActionsFactory.h; sourceTree = "<group>"; };
+		9548F68D1A5F3E6F00AC6565 /* ContactActionsFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactActionsFactory.m; sourceTree = "<group>"; };
+		9548F68F1A5F3F8400AC6565 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		9564E3271A570A9A0040F1D6 /* SunlightFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SunlightFactory.h; sourceTree = "<group>"; };
 		9564E3281A570A9A0040F1D6 /* SunlightFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunlightFactory.m; sourceTree = "<group>"; };
 		9564E32F1A5757ED0040F1D6 /* Politician.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Politician.h; sourceTree = "<group>"; };
@@ -87,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9548F6901A5F3F8400AC6565 /* MessageUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +110,7 @@
 		952DCE5E1A3A678B0000DCF5 = {
 			isa = PBXGroup;
 			children = (
+				9548F6911A5F3F9900AC6565 /* Frameworks */,
 				952DCE951A3A71920000DCF5 /* .travis.yml */,
 				952DCE691A3A678B0000DCF5 /* MyCongress */,
 				952DCE861A3A678B0000DCF5 /* MyCongressTests */,
@@ -184,6 +191,14 @@
 			path = Icons;
 			sourceTree = "<group>";
 		};
+		9548F6911A5F3F9900AC6565 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9548F68F1A5F3F8400AC6565 /* MessageUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9564E32A1A57563D0040F1D6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -222,6 +237,8 @@
 			children = (
 				9564E3271A570A9A0040F1D6 /* SunlightFactory.h */,
 				9564E3281A570A9A0040F1D6 /* SunlightFactory.m */,
+				9548F68C1A5F3E6F00AC6565 /* ContactActionsFactory.h */,
+				9548F68D1A5F3E6F00AC6565 /* ContactActionsFactory.m */,
 			);
 			name = Factory;
 			sourceTree = "<group>";
@@ -375,6 +392,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9564E3291A570A9A0040F1D6 /* SunlightFactory.m in Sources */,
+				9548F68E1A5F3E6F00AC6565 /* ContactActionsFactory.m in Sources */,
 				952DCE761A3A678B0000DCF5 /* SecondViewController.m in Sources */,
 				956F1D6A1A5CAE4900AAA14C /* PoliticianDetailViewController.m in Sources */,
 				952DCE701A3A678B0000DCF5 /* AppDelegate.m in Sources */,

@@ -7,7 +7,6 @@
 //
 
 #import "PoliticianDetailViewController.h"
-
 //May need to change this to a scrollview, or add a scrollview to it
 @interface PoliticianDetailViewController (){
     Politician *politician;
@@ -23,32 +22,37 @@
 
 @implementation PoliticianDetailViewController
 
-//REFACTOR THIS TO BE SHORTER
+@synthesize contactActions;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    contactActions = [[ContactActionsFactory alloc] init];
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    topBarHeight = 20 + self.navigationController.navigationBar.frame.size.height;
-    
     self.title = [NSString stringWithFormat:@"%@. %@ %@", politician.title, politician.firstName, politician.lastName];
     
-    /* LAYOUT CONSTRAINTS */
+    //Layout Constraints
     leftMargin = 25;
     sectionVerticalMargin = 25;
     subSectionVerticalMargin = sectionVerticalMargin/2;
+    topBarHeight = 20 + self.navigationController.navigationBar.frame.size.height;
     
-    //Photo Layout Constraints
-    id photo = [self createPhotoSectionBelow:self.view withImage:nil andLeftMargin:0 aligned:NSTextAlignmentCenter];
+    //Sections in View - added to view by creator methods, return objects are only used to position other elements
+    UIImageView *photo = [self createPhotoSectionBelow:self.view withImage:nil andLeftMargin:0 aligned:NSTextAlignmentCenter];
     
-    id partyStateHeader = [self createHeaderSectionBelow:photo withName:[NSString stringWithFormat:@"%@ - %@", politician.party, politician.state] andLeftMargin:0 aligned:NSTextAlignmentCenter];
+    UILabel *partyStateHeader = [self createHeaderSectionBelow:photo withName:[NSString stringWithFormat:@"%@ - %@", politician.party, politician.state] andLeftMargin:0 aligned:NSTextAlignmentCenter];
     
-    id contactHeader = [self createHeaderSectionBelow:partyStateHeader withName:@"Contact" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
-    id contactButtons = [self createContactButtonSection:contactHeader];
-
-    id donorHeader = [self createHeaderSectionBelow:contactButtons withName:@"Donors" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+    UILabel *contactHeader = [self createHeaderSectionBelow:partyStateHeader withName:@"Contact" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+    UIButton *contactButtons = [self createContactButtonSection:contactHeader];
+    
+    UILabel *donorsHeader = [self createHeaderSectionBelow:contactButtons withName:@"Top Donors" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+    
+    UILabel *donorsByIndustryHeader = [self createHeaderSectionBelow:donorsHeader withName:@"Top Donors by Industry" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+    
+    UILabel *donorsBySectorHeader = [self createHeaderSectionBelow:donorsByIndustryHeader withName:@"Top Donors by Sector" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
 }
 
--(id)createPhotoSectionBelow:(id)itemAbove withImage:(UIImage*)image andLeftMargin:(int)leftHandMargin aligned:(NSTextAlignment)alignment {
+-(UIImageView*)createPhotoSectionBelow:(id)itemAbove withImage:(UIImage*)image andLeftMargin:(int)leftHandMargin aligned:(NSTextAlignment)alignment {
     UIImageView *photo = [[UIImageView alloc] init];
     [photo setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:photo];
@@ -77,7 +81,7 @@
     return photo;
 }
 
--(id)createHeaderSectionBelow:(id)itemAbove withName:(NSString*)title andLeftMargin:(int)leftHandMargin aligned:(NSTextAlignment)alignment {
+-(UILabel *)createHeaderSectionBelow:(id)itemAbove withName:(NSString*)title andLeftMargin:(int)leftHandMargin aligned:(NSTextAlignment)alignment {
     UILabel *header = [[UILabel alloc] init];
     [header setTextAlignment:alignment];
     [self.view addSubview:header];
@@ -105,24 +109,24 @@
 /** 
  * Creates contact buttons below itemAbove and returns an id that can be used to position elements after this section
  */
--(id)createContactButtonSection:(id)itemAbove {
+-(UIButton *)createContactButtonSection:(id)itemAbove {
     //Check which contact information the Politician has
     NSMutableArray *contactMethods = [[NSMutableArray alloc] init];
     
     if(politician.twitter){
-        [contactMethods addObject:@"twitter"];
+        [contactMethods addObject:[NSArray arrayWithObjects:@"twitter", @"TEST", nil]];
     }
     if(politician.youtubeID){
-        [contactMethods addObject:@"youtube"];
+        [contactMethods addObject:[NSArray arrayWithObjects:@"youtube", @"TEST", nil]];
     }
     if(politician.phone){
-        [contactMethods addObject:@"phone"];
+        [contactMethods addObject:[NSArray arrayWithObjects:@"phone", @"TEST", nil]];
     }
     if(politician.email){
-        [contactMethods addObject:@"email"];
+        [contactMethods addObject:[NSArray arrayWithObjects:@"email", @"sendEmail", nil]];
     }
     if(politician.website){
-        [contactMethods addObject:@"website"];
+        [contactMethods addObject:[NSArray arrayWithObjects:@"website", @"TEST", nil]];
     }
     
     
@@ -134,8 +138,12 @@
         UIButton *contactButton = [[UIButton alloc] init];
         [self.view addSubview:contactButton];
         
+        //set button selector with variable?
+        SEL aSelector = NSSelectorFromString([[contactMethods objectAtIndex:i] objectAtIndex:1]);
+        [contactButton addTarget:self action:aSelector forControlEvents:UIControlEventTouchDown];
+        
         [contactButton setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [contactButton setBackgroundImage:[UIImage imageNamed:[contactMethods objectAtIndex:i]] forState:UIControlStateNormal];
+        [contactButton setBackgroundImage:[UIImage imageNamed:[[contactMethods objectAtIndex:i] objectAtIndex:0]] forState:UIControlStateNormal];
         
         //Make sure the first button left aligns to the main view
         // and have the other buttons left align to the button to their left
@@ -166,6 +174,17 @@
     
     //return the last button so the next section can use it to position itself
     return leftSide;
+}
+
+#pragma mark - Contact Delegate Methods
+
+
+-(void)TEST{
+    NSLog(@"TEST");
+}
+
+-(void)sendEmail {
+    [contactActions composeEmail:self];
 }
 
 - (void)didReceiveMemoryWarning {

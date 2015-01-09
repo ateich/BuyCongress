@@ -41,6 +41,7 @@
     tableVC = [[TableViewController alloc] initWithStyle:UITableViewStylePlain];
     [self addChildViewController:tableVC];
     [tableVC didMoveToParentViewController:self];
+    
     int topBarHeight = 20 + self.navigationController.navigationBar.frame.size.height;
     CGRect tableFrame = CGRectMake(self.view.frame.origin.x, topBarHeight, self.view.frame.size.width, self.view.frame.size.height-topBarHeight-self.tabBarController.tabBar.frame.size.height);
     tableVC.view.frame = tableFrame;
@@ -71,6 +72,7 @@
         [aPolitician setEmail: [thisPoliticiansData objectForKey:@"oc_email"]];
         [aPolitician setTwitter: [thisPoliticiansData objectForKey:@"twitter_id"]];
         [aPolitician setYoutubeID: [thisPoliticiansData objectForKey:@"youtube_id"]];
+        [aPolitician setWebsite: [thisPoliticiansData objectForKey:@"website"]];
         
         NSString *party = [thisPoliticiansData objectForKey:@"party"];
         if([party isEqual: @"D"]){

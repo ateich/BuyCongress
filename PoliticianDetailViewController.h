@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "Politician.h"
+#import "ContactActionsFactory.h"
 
 @interface PoliticianDetailViewController : UIViewController
+@property (strong, nonatomic) ContactActionsFactory *contactActions;
 
 -(void)setPolitician:(Politician *)newPolitician;
 
