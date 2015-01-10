@@ -13,5 +13,6 @@
 }
 
 -(void)getAllLawmakers;
+-(void)getTopDonorsForLawmaker;
 
 @end

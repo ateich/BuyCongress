@@ -16,6 +16,7 @@
     int sectionVerticalMargin;
     int subSectionVerticalMargin;
     int topBarHeight;
+    NSString *topDonorLoaded;
 }
 
 @end
@@ -27,6 +28,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     contactActions = [[ContactActionsFactory alloc] init];
+    [contactActions setViewController:self];
+    
+    topDonorLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorForLawmakerNotification";
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianData:) name:topDonorLoaded object:nil];
+    
+    SunlightFactory *sunlightAPI = [[SunlightFactory alloc] init];
+    [sunlightAPI getTopDonorsForLawmaker];
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     self.title = [NSString stringWithFormat:@"%@. %@ %@", politician.title, politician.firstName, politician.lastName];
@@ -114,19 +122,19 @@
     NSMutableArray *contactMethods = [[NSMutableArray alloc] init];
     
     if(politician.twitter){
-        [contactMethods addObject:[NSArray arrayWithObjects:@"twitter", @"TEST", nil]];
+//        [contactMethods addObject:[NSArray arrayWithObjects:@"twitter", @"TEST", nil]];
     }
     if(politician.youtubeID){
-        [contactMethods addObject:[NSArray arrayWithObjects:@"youtube", @"TEST", nil]];
+//        [contactMethods addObject:[NSArray arrayWithObjects:@"youtube", @"TEST", nil]];
     }
     if(politician.phone){
-        [contactMethods addObject:[NSArray arrayWithObjects:@"phone", @"TEST", nil]];
+        [contactMethods addObject:[NSArray arrayWithObjects:@"phone", @"makePhoneCall", nil]];
     }
     if(politician.email){
         [contactMethods addObject:[NSArray arrayWithObjects:@"email", @"sendEmail", nil]];
     }
     if(politician.website){
-        [contactMethods addObject:[NSArray arrayWithObjects:@"website", @"TEST", nil]];
+//        [contactMethods addObject:[NSArray arrayWithObjects:@"website", @"loadWebsite", nil]];
     }
     
     
@@ -176,6 +184,18 @@
     return leftSide;
 }
 
+- (void)didReceivePoliticianData:(NSNotification*)notification {
+    NSDictionary *userInfo = [notification userInfo];
+    NSArray *donors = [userInfo objectForKey:@"getTopDonorsForLawmakerResponse"];
+    [self formatDonorsFromArray:donors];
+}
+
+-(void)formatDonorsFromArray:(NSArray*)donors {
+    for(int i=0; i<donors.count; i++){
+        
+    }
+}
+
 #pragma mark - Contact Delegate Methods
 
 
@@ -184,7 +204,15 @@
 }
 
 -(void)sendEmail {
-    [contactActions composeEmail:self];
+    [contactActions composeEmail];
+}
+
+-(void)makePhoneCall {
+    [contactActions makePhoneCall:politician.phone];
+}
+
+-(void)loadWebsite {
+    [contactActions loadWebsite:politician.website];
 }
 
 - (void)didReceiveMemoryWarning {

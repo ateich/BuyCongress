@@ -9,21 +9,17 @@
 #import "SunlightFactory.h"
 NSString *sunlightKey = @"?apikey=d5ac2a8391d94345b8e93d5c69dd8739";
 NSString *sunlightURL = @"http://congress.api.sunlightfoundation.com";
-NSString *transparencyURL = @"transparencydata.com";
+NSString *transparencyURL = @"http://transparencydata.com/api/1.0";
 NSMutableDictionary *sectorCodes;
 NSMutableDictionary *asyncCalls;
 NSMutableDictionary *asyncDataStore;
 
 
-@implementation SunlightFactory{
-    NSString *politicianDataChanged;
-}
+@implementation SunlightFactory
 
 -(id)init{
     self = [super init];
-    
-    politicianDataChanged = @"SunlightFactoryDidReceivePoliticianDataNotification";
-    
+
     sectorCodes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
        @"Agribusiness", @"A",
        @"Communications/Electronics", @"B",
@@ -44,10 +40,12 @@ NSMutableDictionary *asyncDataStore;
     
     asyncCalls = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                   nil, @"getAllLawmakers",
+                  nil, @"getTopDonorsForLawmaker",
                   nil];
     
     asyncDataStore = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                  [[NSMutableData alloc] init], @"getAllLawmakers",
+                      [[NSMutableData alloc] init], @"getAllLawmakers",
+                      [[NSMutableData alloc] init], @"getTopDonorsForLawmaker",
                   nil];
     
     return self;
@@ -61,6 +59,13 @@ NSMutableDictionary *asyncDataStore;
     [self getRequest:[NSString stringWithFormat:@"%@%@%@%@", sunlightURL, @"/legislators", sunlightKey, @"&per_page=all"] withCallingMethod:@"getAllLawmakers"];
 }
 
+-(void)getTopDonorsForLawmaker {
+    NSString *url = [NSString stringWithFormat:@"%@/aggregates/pol/%@/contributors.json%@", transparencyURL, @"4148b26f6f1c437cb50ea9ca4699417a", sunlightKey];
+    NSLog(@"URL: %@", url);
+    [self getRequest:url withCallingMethod:@"getTopDonorsForLawmaker"];
+}
+
+#pragma mark - Async request helper functions
 -(void)getRequest:(NSString*)url withCallingMethod:(NSString*)callingMethod{
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60.0];
@@ -78,26 +83,36 @@ NSMutableDictionary *asyncDataStore;
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
     if(connection == asyncCalls[@"getAllLawmakers"]){
         [[asyncDataStore objectForKey:@"getAllLawmakers"] appendData:data];
+    } else if(connection == asyncCalls[@"getTopDonorsForLawmaker"]){
+        [[asyncDataStore objectForKey:@"getTopDonorsForLawmaker"] appendData:data];
     }
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection{
     
     NSArray *jsonObjects;
+    NSError *error;
+    NSDictionary *userInfo;
+    NSString *postNotificationName;
+    
     
     //Parse JSON data for the given connection
     if(connection == asyncCalls[@"getAllLawmakers"]){
-        NSError *error;
         jsonObjects = [NSJSONSerialization JSONObjectWithData:[asyncDataStore objectForKey:@"getAllLawmakers"] options:kNilOptions error:&error];
-    } else if(connection == asyncCalls[@"some other connection to be implemented later"]){
-        
+        userInfo = @{@"allPoliticiansResponse": jsonObjects};
+        postNotificationName = @"SunlightFactoryDidReceivePoliticianDataNotification";
+    } else if(connection == asyncCalls[@"getTopDonorsForLawmaker"]){
+        NSLog(@"connection finished");
+        jsonObjects = [NSJSONSerialization JSONObjectWithData:[asyncDataStore objectForKey:@"getTopDonorsForLawmaker"] options:kNilOptions error:&error];
+        userInfo = @{@"getTopDonorsForLawmakerResponse": jsonObjects};
+        postNotificationName = @"SunlightFactoryDidReceivePoliticianTopDonorForLawmakerNotification";
+        NSLog(@"end of if");
     } else {
         NSLog(@"[SunlightFactory.m] WARNING: Unexpected connection finished loading - Data will not be parsed");
     }
     
     if(jsonObjects){
-        NSDictionary *userInfo = @{@"allPoliticiansResponse": jsonObjects};
-        [[NSNotificationCenter defaultCenter] postNotificationName:politicianDataChanged object:self userInfo:userInfo];
+        [[NSNotificationCenter defaultCenter] postNotificationName:postNotificationName object:self userInfo:userInfo];
     }
 }
 

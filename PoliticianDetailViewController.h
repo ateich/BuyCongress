@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Politician.h"
 #import "ContactActionsFactory.h"
+#import "SunlightFactory.h"
 
 @interface PoliticianDetailViewController : UIViewController
 @property (strong, nonatomic) ContactActionsFactory *contactActions;

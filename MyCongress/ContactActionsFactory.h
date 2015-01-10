@@ -13,7 +13,11 @@
     UIViewController *currentViewController;
 }
 
--(void)composeEmail:(UIViewController*)viewController;
+-(void)setViewController:(UIViewController *)viewController;
+-(void)composeEmail;
+-(void)makePhoneCall:(NSString*)phoneNumber;
+-(void)loadWebsite:(NSString*)url;
+    
 @property (nonatomic, strong) UIViewController *currentViewController;
 
 @end
