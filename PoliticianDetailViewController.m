@@ -17,6 +17,13 @@
     int subSectionVerticalMargin;
     int topBarHeight;
     NSString *topDonorLoaded;
+    
+    UILabel *donorsHeader;
+    UILabel *donorsByIndustryHeader;
+    UILabel *donorsBySectorHeader;
+    
+    NSLayoutConstraint *donorsByIndustryHeaderTop;
+    NSLayoutConstraint *donorsBySectorHeaderTop;
 }
 
 @end
@@ -48,16 +55,23 @@
     //Sections in View - added to view by creator methods, return objects are only used to position other elements
     UIImageView *photo = [self createPhotoSectionBelow:self.view withImage:nil andLeftMargin:0 aligned:NSTextAlignmentCenter];
     
-    UILabel *partyStateHeader = [self createHeaderSectionBelow:photo withName:[NSString stringWithFormat:@"%@ - %@", politician.party, politician.state] andLeftMargin:0 aligned:NSTextAlignmentCenter];
+    NSDictionary *partyStateData = [self createHeaderSectionBelow:photo withName:[NSString stringWithFormat:@"%@ - %@", politician.party, politician.state] andLeftMargin:0 aligned:NSTextAlignmentCenter];
+    UILabel *partyStateHeader = [partyStateData objectForKey:@"UILabel"];
     
-    UILabel *contactHeader = [self createHeaderSectionBelow:partyStateHeader withName:@"Contact" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+    NSDictionary *contactHeaderData = [self createHeaderSectionBelow:partyStateHeader withName:@"Contact" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+    UILabel *contactHeader = [contactHeaderData objectForKey:@"UILabel"];
     UIButton *contactButtons = [self createContactButtonSection:contactHeader];
     
-    UILabel *donorsHeader = [self createHeaderSectionBelow:contactButtons withName:@"Top Donors" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+    NSDictionary *donorsHeaderData = [self createHeaderSectionBelow:contactButtons withName:@"Top Donors" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+    donorsHeader = [donorsHeaderData objectForKey:@"UILabel"];
     
-    UILabel *donorsByIndustryHeader = [self createHeaderSectionBelow:donorsHeader withName:@"Top Donors by Industry" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+    NSDictionary *donorsByIndustryData = [self createHeaderSectionBelow:donorsHeader withName:@"Top Donors by Industry" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+    donorsByIndustryHeader = [donorsByIndustryData objectForKey:@"UILabel"];
+    donorsByIndustryHeaderTop = [donorsByIndustryData objectForKey:@"topConstraint"];
     
-    UILabel *donorsBySectorHeader = [self createHeaderSectionBelow:donorsByIndustryHeader withName:@"Top Donors by Sector" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+    NSDictionary *donorsBySectorData = [self createHeaderSectionBelow:donorsByIndustryHeader withName:@"Top Donors by Sector" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
+    donorsBySectorHeader = [donorsBySectorData objectForKey:@"UILabel"];
+    donorsBySectorHeaderTop = [donorsBySectorData objectForKey:@"topConstraint"];
 }
 
 -(UIImageView*)createPhotoSectionBelow:(id)itemAbove withImage:(UIImage*)image andLeftMargin:(int)leftHandMargin aligned:(NSTextAlignment)alignment {
@@ -89,7 +103,7 @@
     return photo;
 }
 
--(UILabel *)createHeaderSectionBelow:(id)itemAbove withName:(NSString*)title andLeftMargin:(int)leftHandMargin aligned:(NSTextAlignment)alignment {
+-(NSDictionary *)createHeaderSectionBelow:(id)itemAbove withName:(NSString*)title andLeftMargin:(int)leftHandMargin aligned:(NSTextAlignment)alignment {
     UILabel *header = [[UILabel alloc] init];
     [header setTextAlignment:alignment];
     [self.view addSubview:header];
@@ -111,7 +125,7 @@
     [self.view addConstraint:headerWidthConstraint];
     [self.view addConstraint:headerHeightConstraint];
     
-    return header;
+    return [NSDictionary dictionaryWithObjectsAndKeys: header, @"UILabel", headerTopConstraint, @"topConstraint", nil];
 }
 
 /** 
@@ -191,9 +205,38 @@
 }
 
 -(void)formatDonorsFromArray:(NSArray*)donors {
+    UILabel *top = donorsHeader;
+    
     for(int i=0; i<donors.count; i++){
+        NSDictionary *donor = [donors objectAtIndex:i];
+        NSString *totalAmount = [donor objectForKey:@"total_amount"];
+        NSString *donorName = [donor objectForKey:@"name"];
         
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        NSNumber *total = [numberFormatter numberFromString:totalAmount];
+        
+        [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+        totalAmount = [numberFormatter stringFromNumber:total];
+        
+        NSString *labelText = [NSString stringWithFormat:@"%@ - %@", donorName, totalAmount];
+        top = [[self createHeaderSectionBelow:top withName:labelText andLeftMargin:leftMargin aligned:NSTextAlignmentLeft] objectForKey:@"UILabel"];
     }
+    //Pass donorStrings to UILabelMaker
+//    [self createHeaderSectionBelow:<#(id)#> withName:<#(NSString *)#> andLeftMargin:<#(int)#> aligned:<#(NSTextAlignment)#>]
+    
+    [self.view removeConstraint:donorsByIndustryHeaderTop];
+    donorsByIndustryHeaderTop = [NSLayoutConstraint constraintWithItem:donorsByIndustryHeader attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:top attribute:NSLayoutAttributeBottom multiplier:1.0 constant:sectionVerticalMargin];
+    [self.view addConstraint:donorsByIndustryHeaderTop];
+    [self.view updateConstraints];
+    
+    //Will need to keep track of section headers
+    // add new data below relevant section header
+    // move sections headers below this section down (change their top constraint to be relaitve to new data)
+    
+    //in this case,
+    //top donor label is above
+    //and top donors by industy is below
 }
 
 #pragma mark - Contact Delegate Methods

@@ -102,11 +102,9 @@ NSMutableDictionary *asyncDataStore;
         userInfo = @{@"allPoliticiansResponse": jsonObjects};
         postNotificationName = @"SunlightFactoryDidReceivePoliticianDataNotification";
     } else if(connection == asyncCalls[@"getTopDonorsForLawmaker"]){
-        NSLog(@"connection finished");
         jsonObjects = [NSJSONSerialization JSONObjectWithData:[asyncDataStore objectForKey:@"getTopDonorsForLawmaker"] options:kNilOptions error:&error];
         userInfo = @{@"getTopDonorsForLawmakerResponse": jsonObjects};
         postNotificationName = @"SunlightFactoryDidReceivePoliticianTopDonorForLawmakerNotification";
-        NSLog(@"end of if");
     } else {
         NSLog(@"[SunlightFactory.m] WARNING: Unexpected connection finished loading - Data will not be parsed");
     }
