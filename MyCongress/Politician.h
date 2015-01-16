@@ -22,6 +22,7 @@
     NSString *party;
     NSString *title;
     NSString *state;
+    NSString *bioguideID;
 }
 
 @property (nonatomic, retain) NSString *firstName;
@@ -37,5 +38,6 @@
 @property (nonatomic, retain) NSString *party;
 @property (nonatomic, retain) NSString *title;
 @property (nonatomic, retain) NSString *state;
+@property (nonatomic, retain) NSString *bioguideID;
 
 @end

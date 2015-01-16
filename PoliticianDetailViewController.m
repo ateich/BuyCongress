@@ -7,7 +7,8 @@
 //
 
 #import "PoliticianDetailViewController.h"
-//May need to change this to a scrollview, or add a scrollview to it
+
+//Need to change this to a scrollview
 @interface PoliticianDetailViewController (){
     Politician *politician;
     
@@ -16,7 +17,10 @@
     int sectionVerticalMargin;
     int subSectionVerticalMargin;
     int topBarHeight;
+    
     NSString *topDonorLoaded;
+    NSString *topDonorIndustriesLoaded;
+    NSString *transparencyIdLoaded;
     
     UILabel *donorsHeader;
     UILabel *donorsByIndustryHeader;
@@ -24,6 +28,8 @@
     
     NSLayoutConstraint *donorsByIndustryHeaderTop;
     NSLayoutConstraint *donorsBySectorHeaderTop;
+    
+    SunlightFactory *sunlightAPI;
 }
 
 @end
@@ -34,14 +40,29 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     contactActions = [[ContactActionsFactory alloc] init];
     [contactActions setViewController:self];
     
     topDonorLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorForLawmakerNotification";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianData:) name:topDonorLoaded object:nil];
     
-    SunlightFactory *sunlightAPI = [[SunlightFactory alloc] init];
-    [sunlightAPI getTopDonorsForLawmaker];
+    topDonorIndustriesLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorIndustriesForLawmakerNotification";
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianIndustryData:) name:topDonorIndustriesLoaded object:nil];
+    
+    transparencyIdLoaded = @"SunlightFactoryDidReceivePoliticianTransparencyIdNotification";
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveTransparencyId:) name:transparencyIdLoaded object:nil];
+    
+    //listen for transparency id response
+    
+    sunlightAPI = [[SunlightFactory alloc] init];
+    //get transparency api using bioguide_id
+    [sunlightAPI getLawmakerTransparencyIDFromFirstName:politician.firstName andLastName:politician.lastName];
+    
+    //Autolayout this thingy
+    UIScrollView *scrollView = [[UIScrollView alloc] init];
+    [scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:scrollView];
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     self.title = [NSString stringWithFormat:@"%@. %@ %@", politician.title, politician.firstName, politician.lastName];
@@ -95,7 +116,7 @@
     [self.view addConstraint:photoHeightConstraint];
     [self.view addConstraint:photoWidthConstraint];
     
-    //If there isn't an image for the Congressman, show an alternate image
+    //TO DO: If there isn't an image for the Congressman, show an alternate image
     if(!image){
         [photo setBackgroundColor:[UIColor blackColor]];
     }
@@ -204,6 +225,24 @@
     [self formatDonorsFromArray:donors];
 }
 
+-(void)didReceivePoliticianIndustryData:(NSNotification*)notification{
+    NSDictionary *userInfo = [notification userInfo];
+    NSArray *donorIndustries = [userInfo objectForKey:@"getTopDonorIndustriesForLawmaker"];
+    NSLog(@"%@", [donorIndustries description]);
+//    [self formatDonorsFromArray:donorIndustries];
+}
+
+-(void)didReceiveTransparencyId:(NSNotification*)notification{
+    NSDictionary *userInfo = [notification userInfo];
+    NSArray *politicians = [userInfo objectForKey:@"getTransparencyID"];
+    NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
+    
+    //get transparency data using ID
+    
+    [sunlightAPI getTopDonorsForLawmaker:transparencyID];
+    [sunlightAPI getTopDonorIndustriesForLawmaker:transparencyID];
+}
+
 -(void)formatDonorsFromArray:(NSArray*)donors {
     UILabel *top = donorsHeader;
     
@@ -222,26 +261,13 @@
         NSString *labelText = [NSString stringWithFormat:@"%@ - %@", donorName, totalAmount];
         top = [[self createHeaderSectionBelow:top withName:labelText andLeftMargin:leftMargin aligned:NSTextAlignmentLeft] objectForKey:@"UILabel"];
     }
-    //Pass donorStrings to UILabelMaker
-//    [self createHeaderSectionBelow:<#(id)#> withName:<#(NSString *)#> andLeftMargin:<#(int)#> aligned:<#(NSTextAlignment)#>]
     
     [self.view removeConstraint:donorsByIndustryHeaderTop];
     donorsByIndustryHeaderTop = [NSLayoutConstraint constraintWithItem:donorsByIndustryHeader attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:top attribute:NSLayoutAttributeBottom multiplier:1.0 constant:sectionVerticalMargin];
     [self.view addConstraint:donorsByIndustryHeaderTop];
-    [self.view updateConstraints];
-    
-    //Will need to keep track of section headers
-    // add new data below relevant section header
-    // move sections headers below this section down (change their top constraint to be relaitve to new data)
-    
-    //in this case,
-    //top donor label is above
-    //and top donors by industy is below
 }
 
 #pragma mark - Contact Delegate Methods
-
-
 -(void)TEST{
     NSLog(@"TEST");
 }
@@ -260,7 +286,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 

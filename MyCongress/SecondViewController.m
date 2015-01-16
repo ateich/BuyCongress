@@ -83,6 +83,7 @@
         
         [aPolitician setTitle: [thisPoliticiansData objectForKey:@"title"]];
         [aPolitician setState: [thisPoliticiansData objectForKey:@"state_name"]];
+        [aPolitician setBioguideID:[thisPoliticiansData objectForKey:@"bioguide_id"]];
         
         [politiciansFromData addObject:aPolitician];
     }

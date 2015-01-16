@@ -13,6 +13,8 @@
 }
 
 -(void)getAllLawmakers;
--(void)getTopDonorsForLawmaker;
+-(void)getTopDonorsForLawmaker:(NSString*)lawmakerID;
+-(void)getTopDonorIndustriesForLawmaker:(NSString*)lawmakerID;
+-(void)getLawmakerTransparencyIDFromFirstName:(NSString*)first andLastName:(NSString*)last;
 
 @end

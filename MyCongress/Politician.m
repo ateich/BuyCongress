@@ -23,5 +23,6 @@
 @synthesize party;
 @synthesize title;
 @synthesize state;
+@synthesize bioguideID;
 
 @end
