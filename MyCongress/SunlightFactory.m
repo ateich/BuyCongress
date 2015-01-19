@@ -43,6 +43,7 @@ NSMutableDictionary *asyncDataStore;
                   nil, @"getTopDonorsForLawmaker",
                   nil, @"getTopDonorIndustriesForLawmaker",
                   nil, @"getTransparencyID",
+                  nil, @"getTopDonorSectorsForLawmaker",
                   nil];
     
     asyncDataStore = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
@@ -50,6 +51,7 @@ NSMutableDictionary *asyncDataStore;
                       [[NSMutableData alloc] init], @"getTopDonorsForLawmaker",
                       [[NSMutableData alloc] init], @"getTopDonorIndustriesForLawmaker",
                       [[NSMutableData alloc] init], @"getTransparencyID",
+                      [[NSMutableData alloc] init], @"getTopDonorSectorsForLawmaker",
                   nil];
     
     return self;
@@ -70,8 +72,14 @@ NSMutableDictionary *asyncDataStore;
 
 -(void)getTopDonorIndustriesForLawmaker:(NSString*)lawmakerID{
     NSString *url = [NSString stringWithFormat:@"%@/aggregates/pol/%@/contributors/industries.json%@", transparencyURL, lawmakerID, sunlightKey];
-    NSLog(@"URL: %@", url);
+//    NSLog(@"URL: %@", url);
     [self getRequest:url withCallingMethod:@"getTopDonorIndustriesForLawmaker"];
+}
+
+-(void)getTopDonorSectorsForLawmaker:(NSString*)lawmakerID{
+    NSString *url = [NSString stringWithFormat:@"%@/aggregates/pol/%@/contributors/sectors.json%@", transparencyURL, lawmakerID, sunlightKey];
+    NSLog(@"URL: %@", url);
+    [self getRequest:url withCallingMethod:@"getTopDonorSectorsForLawmaker"];
 }
 
 -(void)getLawmakerTransparencyIDFromFirstName:(NSString*)first andLastName:(NSString*)last{
@@ -105,6 +113,8 @@ NSMutableDictionary *asyncDataStore;
         [[asyncDataStore objectForKey:@"getTopDonorIndustriesForLawmaker"] appendData:data];
     } else if(connection == asyncCalls[@"getTransparencyID"]){
         [[asyncDataStore objectForKey:@"getTransparencyID"] appendData:data];
+    } else if(connection == asyncCalls[@"getTopDonorSectorsForLawmaker"]) {
+        [[asyncDataStore objectForKey:@"getTopDonorSectorsForLawmaker"] appendData:data];
     }
 }
 
@@ -136,6 +146,11 @@ NSMutableDictionary *asyncDataStore;
         jsonObjects = [NSJSONSerialization JSONObjectWithData:[asyncDataStore objectForKey:@"getTransparencyID"] options:kNilOptions error:&error];
         userInfo = @{@"getTransparencyID": jsonObjects};
         postNotificationName = @"SunlightFactoryDidReceivePoliticianTransparencyIdNotification";
+    }
+    else if(connection == asyncCalls[@"getTopDonorSectorsForLawmaker"]) {
+        jsonObjects = [NSJSONSerialization JSONObjectWithData:[asyncDataStore objectForKey:@"getTopDonorSectorsForLawmaker"] options:kNilOptions error:&error];
+        userInfo = @{@"getTopDonorSectorsForLawmaker": jsonObjects};
+        postNotificationName = @"SunlightFactoryDidReceivePoliticianTopDonorSectorsForLawmakerNotification";
     }
     else {
         NSLog(@"[SunlightFactory.m] WARNING: Unexpected connection finished loading - Data will not be parsed");

@@ -24,6 +24,7 @@
     NSString *topDonorLoaded;
     NSString *topDonorIndustriesLoaded;
     NSString *transparencyIdLoaded;
+    NSString *topDonorSectorsLoaded;
     
     UILabel *donorsHeader;
     UILabel *donorsByIndustryHeader;
@@ -49,15 +50,11 @@
     [self.view addSubview:scrollView];
     [scrollView setBackgroundColor:[UIColor greenColor]];
     
-    NSLog(@"SCROLL SUBVIEWS START: %@", [[scrollView subviews] description]);
-    
     contentView = [[UIView alloc] init];
     [contentView setBackgroundColor:[UIColor redColor]];
     [contentView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [scrollView addSubview:contentView];
     
-    
-    NSLog(@"SCROLL SUBVIEWS 2: %@", [[scrollView subviews] description]);
     
     //AUTOLAYOUT SCROLLVIEW
     NSLayoutConstraint *scrollViewTopConstraint = [NSLayoutConstraint constraintWithItem:scrollView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.0 constant:0];
@@ -73,8 +70,6 @@
     [self.view addConstraint:scrollViewBottomConstraint];
     [self.view addConstraint:scrollViewRightConstraint];
     
-    
-    NSLog(@"SCROLL SUBVIEWS 3: %@", [[scrollView subviews] description]);
     
     //AUTOLAYOUT SCROLLVIEW'S CONTENTVIEW
     NSLayoutConstraint *contentViewTopConstraint = [NSLayoutConstraint constraintWithItem:contentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:scrollView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0];
@@ -96,9 +91,6 @@
     [scrollView addConstraint:contentViewBottomConstraint];
     [scrollView addConstraint:contentViewRightConstraint];
     
-    
-    NSLog(@"SCROLL SUBVIEWS 4: %@", [[scrollView subviews] description]);
-    
     contactActions = [[ContactActionsFactory alloc] init];
     [contactActions setViewController:self];
     
@@ -111,11 +103,17 @@
     transparencyIdLoaded = @"SunlightFactoryDidReceivePoliticianTransparencyIdNotification";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveTransparencyId:) name:transparencyIdLoaded object:nil];
     
-    //listen for transparency id response
+    topDonorSectorsLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorSectorsForLawmakerNotification";
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianDataSectorData:) name:topDonorSectorsLoaded object:nil];
     
+    
+    
+    
+    
+    //get transparency id to use in receiving politician donor data
     sunlightAPI = [[SunlightFactory alloc] init];
-    //get transparency api using bioguide_id
     [sunlightAPI getLawmakerTransparencyIDFromFirstName:politician.firstName andLastName:politician.lastName];
+    
     
     //Autolayout this thingy
     [self.view setBackgroundColor:[UIColor whiteColor]];
@@ -147,9 +145,6 @@
     NSDictionary *donorsBySectorData = [self createHeaderSectionOn:contentView below:donorsByIndustryHeader withName:@"Top Donors by Sector" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
     donorsBySectorHeader = [donorsBySectorData objectForKey:@"UILabel"];
     donorsBySectorHeaderTop = [donorsBySectorData objectForKey:@"topConstraint"];
-    
-    
-    NSLog(@"SCROLL SUBVIEWS 5: %@", [[scrollView subviews] description]);
     
     [contentView layoutIfNeeded];
 }
@@ -282,26 +277,36 @@
     NSDictionary *userInfo = [notification userInfo];
     NSArray *donors = [userInfo objectForKey:@"getTopDonorsForLawmakerResponse"];
     [self formatDonorsFromArray:donors onView:contentView];
-//    NSLog(@"%@", [[scrollView subviews] description]);
 }
 
 -(void)didReceivePoliticianIndustryData:(NSNotification*)notification{
     NSDictionary *userInfo = [notification userInfo];
     NSArray *donorIndustries = [userInfo objectForKey:@"getTopDonorIndustriesForLawmaker"];
-    NSLog(@"%@", [donorIndustries description]);
+//    NSLog(@"%@", [donorIndustries description]);
 //    [self formatDonorsFromArray:donorIndustries];
+}
+
+-(void)didReceivePoliticianDataSectorData:(NSNotification*)notification{
+    NSLog(@"didReceivePoliticianDataSectorData");
+    NSDictionary *userInfo = [notification userInfo];
+    NSArray *donorSectors = [userInfo objectForKey:@"getTopDonorSectorsForLawmaker"];
+    NSLog(@"%@", [donorSectors description]);
+    //    [self formatDonorsFromArray:donorSectors];
 }
 
 -(void)didReceiveTransparencyId:(NSNotification*)notification{
     NSDictionary *userInfo = [notification userInfo];
     NSArray *politicians = [userInfo objectForKey:@"getTransparencyID"];
-    NSLog(@"received transparency id: ", politicians);
-    NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
     
-    //get transparency data using ID
+    if(politicians.count > 0){
+        NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
     
-    [sunlightAPI getTopDonorsForLawmaker:transparencyID];
-    [sunlightAPI getTopDonorIndustriesForLawmaker:transparencyID];
+        [sunlightAPI getTopDonorsForLawmaker:transparencyID];
+        [sunlightAPI getTopDonorIndustriesForLawmaker:transparencyID];
+        [sunlightAPI getTopDonorSectorsForLawmaker:transparencyID];
+    } else {
+        NSLog(@"POLITICIAN NOT FOUND WHILE CHECKING FOR TRANSPARENCY ID");
+    }
 }
 
 -(void)formatDonorsFromArray:(NSArray*)donors onView:(UIView*)view {
