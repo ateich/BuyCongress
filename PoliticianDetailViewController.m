@@ -261,9 +261,9 @@
     top.text = @"Top Individual Donors";
     
     NSNumber *leftMargin = [NSNumber numberWithInt:25];
-    NSDictionary *metrics = @{@"leftMargin":leftMargin};
+    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"topMargin":@10};
     
-    [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[top]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(top)]];
+    [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[top]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(top)]];
     [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[top]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(top)]];
     
     for(int i=0; i<donors.count; i++){
@@ -286,29 +286,33 @@
         
 //        top = [[self createHeaderSectionOn:view below:top withName:labelText andLeftMargin:leftMargin aligned:NSTextAlignmentLeft] objectForKey:@"UILabel"];
         
-//        NSDictionary *views;
+        NSDictionary *views;
         
-//        if(!top){
-//            views = NSDictionaryOfVariableBindings(label);
-//            [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[label]|" options:0 metrics:nil views:views]];
-//        } else {
-//            views = NSDictionaryOfVariableBindings(top, label);
-//            [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[top]-0-[label]|" options:0 metrics:nil views:views]];
-//        }
-//        [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[label]-0-|" options:0 metrics:nil views:views]];
-        
-        NSLayoutConstraint *topConstraint;
         if(!top){
-            topConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:individualDonorsSection attribute:NSLayoutAttributeBottom multiplier:1.0 constant:15];
+            //THIS WILL NEVER HAPPEN
+            views = NSDictionaryOfVariableBindings(label);
+            [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topMargin-[label]" options:0 metrics:metrics views:views]];
+        } else if(donors.count-1 == i){
+            views = NSDictionaryOfVariableBindings(top, label);
+            [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-topMargin-[label]-|" options:0 metrics:metrics views:views]];
         } else {
-            topConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:top attribute:NSLayoutAttributeBottom multiplier:1.0 constant:15];
+            views = NSDictionaryOfVariableBindings(top, label);
+            [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-topMargin-[label]" options:0 metrics:metrics views:views]];
         }
+        [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[label]-0-|" options:0 metrics:metrics views:views]];
         
-        NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:individualDonorsSection attribute:NSLayoutAttributeLeading multiplier:1.0 constant:[leftMargin doubleValue]];
-        
-        NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:individualDonorsSection attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0];
-        
-        [individualDonorsSection addConstraints:[NSArray arrayWithObjects:topConstraint, leftConstraint, rightConstraint, nil]];
+//        NSLayoutConstraint *topConstraint;
+//        if(!top){
+//            topConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:individualDonorsSection attribute:NSLayoutAttributeBottom multiplier:1.0 constant:15];
+//        } else {
+//            topConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:top attribute:NSLayoutAttributeBottom multiplier:1.0 constant:15];
+//        }
+//        
+//        NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:individualDonorsSection attribute:NSLayoutAttributeLeading multiplier:1.0 constant:[leftMargin doubleValue]];
+//        
+//        NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:individualDonorsSection attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0];
+//        
+//        [individualDonorsSection addConstraints:[NSArray arrayWithObjects:topConstraint, leftConstraint, rightConstraint, nil]];
         
         top = label;
     }
