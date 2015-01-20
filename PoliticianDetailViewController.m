@@ -120,6 +120,7 @@
     
     [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[individualDonorsSection]-0-|" options:0 metrics:nil views:views]];
     
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[contactSection]-0-|" options:0 metrics:nil views:views]];
     
     [self createContactSection];
     
@@ -182,18 +183,17 @@
 
 -(void)createContactSection{
     [contactSection setBackgroundColor:[UIColor yellowColor]];
+    [contactSection setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     NSNumber *leftMargin = [[NSNumber alloc] initWithInt:25];
-    int topMargin = 10;
-    NSDictionary *metrics = @{@"leftMargin":leftMargin};
+    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"buttonSize":@30, @"buttonSpacer":@15, @"topMargin":@10};
     
     //create section header
     UILabel *header = [[UILabel alloc] init];
     [header setTranslatesAutoresizingMaskIntoConstraints:NO];
     header.text = @"Contact";
     [contactSection addSubview:header];
-    
-    [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[header]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(header)]];
+
     [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[header]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(header)]];
     
     NSMutableArray *contactMethods = [[NSMutableArray alloc] init];
@@ -215,7 +215,14 @@
     
     
     id leftSide;
-    int buttonSize = 30;
+
+    
+    UIView *buttonsView = [[UIView alloc] init];
+    [contactSection addSubview:buttonsView];
+    [buttonsView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[header]-0-[buttonsView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(buttonsView, header)]];
+    [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[buttonsView]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(buttonsView, header)]];
+    
     
     //Create a contact button for each available contact method
     for(int i=0; i<contactMethods.count; i++){
@@ -229,28 +236,16 @@
         [contactButton setTranslatesAutoresizingMaskIntoConstraints:NO];
         [contactButton setBackgroundImage:[UIImage imageNamed:[[contactMethods objectAtIndex:i] objectAtIndex:0]] forState:UIControlStateNormal];
         
-        //Make sure the first button left aligns to the main view
-        // and have the other buttons left align to the button to their left
-        NSLayoutConstraint *contactLeftConstraint;
+        [buttonsView addSubview:contactButton];
+        
         if(!leftSide){
-            leftSide = contactSection;
-            
-            contactLeftConstraint = [NSLayoutConstraint constraintWithItem:contactButton attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:leftSide attribute:NSLayoutAttributeLeading multiplier:1.0 constant:[leftMargin doubleValue]];
+            NSLog(@"NO LEFT SIDE");
+            [buttonsView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[contactButton(==buttonSize)]" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(contactButton)]];
         } else {
-            contactLeftConstraint = [NSLayoutConstraint constraintWithItem:contactButton attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:leftSide attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:[leftMargin doubleValue]];
+            [buttonsView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[leftSide]-buttonSpacer-[contactButton(==buttonSize)]" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(contactButton, leftSide)]];
         }
+        [buttonsView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topMargin-[contactButton(==buttonSize)]|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(contactButton)]];
         
-        //Other button constraints
-        NSLayoutConstraint *contactTopConstraint = [NSLayoutConstraint constraintWithItem:contactButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:header attribute:NSLayoutAttributeBottom multiplier:1.0 constant:topMargin];
-        
-        NSLayoutConstraint *contactWidthConstraint = [NSLayoutConstraint constraintWithItem:contactButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:buttonSize];
-        
-        NSLayoutConstraint *contactHeightConstraint = [NSLayoutConstraint constraintWithItem:contactButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:buttonSize];
-        
-        [contactSection addConstraint:contactTopConstraint];
-        [contactSection addConstraint:contactLeftConstraint];
-        [contactSection addConstraint:contactWidthConstraint];
-        [contactSection addConstraint:contactHeightConstraint];
         
         //Save this button to be used in left positioning the next button
         leftSide = contactButton;
