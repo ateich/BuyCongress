@@ -96,8 +96,9 @@
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView(==scrollView)]|" options:0 metrics:nil views:views]];
     
     //Entire page layout, vertically
+    NSDictionary *metrics = @{@"sectionPadding": @20};
     views = NSDictionaryOfVariableBindings(contentView, photo, contactSection, individualDonorsSection, industryDonorsSection, sectorDonorsSection);
-    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[photo(75)]-25-[contactSection]-25-[individualDonorsSection]-25-[industryDonorsSection]-25-[sectorDonorsSection]|" options:0 metrics:nil views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-sectionPadding-[photo(75)]-sectionPadding-[contactSection]-sectionPadding-[individualDonorsSection]-sectionPadding-[industryDonorsSection]-sectionPadding-[sectorDonorsSection]|" options:0 metrics:metrics views:views]];
     
     //Photo layout
     [contentView addConstraint:[NSLayoutConstraint constraintWithItem:photo attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:75]];
@@ -216,7 +217,7 @@
     NSNumber *leftMargin = [NSNumber numberWithInt:25];
     NSDictionary *metrics = @{@"leftMargin":leftMargin, @"topMargin":@10};
     
-    [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[top]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(top)]];
+    [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[top]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(top)]];
     [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[top]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(top)]];
     
     for(int i=0; i<donors.count; i++){
@@ -262,8 +263,10 @@
         top = label;
     }
 //    [section setBackgroundColor:[UIColor purpleColor]];
-    [section updateConstraints];
-    [[section superview] updateConstraints];
+    
+    [UIView animateWithDuration:1.0f animations:^{
+        [section setAlpha:1.0f];
+    } completion:^(BOOL finished) {}];
 }
 
 //top donors by sector
@@ -280,12 +283,16 @@
     NSLog(@"didReceivePoliticianData");
     NSDictionary *userInfo = [notification userInfo];
     NSArray *donors = [userInfo objectForKey:@"getTopDonorsForLawmakerResponse"];
+    
+    [individualDonorsSection setAlpha:0.0f];
     [self createDonorDataSectionWithDonors:donors andSection:individualDonorsSection andTitle:@"Top Individual Donors"];
 }
 
 -(void)didReceivePoliticianIndustryData:(NSNotification*)notification{
     NSDictionary *userInfo = [notification userInfo];
     NSArray *donorIndustries = [userInfo objectForKey:@"getTopDonorIndustriesForLawmaker"];
+    
+    [industryDonorsSection setAlpha:0.0f];
     [self createDonorDataSectionWithDonors:donorIndustries andSection:industryDonorsSection andTitle:@"Top Donors by Industry"];
 }
 
@@ -293,7 +300,8 @@
     NSLog(@"didReceivePoliticianDataSectorData");
     NSDictionary *userInfo = [notification userInfo];
     NSArray *donorSectors = [userInfo objectForKey:@"getTopDonorSectorsForLawmaker"];
-    NSLog(@"%@", [donorSectors description]);
+    
+    [sectorDonorsSection setAlpha:0.0f];
     [self createDonorDataSectionWithDonors:donorSectors andSection:sectorDonorsSection andTitle:@"Top Donors by Sector"];
 }
 
