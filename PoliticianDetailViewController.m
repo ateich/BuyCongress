@@ -194,7 +194,6 @@
         [buttonsView addSubview:contactButton];
         
         if(!leftSide){
-            NSLog(@"NO LEFT SIDE");
             [buttonsView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[contactButton(==buttonSize)]" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(contactButton)]];
         } else {
             [buttonsView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[leftSide]-buttonSpacer-[contactButton(==buttonSize)]" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(contactButton, leftSide)]];
@@ -280,7 +279,6 @@
 }
 
 - (void)didReceivePoliticianData:(NSNotification*)notification {
-    NSLog(@"didReceivePoliticianData");
     NSDictionary *userInfo = [notification userInfo];
     NSArray *donors = [userInfo objectForKey:@"getTopDonorsForLawmakerResponse"];
     
@@ -297,7 +295,6 @@
 }
 
 -(void)didReceivePoliticianDataSectorData:(NSNotification*)notification{
-    NSLog(@"didReceivePoliticianDataSectorData");
     NSDictionary *userInfo = [notification userInfo];
     NSArray *donorSectors = [userInfo objectForKey:@"getTopDonorSectorsForLawmaker"];
     
@@ -308,8 +305,6 @@
 -(void)didReceiveTransparencyId:(NSNotification*)notification{
     NSDictionary *userInfo = [notification userInfo];
     NSArray *politicians = [userInfo objectForKey:@"getTransparencyID"];
-    
-    NSLog(@"didReceiveTransparencyId");
     
     if(politicians.count > 0){
         NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];

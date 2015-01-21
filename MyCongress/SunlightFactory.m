@@ -78,14 +78,14 @@ NSMutableDictionary *asyncDataStore;
 
 -(void)getTopDonorSectorsForLawmaker:(NSString*)lawmakerID{
     NSString *url = [NSString stringWithFormat:@"%@/aggregates/pol/%@/contributors/sectors.json%@", transparencyURL, lawmakerID, sunlightKey];
-    NSLog(@"URL: %@", url);
+//    NSLog(@"URL: %@", url);
     [self getRequest:url withCallingMethod:@"getTopDonorSectorsForLawmaker"];
 }
 
 -(void)getLawmakerTransparencyIDFromFirstName:(NSString*)first andLastName:(NSString*)last{
     //entities/id_lookup.json
     NSString *url = [NSString stringWithFormat:@"%@/entities.json%@&search=%@+%@&type=politician", transparencyURL, sunlightKey, first, last];
-    NSLog(@"URL: %@", url);
+//    NSLog(@"URL: %@", url);
     [self getRequest:url withCallingMethod:@"getTransparencyID"];
 }
 
