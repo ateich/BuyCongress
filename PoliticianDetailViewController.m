@@ -13,7 +13,6 @@
     Politician *politician;
     
     /* LAYOUT CONSTRAINTS */
-//    int leftMargin;
     int sectionVerticalMargin;
     int subSectionVerticalMargin;
     int topBarHeight;
@@ -25,10 +24,6 @@
     NSString *topDonorIndustriesLoaded;
     NSString *transparencyIdLoaded;
     NSString *topDonorSectorsLoaded;
-    
-//    UILabel *donorsHeader;
-//    UILabel *donorsByIndustryHeader;
-//    UILabel *donorsBySectorHeader;
     
     UIView *contactSection;
     UIView *individualDonorsSection;
@@ -56,10 +51,10 @@
     scrollView = [[UIScrollView alloc] init];
     [scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:scrollView];
-    [scrollView setBackgroundColor:[UIColor greenColor]];
+//    [scrollView setBackgroundColor:[UIColor greenColor]];
     
     contentView = [[UIView alloc] init];
-    [contentView setBackgroundColor:[UIColor redColor]];
+//    [contentView setBackgroundColor:[UIColor redColor]];
     [contentView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [scrollView addSubview:contentView];
     
@@ -68,9 +63,6 @@
     [photo setBackgroundColor:[UIColor blackColor]];
     [photo setTranslatesAutoresizingMaskIntoConstraints:NO];
     [contentView addSubview:photo];
-    
-    /** Break out into their own views */
-    //Each section contains a header and subheaders generated from an array of data
     
     //Contact Section
     contactSection =[[UIView alloc] init];
@@ -81,7 +73,7 @@
     individualDonorsSection =[[UIView alloc] init];
     [individualDonorsSection setTranslatesAutoresizingMaskIntoConstraints:NO];
     [contentView addSubview:individualDonorsSection];
-    [individualDonorsSection setBackgroundColor:[UIColor orangeColor]];
+//    [individualDonorsSection setBackgroundColor:[UIColor orangeColor]];
     
     //Industry Donors Section
     industryDonorsSection =[[UIView alloc] init];
@@ -102,13 +94,6 @@
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[contentView]-0-|" options:0 metrics:nil views:views]];
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[contentView]-0-|" options:0 metrics:nil views:views]];
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView(==scrollView)]|" options:0 metrics:nil views:views]];
-    //    [scrollView addConstraint:[NSLayoutConstraint constraintWithItem:contentView
-    //                                                           attribute:NSLayoutAttributeWidth
-    //                                                           relatedBy:NSLayoutRelationEqual
-    //                                                              toItem:scrollView
-    //                                                           attribute:NSLayoutAttributeWidth
-    //                                                          multiplier:1.0f
-    //                                                            constant:0.0f]];
     
     //Entire page layout, vertically
     views = NSDictionaryOfVariableBindings(contentView, photo, contactSection, individualDonorsSection, industryDonorsSection, sectorDonorsSection);
@@ -118,12 +103,12 @@
     [contentView addConstraint:[NSLayoutConstraint constraintWithItem:photo attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:75]];
     [scrollView addConstraint:[NSLayoutConstraint constraintWithItem:photo attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:contentView attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
     
-    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[individualDonorsSection]-0-|" options:0 metrics:nil views:views]];
-    
     [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[contactSection]-0-|" options:0 metrics:nil views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[individualDonorsSection]-0-|" options:0 metrics:nil views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[industryDonorsSection]-0-|" options:0 metrics:nil views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[sectorDonorsSection]-0-|" options:0 metrics:nil views:views]];
     
     [self createContactSection];
-    
 
     
     
@@ -136,53 +121,22 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianData:) name:topDonorLoaded object:nil];
     
     topDonorIndustriesLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorIndustriesForLawmakerNotification";
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianIndustryData:) name:topDonorIndustriesLoaded object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianIndustryData:) name:topDonorIndustriesLoaded object:nil];
     
     transparencyIdLoaded = @"SunlightFactoryDidReceivePoliticianTransparencyIdNotification";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveTransparencyId:) name:transparencyIdLoaded object:nil];
     
     topDonorSectorsLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorSectorsForLawmakerNotification";
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianDataSectorData:) name:topDonorSectorsLoaded object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianDataSectorData:) name:topDonorSectorsLoaded object:nil];
     
     
     //get transparency id to use in receiving politician donor data
     sunlightAPI = [[SunlightFactory alloc] init];
     [sunlightAPI getLawmakerTransparencyIDFromFirstName:politician.firstName andLastName:politician.lastName];
-
-    
-    
-    //Layout Constraints
-//    leftMargin = 25;
-//    sectionVerticalMargin = 25;
-//    subSectionVerticalMargin = sectionVerticalMargin/2;
-//    topBarHeight = 20 + self.navigationController.navigationBar.frame.size.height;
-//    
-//    //Sections in View - added to view by creator methods, return objects are only used to position other elements
-//    UIImageView *photo = [self createPhotoSectionOn:contentView below:contentView withImage:nil andLeftMargin:0 aligned:NSTextAlignmentCenter];
-//    
-//    NSDictionary *partyStateData = [self createHeaderSectionOn:contentView below:photo withName:[NSString stringWithFormat:@"%@ - %@", politician.party, politician.state] andLeftMargin:0 aligned:NSTextAlignmentCenter];
-//    UILabel *partyStateHeader = [partyStateData objectForKey:@"UILabel"];
-//    
-//    NSDictionary *contactHeaderData = [self createHeaderSectionOn:contentView below:partyStateHeader withName:@"Contact" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
-//    UILabel *contactHeader = [contactHeaderData objectForKey:@"UILabel"];
-//    UIButton *contactButtons = [self createContactButtonSectionOn:contentView below:contactHeader];
-//    
-//    NSDictionary *donorsHeaderData = [self createHeaderSectionOn:contentView below:contactButtons withName:@"Top Individual Donors" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
-//    donorsHeader = [donorsHeaderData objectForKey:@"UILabel"];
-//    
-//    NSDictionary *donorsByIndustryData = [self createHeaderSectionOn:contentView below:donorsHeader withName:@"Top Donors by Industry" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
-//    donorsByIndustryHeader = [donorsByIndustryData objectForKey:@"UILabel"];
-//    donorsByIndustryHeaderTop = [donorsByIndustryData objectForKey:@"topConstraint"];
-//    
-//    NSDictionary *donorsBySectorData = [self createHeaderSectionOn:contentView below:donorsByIndustryHeader withName:@"Top Donors by Sector" andLeftMargin:leftMargin aligned:NSTextAlignmentLeft];
-//    donorsBySectorHeader = [donorsBySectorData objectForKey:@"UILabel"];
-//    donorsBySectorHeaderTop = [donorsBySectorData objectForKey:@"topConstraint"];
-//    
-//    [contentView layoutIfNeeded];
 }
 
 -(void)createContactSection{
-    [contactSection setBackgroundColor:[UIColor yellowColor]];
+//    [contactSection setBackgroundColor:[UIColor yellowColor]];
     [contactSection setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     NSNumber *leftMargin = [[NSNumber alloc] initWithInt:25];
@@ -252,92 +206,87 @@
     }
 }
 
--(void)createIndividualDonorSection:(NSArray*)donors{
-    UILabel *header = [[UILabel alloc] init];
-    header.text = @"Top Individual Donors";
+-(void)createDonorDataSectionWithDonors:(NSArray*)donors andSection:(UIView*)section andTitle:(NSString*)title {
     UILabel *top = [[UILabel alloc] init];
     [top setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [individualDonorsSection addSubview:top];
-    top.text = @"Top Individual Donors";
+    [top setFont:[UIFont boldSystemFontOfSize:16]];
+    [section addSubview:top];
+    top.text = title;
     
     NSNumber *leftMargin = [NSNumber numberWithInt:25];
     NSDictionary *metrics = @{@"leftMargin":leftMargin, @"topMargin":@10};
     
-    [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[top]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(top)]];
-    [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[top]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(top)]];
+    [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[top]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(top)]];
+    [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[top]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(top)]];
     
     for(int i=0; i<donors.count; i++){
         NSDictionary *donor = [donors objectAtIndex:i];
-        NSString *totalAmount = [donor objectForKey:@"total_amount"];
+        NSString *totalAmount;
+        
+        if(section == individualDonorsSection){
+            totalAmount = [donor objectForKey:@"total_amount"];
+        } else if (section == industryDonorsSection || section == sectorDonorsSection){
+            totalAmount = [donor objectForKey:@"amount"];
+        }
         NSString *donorName = [donor objectForKey:@"name"];
-    
+        if(section == sectorDonorsSection){
+            donorName = [sunlightAPI convertSectorCode:[donor objectForKey:@"sector"]];
+        }
+        
         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
         [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
         NSNumber *total = [numberFormatter numberFromString:totalAmount];
-    
+        
         [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
         totalAmount = [numberFormatter stringFromNumber:total];
-    
+        
         NSString *labelText = [NSString stringWithFormat:@"%@ - %@", donorName, totalAmount];
+        labelText = [[labelText lowercaseString] capitalizedString];
         UILabel *label = [[UILabel alloc] init];
-        [individualDonorsSection addSubview:label];
+        [label setNumberOfLines:0];
+        [section addSubview:label];
         [label setTranslatesAutoresizingMaskIntoConstraints:NO];
         label.text = labelText;
         
-//        top = [[self createHeaderSectionOn:view below:top withName:labelText andLeftMargin:leftMargin aligned:NSTextAlignmentLeft] objectForKey:@"UILabel"];
-        
         NSDictionary *views;
         
-        if(!top){
-            //THIS WILL NEVER HAPPEN
-            views = NSDictionaryOfVariableBindings(label);
-            [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topMargin-[label]" options:0 metrics:metrics views:views]];
-        } else if(donors.count-1 == i){
+        if(donors.count-1 == i){
             views = NSDictionaryOfVariableBindings(top, label);
-            [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-topMargin-[label]-|" options:0 metrics:metrics views:views]];
+            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-topMargin-[label]-|" options:0 metrics:metrics views:views]];
         } else {
             views = NSDictionaryOfVariableBindings(top, label);
-            [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-topMargin-[label]" options:0 metrics:metrics views:views]];
+            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-topMargin-[label]" options:0 metrics:metrics views:views]];
         }
-        [individualDonorsSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[label]-0-|" options:0 metrics:metrics views:views]];
-        
-//        NSLayoutConstraint *topConstraint;
-//        if(!top){
-//            topConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:individualDonorsSection attribute:NSLayoutAttributeBottom multiplier:1.0 constant:15];
-//        } else {
-//            topConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:top attribute:NSLayoutAttributeBottom multiplier:1.0 constant:15];
-//        }
-//        
-//        NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:individualDonorsSection attribute:NSLayoutAttributeLeading multiplier:1.0 constant:[leftMargin doubleValue]];
-//        
-//        NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:individualDonorsSection attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0];
-//        
-//        [individualDonorsSection addConstraints:[NSArray arrayWithObjects:topConstraint, leftConstraint, rightConstraint, nil]];
+        [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[label]-0-|" options:0 metrics:metrics views:views]];
         
         top = label;
     }
-    [individualDonorsSection setBackgroundColor:[UIColor purpleColor]];
-    [individualDonorsSection updateConstraints];
-    [[individualDonorsSection superview] updateConstraints];
-//    [contentView updateConstraints];
-    //    [view removeConstraint:donorsByIndustryHeaderTop];
-    //    donorsByIndustryHeaderTop = [NSLayoutConstraint constraintWithItem:donorsByIndustryHeader attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:top attribute:NSLayoutAttributeBottom multiplier:1.0 constant:sectionVerticalMargin];
-    //    [view addConstraint:donorsByIndustryHeaderTop];
+//    [section setBackgroundColor:[UIColor purpleColor]];
+    [section updateConstraints];
+    [[section superview] updateConstraints];
+}
+
+//top donors by sector
+-(void)createDonorSectorSection{
+    
+}
+
+//top donors by industry
+-(void)createDonorIndustrySection{
+    
 }
 
 - (void)didReceivePoliticianData:(NSNotification*)notification {
     NSLog(@"didReceivePoliticianData");
     NSDictionary *userInfo = [notification userInfo];
     NSArray *donors = [userInfo objectForKey:@"getTopDonorsForLawmakerResponse"];
-//    [self formatDonorsFromArray:donors onView:contentView];
-    [self createIndividualDonorSection:donors];
+    [self createDonorDataSectionWithDonors:donors andSection:individualDonorsSection andTitle:@"Top Individual Donors"];
 }
 
 -(void)didReceivePoliticianIndustryData:(NSNotification*)notification{
     NSDictionary *userInfo = [notification userInfo];
     NSArray *donorIndustries = [userInfo objectForKey:@"getTopDonorIndustriesForLawmaker"];
-//    NSLog(@"%@", [donorIndustries description]);
-//    [self formatDonorsFromArray:donorIndustries];
+    [self createDonorDataSectionWithDonors:donorIndustries andSection:industryDonorsSection andTitle:@"Top Donors by Industry"];
 }
 
 -(void)didReceivePoliticianDataSectorData:(NSNotification*)notification{
@@ -345,7 +294,7 @@
     NSDictionary *userInfo = [notification userInfo];
     NSArray *donorSectors = [userInfo objectForKey:@"getTopDonorSectorsForLawmaker"];
     NSLog(@"%@", [donorSectors description]);
-    //    [self formatDonorsFromArray:donorSectors];
+    [self createDonorDataSectionWithDonors:donorSectors andSection:sectorDonorsSection andTitle:@"Top Donors by Sector"];
 }
 
 -(void)didReceiveTransparencyId:(NSNotification*)notification{
@@ -363,30 +312,6 @@
     } else {
         NSLog(@"[PoliticianDetailViewController.m] WARNING: Politician not found while checking for transparency id - Donation data will not be shown");
     }
-}
-
--(void)formatDonorsFromArray:(NSArray*)donors onView:(UIView*)view {
-//    UILabel *top = donorsHeader;
-//    
-//    for(int i=0; i<donors.count; i++){
-//        NSDictionary *donor = [donors objectAtIndex:i];
-//        NSString *totalAmount = [donor objectForKey:@"total_amount"];
-//        NSString *donorName = [donor objectForKey:@"name"];
-//        
-//        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-//        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-//        NSNumber *total = [numberFormatter numberFromString:totalAmount];
-//        
-//        [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
-//        totalAmount = [numberFormatter stringFromNumber:total];
-//        
-//        NSString *labelText = [NSString stringWithFormat:@"%@ - %@", donorName, totalAmount];
-//        top = [[self createHeaderSectionOn:view below:top withName:labelText andLeftMargin:leftMargin aligned:NSTextAlignmentLeft] objectForKey:@"UILabel"];
-//    }
-    
-//    [view removeConstraint:donorsByIndustryHeaderTop];
-//    donorsByIndustryHeaderTop = [NSLayoutConstraint constraintWithItem:donorsByIndustryHeader attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:top attribute:NSLayoutAttributeBottom multiplier:1.0 constant:sectionVerticalMargin];
-//    [view addConstraint:donorsByIndustryHeaderTop];
 }
 
 #pragma mark - Contact Delegate Methods

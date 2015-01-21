@@ -171,4 +171,8 @@ NSMutableDictionary *asyncDataStore;
     return nil;
 }
 
+-(NSString*)convertSectorCode:(NSString*)code{
+    return [sectorCodes objectForKey:code];
+}
+
 @end

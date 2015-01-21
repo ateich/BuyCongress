@@ -13,6 +13,7 @@
 }
 
 -(void)getAllLawmakers;
+-(NSString*)convertSectorCode:(NSString*)code;
 -(void)getTopDonorsForLawmaker:(NSString*)lawmakerID;
 -(void)getTopDonorIndustriesForLawmaker:(NSString*)lawmakerID;
 -(void)getTopDonorSectorsForLawmaker:(NSString*)lawmakerID;
