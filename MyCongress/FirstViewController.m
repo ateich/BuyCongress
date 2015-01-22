@@ -8,8 +8,12 @@
 
 #import "FirstViewController.h"
 #import "SunlightFactory.h"
+#import "SunlightFactory.h"
 
-@interface FirstViewController ()
+@interface FirstViewController (){
+    UITextField *zipCodeField;
+    SunlightFactory *sunlightAPI;
+}
 
 @end
 
@@ -24,6 +28,8 @@
     //          or
     //Use My Current Location (button)
     
+    sunlightAPI = [[SunlightFactory alloc] init];
+    
     UIView *containerView = [[UIView alloc] init];
     [containerView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:containerView];
@@ -36,7 +42,7 @@
     [bottomSpacer setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:bottomSpacer];
     
-    UITextField *zipCodeField = [[UITextField alloc] init];
+    zipCodeField = [[UITextField alloc] init];
     [zipCodeField setTranslatesAutoresizingMaskIntoConstraints:NO];
     [zipCodeField setPlaceholder:@"Enter your Zip Code Here"];
     [zipCodeField setTextAlignment:NSTextAlignmentCenter];
@@ -46,6 +52,7 @@
     UIButton *searchByZipCode = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [searchByZipCode setTranslatesAutoresizingMaskIntoConstraints:NO];
     [searchByZipCode setTitle:@"Search by Zip Code" forState:UIControlStateNormal];
+    [searchByZipCode addTarget:self action:@selector(searchForPoliticiansByZipCode:) forControlEvents:UIControlEventTouchDown];
     [containerView addSubview:searchByZipCode];
     
     UILabel *or = [[UILabel alloc] init];
@@ -73,6 +80,25 @@
     [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[searchByZipCode]-|" options:0 metrics:nil views:views]];
     [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[or]-|" options:0 metrics:nil views:views]];
     [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[searchByCurrentLocation]-|" options:0 metrics:nil views:views]];
+    
+    //SunlightFactoryDidReceivePoliticiansForZipCodeNotification
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticiansForZip:) name:@"SunlightFactoryDidReceivePoliticiansForZipCodeNotification" object:nil];
+}
+
+- (void)searchForPoliticiansByZipCode:(UIButton *)sender{
+    
+    //make sure zip is 5 numbers, no more, no less
+    
+    [sunlightAPI getLawmakersByZipCode:zipCodeField.text];
+}
+
+- (void)didReceivePoliticiansForZip:(NSNotification*)notification {
+    NSDictionary *userInfo = [notification userInfo];
+    NSArray *politicianData = [[userInfo objectForKey:@"getLawmakersByZipCode"] objectForKey:@"results"];
+    
+    NSLog(@"%@", [politicianData description]);
+//    [tableVC updateTableViewWithNewData:[self createPoliticiansFromDataArray:politicianData]];
+    //push a new view listing the three polticians returned here
     
 }
 
