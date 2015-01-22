@@ -27,8 +27,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    tableViewController = [[TableViewController alloc] initWithStyle:UITableViewStylePlain];
-    
     sunlightAPI = [[SunlightFactory alloc] init];
     locationManager = [[CLLocationManager alloc] init];
     
@@ -94,7 +92,6 @@
 }
 
 - (void)searchForPoliticiansByLocation:(UIButton *)sender{
-    NSLog(@"searchForPoliticiansByLocation");
     locationManager.delegate = self;
     locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
     
@@ -105,19 +102,21 @@
 - (void)didReceivePoliticiansForZip:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
     NSMutableArray *politicianData = [[userInfo objectForKey:@"getLawmakersByZipCode"] objectForKey:@"results"];
-    
-    [self.navigationController pushViewController:tableViewController animated:YES];
-    [tableViewController updateTableViewWithNewData:[tableViewController createPoliticiansFromDataArray:politicianData]];
-    [tableViewController updateTableViewWithNewData:[tableViewController createPoliticiansFromDataArray:politicianData]];
+    [self openTableOfPoliticians:politicianData];
 }
 
 - (void)didReceivePoliticiansForLocation:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
     NSMutableArray *politicianData = [[userInfo objectForKey:@"getLawmakersByLatitudeAndLongitude"] objectForKey:@"results"];
-    
+    [self openTableOfPoliticians:politicianData];
+}
+
+-(void)openTableOfPoliticians:(NSMutableArray*)data{
+    tableViewController = [[TableViewController alloc] initWithStyle:UITableViewStylePlain];
     [self.navigationController pushViewController:tableViewController animated:YES];
-    [tableViewController updateTableViewWithNewData:[tableViewController createPoliticiansFromDataArray:politicianData]];
-    [tableViewController updateTableViewWithNewData:[tableViewController createPoliticiansFromDataArray:politicianData]];
+    
+    [tableViewController updateTableViewWithNewData:[tableViewController createPoliticiansFromDataArray:data]];
+    [tableViewController updateTableViewWithNewData:[tableViewController createPoliticiansFromDataArray:data]];
 }
 
 //Limit text field length to 5 numbers, no letters (Zip Code)
@@ -159,14 +158,12 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
-    NSLog(@"didUpdateToLocation: %@", newLocation);
     CLLocation *currentLocation = newLocation;
     
     if (currentLocation != nil) {
         NSString *longitude = [NSString stringWithFormat:@"%.8f", currentLocation.coordinate.longitude];
         NSString *latitude = [NSString stringWithFormat:@"%.8f", currentLocation.coordinate.latitude];
         [locationManager stopUpdatingLocation];
-        NSLog(@"%@ : %@", latitude, longitude);
         [sunlightAPI getLawmakersByLatitude:latitude andLongitude:longitude];
     }
 }
