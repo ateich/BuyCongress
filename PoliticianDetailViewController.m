@@ -308,6 +308,7 @@
     
     if(politicians.count > 0){
         NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
+        NSLog(@"transparency id: %@", transparencyID);
         
         [sunlightAPI getTopDonorsForLawmaker:transparencyID];
         [sunlightAPI getTopDonorIndustriesForLawmaker:transparencyID];
@@ -341,6 +342,20 @@
 
 -(void)setPolitician:(Politician *)newPolitician{
     politician = newPolitician;
+}
+
+-(void)dealloc{
+    topDonorLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorForLawmakerNotification";
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:topDonorLoaded object:nil];
+    
+    topDonorIndustriesLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorIndustriesForLawmakerNotification";
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:topDonorIndustriesLoaded object:nil];
+    
+    transparencyIdLoaded = @"SunlightFactoryDidReceivePoliticianTransparencyIdNotification";
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:transparencyIdLoaded object:nil];
+    
+    topDonorSectorsLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorSectorsForLawmakerNotification";
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:topDonorSectorsLoaded object:nil];
 }
 
 @end

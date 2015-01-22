@@ -168,4 +168,10 @@
     }
 }
 
+- (void) dealloc {
+    //Stop listening for changes to Politician Data
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceivePoliticiansForZipCodeNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceivePoliticiansForLatitudeAndLongitudeNotification" object:nil];
+}
+
 @end

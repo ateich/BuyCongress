@@ -11,6 +11,8 @@
 #import "SunlightFactory.h"
 #import "OCMock.h"
 
+NSString *TRANSPARENCY_ID = @"42ccd9758603419ba38a2546d96a0f02";
+
 @interface SunlightAPITests : XCTestCase{
     SunlightFactory *api;
 }
@@ -47,9 +49,124 @@
     
     id observerMock = [OCMockObject observerMock];
     [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
-    [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg any]];
+    [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
+        NSMutableDictionary *value = [userInfo objectForKey:@"allPoliticiansResponse"];
+        if(value && [value objectForKey:@"results"]){
+            return YES;
+        } else {
+            return NO;
+        }
+    }]];
     
     [api getAllLawmakers];
+    [self waitForVerifiedMock:observerMock delay:3];
+}
+
+-(void)testGetLawmakersByZipCode {
+    NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticiansForZipCodeNotification";
+    
+    id observerMock = [OCMockObject observerMock];
+    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
+    [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
+        NSMutableDictionary *value = [userInfo objectForKey:@"getLawmakersByZipCode"];
+        if(value && [value objectForKey:@"results"]){
+            return YES;
+        } else {
+            return NO;
+        }
+    }]];
+    
+    [api getLawmakersByZipCode:@"01085"];
+    [self waitForVerifiedMock:observerMock delay:3];
+}
+
+-(void)XtestGetLawmakersByLocation {
+    NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticiansForLatitudeAndLongitudeNotification";
+    
+    id observerMock = [OCMockObject observerMock];
+    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
+    [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
+        NSMutableDictionary *value = [userInfo objectForKey:@"getLawmakersByLatitudeAndLongitude"];
+        if(value && [value objectForKey:@"results"]){
+            return YES;
+        } else {
+            return NO;
+        }
+    }]];
+    
+    [api getLawmakersByLatitude:@"" andLongitude:@""];
+    [self waitForVerifiedMock:observerMock delay:3];
+}
+
+-(void)testGetTopDonorsForLawmaker{
+    NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticianTopDonorForLawmakerNotification";
+    
+    id observerMock = [OCMockObject observerMock];
+    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
+    [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
+        NSMutableDictionary *value = [userInfo objectForKey:@"getTopDonorsForLawmakerResponse"];
+        if(value){
+            return YES;
+        } else {
+            return NO;
+        }
+    }]];
+    NSLog(@"transparency test id: %@", TRANSPARENCY_ID);
+    [api getTopDonorsForLawmaker:TRANSPARENCY_ID];
+    [self waitForVerifiedMock:observerMock delay:3];
+}
+
+-(void)testGetTopDonorIndustriesForLawmaker{
+    NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticianTopDonorIndustriesForLawmakerNotification";
+    
+    id observerMock = [OCMockObject observerMock];
+    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
+    [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
+        NSMutableDictionary *value = [userInfo objectForKey:@"getTopDonorIndustriesForLawmaker"];
+        if(value){
+            return YES;
+        } else {
+            return NO;
+        }
+    }]];
+    
+    [api getTopDonorIndustriesForLawmaker:TRANSPARENCY_ID];
+    [self waitForVerifiedMock:observerMock delay:3];
+}
+
+-(void)testGetTransparencyID{
+    NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticianTransparencyIdNotification";
+    
+    id observerMock = [OCMockObject observerMock];
+    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
+    [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
+        NSMutableDictionary *value = [userInfo objectForKey:@"getTransparencyID"];
+        if(value){
+            return YES;
+        } else {
+            return NO;
+        }
+    }]];
+    
+    [api getLawmakerTransparencyIDFromFirstName:@"Elizabeth" andLastName:@"Warren"];
+    [self waitForVerifiedMock:observerMock delay:3];
+}
+
+-(void)testGetTopDonorSectorsForLawmaker{
+    NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticianTopDonorSectorsForLawmakerNotification";
+    
+    id observerMock = [OCMockObject observerMock];
+    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
+    [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
+        NSMutableDictionary *value = [userInfo objectForKey:@"getTopDonorSectorsForLawmaker"];
+        if(value){
+            return YES;
+        } else {
+            return NO;
+        }
+    }]];
+    
+    [api getTopDonorSectorsForLawmaker:TRANSPARENCY_ID];
     [self waitForVerifiedMock:observerMock delay:3];
 }
 
