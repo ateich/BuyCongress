@@ -9,6 +9,7 @@
 #import "FirstViewController.h"
 #import "SunlightFactory.h"
 #import "SunlightFactory.h"
+#import "TableViewController.h"
 
 @interface FirstViewController (){
     UITextField *zipCodeField;
@@ -16,6 +17,7 @@
     #define NUMBERS_ONLY @"1234567890"
     #define CHARACTER_LIMIT 5
     CLLocationManager *locationManager;
+    TableViewController *tableViewController;
 }
 
 @end
@@ -24,6 +26,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    tableViewController = [[TableViewController alloc] initWithStyle:UITableViewStylePlain];
     
     sunlightAPI = [[SunlightFactory alloc] init];
     locationManager = [[CLLocationManager alloc] init];
@@ -45,8 +49,8 @@
     [zipCodeField setDelegate:self];
     [zipCodeField setPlaceholder:@"Enter your Zip Code Here"];
     [zipCodeField setTextAlignment:NSTextAlignmentCenter];
+    [zipCodeField setKeyboardType:UIKeyboardTypeNumberPad];
     [containerView addSubview:zipCodeField];
-    [zipCodeField becomeFirstResponder];
     
     UIButton *searchByZipCode = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [searchByZipCode setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -100,22 +104,20 @@
 
 - (void)didReceivePoliticiansForZip:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
-    NSArray *politicianData = [[userInfo objectForKey:@"getLawmakersByZipCode"] objectForKey:@"results"];
+    NSMutableArray *politicianData = [[userInfo objectForKey:@"getLawmakersByZipCode"] objectForKey:@"results"];
     
-    NSLog(@"%@", [politicianData description]);
-//    [tableVC updateTableViewWithNewData:[self createPoliticiansFromDataArray:politicianData]];
-    //push a new view listing the three polticians returned here
-    
+    [self.navigationController pushViewController:tableViewController animated:YES];
+    [tableViewController updateTableViewWithNewData:[tableViewController createPoliticiansFromDataArray:politicianData]];
+    [tableViewController updateTableViewWithNewData:[tableViewController createPoliticiansFromDataArray:politicianData]];
 }
 
 - (void)didReceivePoliticiansForLocation:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
-    NSArray *politicianData = [[userInfo objectForKey:@"getLawmakersByLatitudeAndLongitude"] objectForKey:@"results"];
+    NSMutableArray *politicianData = [[userInfo objectForKey:@"getLawmakersByLatitudeAndLongitude"] objectForKey:@"results"];
     
-    NSLog(@"%@", [politicianData description]);
-    //    [tableVC updateTableViewWithNewData:[self createPoliticiansFromDataArray:politicianData]];
-    //push a new view listing the three polticians returned here
-    
+    [self.navigationController pushViewController:tableViewController animated:YES];
+    [tableViewController updateTableViewWithNewData:[tableViewController createPoliticiansFromDataArray:politicianData]];
+    [tableViewController updateTableViewWithNewData:[tableViewController createPoliticiansFromDataArray:politicianData]];
 }
 
 //Limit text field length to 5 numbers, no letters (Zip Code)
@@ -128,6 +130,22 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+#pragma mark - Hide keyboard
+-(void)viewWillDisappear:(BOOL)animated{
+    if ([zipCodeField isFirstResponder]) {
+        [zipCodeField resignFirstResponder];
+    }
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    UITouch *touch = [[event allTouches] anyObject];
+    if ([zipCodeField isFirstResponder] && [touch view] != zipCodeField) {
+        [zipCodeField resignFirstResponder];
+    }
+    [super touchesBegan:touches withEvent:event];
 }
 
 #pragma mark - CLLocationManagerDelegate

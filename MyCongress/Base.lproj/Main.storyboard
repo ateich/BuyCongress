@@ -18,10 +18,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="My Congress" image="first" id="acW-dT-cKf"/>
+                    <navigationItem key="navigationItem" title="My Congress" id="R9r-7I-jX7"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="750" y="-320"/>
+            <point key="canvasLocation" x="810" y="0.0"/>
         </scene>
         <!--Members of Congress-->
         <scene sceneID="Bio-0K-mHb">
@@ -38,7 +39,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nDZ-3a-9ST" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="8" y="714"/>
+            <point key="canvasLocation" x="54" y="704"/>
         </scene>
         <!--Members of Congress-->
         <scene sceneID="wg7-f3-ORb">
@@ -79,12 +80,30 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="750" y="360"/>
+            <point key="canvasLocation" x="810" y="704"/>
+        </scene>
+        <!--My Congress-->
+        <scene sceneID="biC-xX-gGN">
+            <objects>
+                <navigationController id="zbM-OT-LvA" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="My Congress" id="I4h-Xa-ifY"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="eFa-w7-hdb">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="9pv-A4-QxB" kind="relationship" relationship="rootViewController" id="kBA-nK-q9P"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nQB-Wa-sOW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="54" y="0.0"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
                 <tabBarController id="49e-Tb-3d3" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="mjf-xU-1AB"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
@@ -92,13 +111,13 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="9pv-A4-QxB" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
-                        <segue destination="gqE-RR-z1q" kind="relationship" relationship="viewControllers" id="q6Q-F3-dVu"/>
+                        <segue destination="zbM-OT-LvA" kind="relationship" relationship="viewControllers" id="WpJ-nJ-kBO"/>
+                        <segue destination="gqE-RR-z1q" kind="relationship" relationship="viewControllers" id="vUy-Ee-DMc"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="0.0" y="0.0"/>
+            <point key="canvasLocation" x="-644" y="0.0"/>
         </scene>
     </scenes>
     <resources>

@@ -49,6 +49,7 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"C4R");
     NSString *cellIdentifier = [NSString stringWithFormat:@"Cell%ld%ld",(long)indexPath.section,indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
@@ -110,6 +111,40 @@
     }
     
     return cell;
+}
+
+-(NSMutableArray *)createPoliticiansFromDataArray:(NSArray *)politicianData{
+    NSMutableArray *politiciansFromData = [[NSMutableArray alloc] init];
+    
+    for(int i=0; i<politicianData.count; i++){
+        NSDictionary *thisPoliticiansData = [politicianData objectAtIndex:i];
+        Politician *aPolitician = [[Politician alloc] init];
+        
+        [aPolitician setFirstName: [thisPoliticiansData objectForKey:@"first_name"]];
+        [aPolitician setLastName: [thisPoliticiansData objectForKey:@"last_name"]];
+        [aPolitician setGender: [thisPoliticiansData objectForKey:@"gender"]]; //May have an issue, check this
+        
+        [aPolitician setEmail: [thisPoliticiansData objectForKey:@"oc_email"]];
+        [aPolitician setPhone: [thisPoliticiansData objectForKey:@"phone"]];
+        [aPolitician setEmail: [thisPoliticiansData objectForKey:@"oc_email"]];
+        [aPolitician setTwitter: [thisPoliticiansData objectForKey:@"twitter_id"]];
+        [aPolitician setYoutubeID: [thisPoliticiansData objectForKey:@"youtube_id"]];
+        [aPolitician setWebsite: [thisPoliticiansData objectForKey:@"website"]];
+        
+        NSString *party = [thisPoliticiansData objectForKey:@"party"];
+        if([party isEqual: @"D"]){
+            [aPolitician setParty: @"Democrat"];
+        } else {
+            [aPolitician setParty: @"Republican"];
+        }
+        
+        [aPolitician setTitle: [thisPoliticiansData objectForKey:@"title"]];
+        [aPolitician setState: [thisPoliticiansData objectForKey:@"state_name"]];
+        [aPolitician setBioguideID:[thisPoliticiansData objectForKey:@"bioguide_id"]];
+        
+        [politiciansFromData addObject:aPolitician];
+    }
+    return politiciansFromData;
 }
 
 /* Show more details about the selected politician */

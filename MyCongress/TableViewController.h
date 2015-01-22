@@ -12,5 +12,6 @@
 @property (nonatomic,strong) NSMutableArray *politicians;
 
 -(void)updateTableViewWithNewData:(NSMutableArray*)data;
+-(NSMutableArray *)createPoliticiansFromDataArray:(NSArray *)politicianData;
 
 @end
