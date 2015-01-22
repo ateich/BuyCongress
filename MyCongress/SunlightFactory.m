@@ -45,6 +45,7 @@ NSMutableDictionary *asyncDataStore;
                   nil, @"getTransparencyID",
                   nil, @"getTopDonorSectorsForLawmaker",
                   nil, @"getLawmakersByZipCode",
+                  nil, @"getLawmakersByLatitudeAndLongitude",
                   nil];
     
     asyncDataStore = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
@@ -54,6 +55,7 @@ NSMutableDictionary *asyncDataStore;
                       [[NSMutableData alloc] init], @"getTransparencyID",
                       [[NSMutableData alloc] init], @"getTopDonorSectorsForLawmaker",
                       [[NSMutableData alloc] init], @"getLawmakersByZipCode",
+                      [[NSMutableData alloc] init], @"getLawmakersByLatitudeAndLongitude",
                   nil];
     
     return self;
@@ -68,8 +70,11 @@ NSMutableDictionary *asyncDataStore;
 }
 
 -(void)getLawmakersByZipCode:(NSString*)zip{
-    NSLog(@"getLawmakersByZipCode: %@", [NSString stringWithFormat:@"%@%@%@%@%@", sunlightURL, @"/legislators/locate", sunlightKey, @"&zip=", zip]);
     [self getRequest:[NSString stringWithFormat:@"%@%@%@%@%@", sunlightURL, @"/legislators/locate", sunlightKey, @"&zip=", zip] withCallingMethod:@"getLawmakersByZipCode"];
+}
+
+-(void)getLawmakersByLatitude:(NSString*)latitude andLongitude:(NSString*)longitude{
+    [self getRequest:[NSString stringWithFormat:@"%@%@%@%@%@%@%@", sunlightURL, @"/legislators/locate", sunlightKey, @"&latitude=", latitude, @"&longitude=", longitude] withCallingMethod:@"getLawmakersByLatitudeAndLongitude"];
 }
 
 -(void)getTopDonorsForLawmaker:(NSString*)lawmakerID {
@@ -124,6 +129,8 @@ NSMutableDictionary *asyncDataStore;
         [[asyncDataStore objectForKey:@"getTopDonorSectorsForLawmaker"] appendData:data];
     } else if(connection == asyncCalls[@"getLawmakersByZipCode"]){
         [[asyncDataStore objectForKey:@"getLawmakersByZipCode"] appendData:data];
+    } else if(connection == asyncCalls[@"getLawmakersByLatitudeAndLongitude"]){
+        [[asyncDataStore objectForKey:@"getLawmakersByLatitudeAndLongitude"] appendData:data];
     }
 }
 
@@ -165,6 +172,11 @@ NSMutableDictionary *asyncDataStore;
         jsonObjects = [NSJSONSerialization JSONObjectWithData:[asyncDataStore objectForKey:@"getLawmakersByZipCode"] options:kNilOptions error:&error];
         userInfo = @{@"getLawmakersByZipCode": jsonObjects};
         postNotificationName = @"SunlightFactoryDidReceivePoliticiansForZipCodeNotification";
+    }
+    else if(connection == asyncCalls[@"getLawmakersByLatitudeAndLongitude"]){
+        jsonObjects = [NSJSONSerialization JSONObjectWithData:[asyncDataStore objectForKey:@"getLawmakersByLatitudeAndLongitude"] options:kNilOptions error:&error];
+        userInfo = @{@"getLawmakersByLatitudeAndLongitude": jsonObjects};
+        postNotificationName = @"SunlightFactoryDidReceivePoliticiansForLatitudeAndLongitudeNotification";
     }
     else {
         NSLog(@"[SunlightFactory.m] WARNING: Unexpected connection finished loading - Data will not be parsed");

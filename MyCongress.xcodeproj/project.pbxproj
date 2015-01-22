@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9513E86C1A70847F00304A5F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9513E86B1A70847F00304A5F /* CoreLocation.framework */; };
 		952DCE6D1A3A678B0000DCF5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE6C1A3A678B0000DCF5 /* main.m */; };
 		952DCE701A3A678B0000DCF5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE6F1A3A678B0000DCF5 /* AppDelegate.m */; };
 		952DCE731A3A678B0000DCF5 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE721A3A678B0000DCF5 /* FirstViewController.m */; };
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9513E86B1A70847F00304A5F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		952DCE671A3A678B0000DCF5 /* MyCongress.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyCongress.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		952DCE6B1A3A678B0000DCF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		952DCE6C1A3A678B0000DCF5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9513E86C1A70847F00304A5F /* CoreLocation.framework in Frameworks */,
 				9548F6901A5F3F8400AC6565 /* MessageUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -194,6 +197,7 @@
 		9548F6911A5F3F9900AC6565 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9513E86B1A70847F00304A5F /* CoreLocation.framework */,
 				9548F68F1A5F3F8400AC6565 /* MessageUI.framework */,
 			);
 			name = Frameworks;

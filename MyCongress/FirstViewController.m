@@ -15,6 +15,7 @@
     SunlightFactory *sunlightAPI;
     #define NUMBERS_ONLY @"1234567890"
     #define CHARACTER_LIMIT 5
+    CLLocationManager *locationManager;
 }
 
 @end
@@ -23,14 +24,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    
-    //Text input field for zip code
-    //Search by Zip Code (button)
-    //          or
-    //Use My Current Location (button)
     
     sunlightAPI = [[SunlightFactory alloc] init];
+    locationManager = [[CLLocationManager alloc] init];
     
     UIView *containerView = [[UIView alloc] init];
     [containerView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -67,6 +63,7 @@
     UIButton *searchByCurrentLocation = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [searchByCurrentLocation setTranslatesAutoresizingMaskIntoConstraints:NO];
     [searchByCurrentLocation setTitle:@"Use My Current Location" forState:UIControlStateNormal];
+    [searchByCurrentLocation addTarget:self action:@selector(searchForPoliticiansByLocation:) forControlEvents:UIControlEventTouchDown];
     [containerView addSubview:searchByCurrentLocation];
     
     //AUTOLAYOUT
@@ -84,15 +81,21 @@
     [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[or]-|" options:0 metrics:nil views:views]];
     [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[searchByCurrentLocation]-|" options:0 metrics:nil views:views]];
     
-    //SunlightFactoryDidReceivePoliticiansForZipCodeNotification
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticiansForZip:) name:@"SunlightFactoryDidReceivePoliticiansForZipCodeNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticiansForLocation:) name:@"SunlightFactoryDidReceivePoliticiansForLatitudeAndLongitudeNotification" object:nil];
 }
 
 - (void)searchForPoliticiansByZipCode:(UIButton *)sender{
-    
-    //make sure zip is 5 numbers, no more, no less
-    
     [sunlightAPI getLawmakersByZipCode:zipCodeField.text];
+}
+
+- (void)searchForPoliticiansByLocation:(UIButton *)sender{
+    NSLog(@"searchForPoliticiansByLocation");
+    locationManager.delegate = self;
+    locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+    
+    [locationManager requestWhenInUseAuthorization];
+    [locationManager startUpdatingLocation];
 }
 
 - (void)didReceivePoliticiansForZip:(NSNotification*)notification {
@@ -105,7 +108,17 @@
     
 }
 
-//Limit text field length to 5 (Zip Code)
+- (void)didReceivePoliticiansForLocation:(NSNotification*)notification {
+    NSDictionary *userInfo = [notification userInfo];
+    NSArray *politicianData = [[userInfo objectForKey:@"getLawmakersByLatitudeAndLongitude"] objectForKey:@"results"];
+    
+    NSLog(@"%@", [politicianData description]);
+    //    [tableVC updateTableViewWithNewData:[self createPoliticiansFromDataArray:politicianData]];
+    //push a new view listing the three polticians returned here
+    
+}
+
+//Limit text field length to 5 numbers, no letters (Zip Code)
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSUInteger newLength = [textField.text length] + [string length] - range.length;
     NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:NUMBERS_ONLY] invertedSet];
@@ -115,7 +128,29 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - CLLocationManagerDelegate
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"didFailWithError: %@", error);
+    UIAlertView *errorAlert = [[UIAlertView alloc]
+                               initWithTitle:@"Error" message:@"Failed to Get Your Location" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [errorAlert show];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+{
+    NSLog(@"didUpdateToLocation: %@", newLocation);
+    CLLocation *currentLocation = newLocation;
+    
+    if (currentLocation != nil) {
+        NSString *longitude = [NSString stringWithFormat:@"%.8f", currentLocation.coordinate.longitude];
+        NSString *latitude = [NSString stringWithFormat:@"%.8f", currentLocation.coordinate.latitude];
+        [locationManager stopUpdatingLocation];
+        NSLog(@"%@ : %@", latitude, longitude);
+        [sunlightAPI getLawmakersByLatitude:latitude andLongitude:longitude];
+    }
 }
 
 @end
