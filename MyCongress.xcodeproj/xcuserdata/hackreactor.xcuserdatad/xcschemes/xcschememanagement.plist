@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Influence Explorer.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>MyCongress.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -18,6 +23,11 @@
 			<true/>
 		</dict>
 		<key>952DCE821A3A678B0000DCF5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>95D465431A7216CF00E20411</key>
 		<dict>
 			<key>primary</key>
 			<true/>
