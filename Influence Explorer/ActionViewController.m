@@ -48,7 +48,7 @@
 }
 
 -(void)parseUrlForArticle:(NSURL*)url{
-    NSString *apiUrl = [NSString stringWithFormat:@"https://readability.com/api/content/v1/parser?url=http://%@?currentPage=all&token=%@", [url host], [Tokens getReadabilityToken]];
+    NSString *apiUrl = [NSString stringWithFormat:@"https://readability.com/api/content/v1/parser?url=%@?currentPage=all&token=%@", [url absoluteString], [Tokens getReadabilityToken]];
     NSLog(@"%@", apiUrl);
     [readabilityFactory makeReadableArticleFromUrl:apiUrl];
 }
@@ -59,6 +59,10 @@
     NSArray *articleHTML = [userInfo objectForKey:@"content"];
     
     NSLog(@"%@", [articleHTML description]);
+}
+
+-(void)parseReadableArticleForProperNouns{
+    
 }
 
 - (void)didReceiveMemoryWarning {
