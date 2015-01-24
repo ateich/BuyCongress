@@ -56,13 +56,55 @@
 -(void)didReceiveReadableArticle:(NSNotification*)notification{
     NSLog(@"Notification received");
     NSDictionary *userInfo = [notification userInfo];
-    NSArray *articleHTML = [userInfo objectForKey:@"content"];
-    
-    NSLog(@"%@", [articleHTML description]);
+    NSString *articleHTML = [[userInfo objectForKey:@"content"] objectForKey:@"content"];
+    [self parseReadableArticleForProperNouns:articleHTML];
 }
 
--(void)parseReadableArticleForProperNouns{
+-(void)parseReadableArticleForProperNouns:(NSString*)content{
+    NSMutableArray *properNouns = [[NSMutableArray alloc] init];
     
+    //strip out all HTML tags and political titles
+    content = [self stringByStrippingHTML:content];
+    content = [self removePoliticalTitles:content];
+    
+    //Get all names of people and organizations with NSLinguisticTagger
+    NSLinguisticTaggerOptions tagOptions = NSLinguisticTaggerOmitWhitespace | NSLinguisticTaggerOmitPunctuation | NSLinguisticTaggerJoinNames;
+    NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes:[NSLinguisticTagger availableTagSchemesForLanguage:@"en"] options:tagOptions];
+    tagger.string = content;
+    
+    [tagger enumerateTagsInRange:NSMakeRange(0, [content length]) scheme:NSLinguisticTagSchemeNameType options:tagOptions usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
+        NSString *token = [content substringWithRange:tokenRange];
+        if(![tag isEqualToString:@"OtherWord"]){
+//            NSLog(@"%@: %@", token, tag);
+            [properNouns addObject:token];
+        }
+    }];
+    NSLog(@"%@", [properNouns description]);
+}
+
+-(NSString*)removePoliticalTitles:(NSString*)content{
+    NSMutableArray *wordsToRemove = [[NSMutableArray alloc] init];
+    [wordsToRemove addObject:@"Sen."];
+    [wordsToRemove addObject:@"Sen"];
+    [wordsToRemove addObject:@"Rep."];
+    [wordsToRemove addObject:@"Rep"];
+    [wordsToRemove addObject:@"Speaker"];
+    [wordsToRemove addObject:@"Leader"];
+    [wordsToRemove addObject:@"Whip"];
+    [wordsToRemove addObject:@"Chairman"];
+    
+    for(int i=0; i<wordsToRemove.count; i++){
+        content = [content stringByReplacingOccurrencesOfString:[wordsToRemove objectAtIndex:i] withString:@". "];
+    }
+    
+    return content;
+}
+
+-(NSString*)stringByStrippingHTML:(NSString*)s {
+    NSRange r;
+    while ((r = [s rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound)
+        s = [s stringByReplacingCharactersInRange:r withString:@""];
+    return s;
 }
 
 - (void)didReceiveMemoryWarning {
