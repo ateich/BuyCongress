@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		950175031A7305FD00989F9D /* WebsitePreprocessor.js in Resources */ = {isa = PBXBuildFile; fileRef = 950175021A7305FD00989F9D /* WebsitePreprocessor.js */; };
+		950175041A73067000989F9D /* WebsitePreprocessor.js in Resources */ = {isa = PBXBuildFile; fileRef = 950175021A7305FD00989F9D /* WebsitePreprocessor.js */; };
+		950175091A7323EC00989F9D /* Tokens.m in Sources */ = {isa = PBXBuildFile; fileRef = 95D4655A1A72F4ED00E20411 /* Tokens.m */; };
+		9501750C1A73255600989F9D /* ReadabilityFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9501750B1A73255600989F9D /* ReadabilityFactory.m */; };
+		9501750D1A73291C00989F9D /* ReadabilityFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9501750B1A73255600989F9D /* ReadabilityFactory.m */; };
 		9513E86C1A70847F00304A5F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9513E86B1A70847F00304A5F /* CoreLocation.framework */; };
 		952DCE6D1A3A678B0000DCF5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE6C1A3A678B0000DCF5 /* main.m */; };
 		952DCE701A3A678B0000DCF5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE6F1A3A678B0000DCF5 /* AppDelegate.m */; };
@@ -68,6 +73,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		950175021A7305FD00989F9D /* WebsitePreprocessor.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebsitePreprocessor.js; sourceTree = "<group>"; };
+		9501750A1A73255600989F9D /* ReadabilityFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadabilityFactory.h; sourceTree = "<group>"; };
+		9501750B1A73255600989F9D /* ReadabilityFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadabilityFactory.m; sourceTree = "<group>"; };
 		9513E86B1A70847F00304A5F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		952DCE671A3A678B0000DCF5 /* MyCongress.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyCongress.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		952DCE6B1A3A678B0000DCF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -345,8 +353,11 @@
 			children = (
 				95D465481A7216CF00E20411 /* ActionViewController.h */,
 				95D465491A7216CF00E20411 /* ActionViewController.m */,
+				9501750A1A73255600989F9D /* ReadabilityFactory.h */,
+				9501750B1A73255600989F9D /* ReadabilityFactory.m */,
 				95D4654B1A7216CF00E20411 /* MainInterface.storyboard */,
 				95D465461A7216CF00E20411 /* Supporting Files */,
+				950175021A7305FD00989F9D /* WebsitePreprocessor.js */,
 			);
 			path = "Influence Explorer";
 			sourceTree = "<group>";
@@ -481,6 +492,7 @@
 				9548F68B1A5EFC3700AC6565 /* website.png in Resources */,
 				9548F6881A5EFC3700AC6565 /* youtube.png in Resources */,
 				952DCE791A3A678B0000DCF5 /* Main.storyboard in Resources */,
+				950175031A7305FD00989F9D /* WebsitePreprocessor.js in Resources */,
 				9548F68A1A5EFC3700AC6565 /* email.png in Resources */,
 				952DCE7E1A3A678B0000DCF5 /* LaunchScreen.xib in Resources */,
 				952DCE961A3A71920000DCF5 /* .travis.yml in Resources */,
@@ -501,6 +513,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				950175041A73067000989F9D /* WebsitePreprocessor.js in Resources */,
 				95D4654C1A7216CF00E20411 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -520,6 +533,7 @@
 				952DCE701A3A678B0000DCF5 /* AppDelegate.m in Sources */,
 				952DCE731A3A678B0000DCF5 /* FirstViewController.m in Sources */,
 				952DCE6D1A3A678B0000DCF5 /* main.m in Sources */,
+				9501750C1A73255600989F9D /* ReadabilityFactory.m in Sources */,
 				95DECD881A5B2CF100111AEC /* TableViewController.m in Sources */,
 				9564E3311A5757ED0040F1D6 /* Politician.m in Sources */,
 			);
@@ -538,6 +552,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9501750D1A73291C00989F9D /* ReadabilityFactory.m in Sources */,
+				950175091A7323EC00989F9D /* Tokens.m in Sources */,
 				95D4654A1A7216CF00E20411 /* ActionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -808,6 +824,7 @@
 				95D465531A7216CF00E20411 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -7,7 +7,9 @@
 //
 
 #import "SunlightFactory.h"
-NSString *sunlightKey = @"?apikey=d5ac2a8391d94345b8e93d5c69dd8739";
+#import "Tokens.h"
+
+NSString *sunlightKey;
 NSString *sunlightURL = @"http://congress.api.sunlightfoundation.com";
 NSString *transparencyURL = @"http://transparencydata.com/api/1.0";
 NSMutableDictionary *sectorCodes;
@@ -19,6 +21,8 @@ NSMutableDictionary *asyncDataStore;
 
 -(id)init{
     self = [super init];
+    
+    sunlightKey = [NSString stringWithFormat:@"?apikey=%@", [Tokens getSunlightToken]];
 
     sectorCodes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
        @"Agribusiness", @"A",
