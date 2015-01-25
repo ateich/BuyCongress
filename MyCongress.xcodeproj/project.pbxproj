@@ -34,6 +34,7 @@
 		956F1D6A1A5CAE4900AAA14C /* PoliticianDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 956F1D691A5CAE4900AAA14C /* PoliticianDetailViewController.m */; };
 		956F1D6C1A5CB2B900AAA14C /* SunlightAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 956F1D6B1A5CB2B900AAA14C /* SunlightAPITests.m */; };
 		956F1D7B1A5CC9B100AAA14C /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 956F1D7A1A5CC9B100AAA14C /* libOCMock.a */; };
+		958E23411A757D51008C733F /* SunlightFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3281A570A9A0040F1D6 /* SunlightFactory.m */; };
 		95D4654A1A7216CF00E20411 /* ActionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95D465491A7216CF00E20411 /* ActionViewController.m */; };
 		95D4654C1A7216CF00E20411 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 95D4654B1A7216CF00E20411 /* MainInterface.storyboard */; };
 		95D465501A7216CF00E20411 /* Influence Explorer.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 95D465441A7216CF00E20411 /* Influence Explorer.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -552,6 +553,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				958E23411A757D51008C733F /* SunlightFactory.m in Sources */,
 				9501750D1A73291C00989F9D /* ReadabilityFactory.m in Sources */,
 				950175091A7323EC00989F9D /* Tokens.m in Sources */,
 				95D4654A1A7216CF00E20411 /* ActionViewController.m in Sources */,

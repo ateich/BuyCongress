@@ -118,16 +118,16 @@
     [contactActions setViewController:self];
     
     //Listen for asynchronous callbacks of politician donor data
-    topDonorLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorForLawmakerNotification";
+    topDonorLoaded = @"SunlightFactoryDidReceiveGetTopDonorsForLawmakerNotification";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianData:) name:topDonorLoaded object:nil];
     
-    topDonorIndustriesLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorIndustriesForLawmakerNotification";
+    topDonorIndustriesLoaded = @"SunlightFactoryDidReceiveGetTopDonorIndustriesForLawmakerNotification";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianIndustryData:) name:topDonorIndustriesLoaded object:nil];
     
-    transparencyIdLoaded = @"SunlightFactoryDidReceivePoliticianTransparencyIdNotification";
+    transparencyIdLoaded = @"SunlightFactoryDidReceiveGetTransparencyIDNotification";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveTransparencyId:) name:transparencyIdLoaded object:nil];
     
-    topDonorSectorsLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorSectorsForLawmakerNotification";
+    topDonorSectorsLoaded = @"SunlightFactoryDidReceiveGetTopDonorSectorsForLawmakerNotification";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianDataSectorData:) name:topDonorSectorsLoaded object:nil];
     
     
@@ -280,7 +280,8 @@
 
 - (void)didReceivePoliticianData:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
-    NSArray *donors = [userInfo objectForKey:@"getTopDonorsForLawmakerResponse"];
+    NSLog(@"%@", [userInfo description]);
+    NSArray *donors = [userInfo objectForKey:@"results"];
     
     [individualDonorsSection setAlpha:0.0f];
     [self createDonorDataSectionWithDonors:donors andSection:individualDonorsSection andTitle:@"Top Individual Donors"];
@@ -288,7 +289,7 @@
 
 -(void)didReceivePoliticianIndustryData:(NSNotification*)notification{
     NSDictionary *userInfo = [notification userInfo];
-    NSArray *donorIndustries = [userInfo objectForKey:@"getTopDonorIndustriesForLawmaker"];
+    NSArray *donorIndustries = [userInfo objectForKey:@"results"];
     
     [industryDonorsSection setAlpha:0.0f];
     [self createDonorDataSectionWithDonors:donorIndustries andSection:industryDonorsSection andTitle:@"Top Donors by Industry"];
@@ -296,7 +297,7 @@
 
 -(void)didReceivePoliticianDataSectorData:(NSNotification*)notification{
     NSDictionary *userInfo = [notification userInfo];
-    NSArray *donorSectors = [userInfo objectForKey:@"getTopDonorSectorsForLawmaker"];
+    NSArray *donorSectors = [userInfo objectForKey:@"results"];
     
     [sectorDonorsSection setAlpha:0.0f];
     [self createDonorDataSectionWithDonors:donorSectors andSection:sectorDonorsSection andTitle:@"Top Donors by Sector"];
@@ -304,7 +305,7 @@
 
 -(void)didReceiveTransparencyId:(NSNotification*)notification{
     NSDictionary *userInfo = [notification userInfo];
-    NSArray *politicians = [userInfo objectForKey:@"getTransparencyID"];
+    NSArray *politicians = [userInfo objectForKey:@"results"];
     
     if(politicians.count > 0){
         NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
@@ -345,16 +346,16 @@
 }
 
 -(void)dealloc{
-    topDonorLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorForLawmakerNotification";
+    topDonorLoaded = @"SunlightFactoryDidReceiveGetTopDonorsForLawmakerNotification";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:topDonorLoaded object:nil];
     
-    topDonorIndustriesLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorIndustriesForLawmakerNotification";
+    topDonorIndustriesLoaded = @"SunlightFactoryDidReceiveGetTopDonorIndustriesForLawmakerNotification";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:topDonorIndustriesLoaded object:nil];
     
-    transparencyIdLoaded = @"SunlightFactoryDidReceivePoliticianTransparencyIdNotification";
+    transparencyIdLoaded = @"SunlightFactoryDidReceiveGetTransparencyIDNotification";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:transparencyIdLoaded object:nil];
     
-    topDonorSectorsLoaded = @"SunlightFactoryDidReceivePoliticianTopDonorSectorsForLawmakerNotification";
+    topDonorSectorsLoaded = @"SunlightFactoryDidReceiveGetTopDonorSectorsForLawmakerNotification";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:topDonorSectorsLoaded object:nil];
 }
 

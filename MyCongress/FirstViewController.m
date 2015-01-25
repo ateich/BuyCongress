@@ -83,8 +83,8 @@
     [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[or]-|" options:0 metrics:nil views:views]];
     [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[searchByCurrentLocation]-|" options:0 metrics:nil views:views]];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticiansForZip:) name:@"SunlightFactoryDidReceivePoliticiansForZipCodeNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticiansForLocation:) name:@"SunlightFactoryDidReceivePoliticiansForLatitudeAndLongitudeNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticiansForZip:) name:@"SunlightFactoryDidReceiveGetLawmakersByZipCodeNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticiansForLocation:) name:@"SunlightFactoryDidReceiveGetLawmakersByLatitudeAndLongitudeNotification" object:nil];
 }
 
 - (void)searchForPoliticiansByZipCode:(UIButton *)sender{
@@ -101,13 +101,13 @@
 
 - (void)didReceivePoliticiansForZip:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
-    NSMutableArray *politicianData = [[userInfo objectForKey:@"getLawmakersByZipCode"] objectForKey:@"results"];
+    NSMutableArray *politicianData = [[userInfo objectForKey:@"results"] objectForKey:@"results"];
     [self openTableOfPoliticians:politicianData];
 }
 
 - (void)didReceivePoliticiansForLocation:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
-    NSMutableArray *politicianData = [[userInfo objectForKey:@"getLawmakersByLatitudeAndLongitude"] objectForKey:@"results"];
+    NSMutableArray *politicianData = [[userInfo objectForKey:@"results"] objectForKey:@"results"];
     [self openTableOfPoliticians:politicianData];
 }
 
@@ -170,8 +170,8 @@
 
 - (void) dealloc {
     //Stop listening for changes to Politician Data
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceivePoliticiansForZipCodeNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceivePoliticiansForLatitudeAndLongitudeNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveGetLawmakersByZipCodeNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveGetLawmakersByLatitudeAndLongitudeNotification" object:nil];
 }
 
 @end

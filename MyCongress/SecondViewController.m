@@ -30,7 +30,7 @@
     [super viewDidLoad];
     
     //Listen for changes to Politician Data
-    politicianDataChanged = @"SunlightFactoryDidReceivePoliticianDataNotification";
+    politicianDataChanged = @"SunlightFactoryDidReceiveGetAllLawmakersNotification";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianData:) name:politicianDataChanged object:nil];
     
     //Get all politicians asynchronously
@@ -52,7 +52,7 @@
 
 - (void)didReceivePoliticianData:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
-    NSArray *politicianData = [[userInfo objectForKey:@"allPoliticiansResponse"] objectForKey:@"results"];
+    NSArray *politicianData = [[userInfo objectForKey:@"results"] objectForKey:@"results"];
     [tableVC updateTableViewWithNewData:[tableVC createPoliticiansFromDataArray:politicianData]];
 }
 

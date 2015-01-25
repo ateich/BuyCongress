@@ -45,12 +45,12 @@ NSString *TRANSPARENCY_ID = @"42ccd9758603419ba38a2546d96a0f02";
 //}
 
 -(void)testGetAllLawmakers {
-    NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticianDataNotification";
+    NSString *politicianDataChanged = @"SunlightFactoryDidReceiveGetAllLawmakersNotification";
     
     id observerMock = [OCMockObject observerMock];
     [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
     [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
-        NSMutableDictionary *value = [userInfo objectForKey:@"allPoliticiansResponse"];
+        NSMutableDictionary *value = [userInfo objectForKey:@"results"];
         if(value && [value objectForKey:@"results"]){
             return YES;
         } else {
@@ -63,12 +63,12 @@ NSString *TRANSPARENCY_ID = @"42ccd9758603419ba38a2546d96a0f02";
 }
 
 -(void)testGetLawmakersByZipCode {
-    NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticiansForZipCodeNotification";
+    NSString *politicianDataChanged = @"SunlightFactoryDidReceiveGetLawmakersByZipCodeNotification";
     
     id observerMock = [OCMockObject observerMock];
     [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
     [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
-        NSMutableDictionary *value = [userInfo objectForKey:@"getLawmakersByZipCode"];
+        NSMutableDictionary *value = [userInfo objectForKey:@"results"];
         if(value && [value objectForKey:@"results"]){
             return YES;
         } else {
@@ -81,12 +81,12 @@ NSString *TRANSPARENCY_ID = @"42ccd9758603419ba38a2546d96a0f02";
 }
 
 -(void)XtestGetLawmakersByLocation {
-    NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticiansForLatitudeAndLongitudeNotification";
+    NSString *politicianDataChanged = @"SunlightFactoryDidReceiveGetLawmakersByLatitudeAndLongitudeNotification";
     
     id observerMock = [OCMockObject observerMock];
     [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
     [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
-        NSMutableDictionary *value = [userInfo objectForKey:@"getLawmakersByLatitudeAndLongitude"];
+        NSMutableDictionary *value = [userInfo objectForKey:@"results"];
         if(value && [value objectForKey:@"results"]){
             return YES;
         } else {
@@ -99,12 +99,12 @@ NSString *TRANSPARENCY_ID = @"42ccd9758603419ba38a2546d96a0f02";
 }
 
 -(void)testGetTopDonorsForLawmaker{
-    NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticianTopDonorForLawmakerNotification";
+    NSString *politicianDataChanged = @"SunlightFactoryDidReceiveGetTopDonorsForLawmakerNotification";
     
     id observerMock = [OCMockObject observerMock];
     [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
     [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
-        NSMutableDictionary *value = [userInfo objectForKey:@"getTopDonorsForLawmakerResponse"];
+        NSMutableDictionary *value = [userInfo objectForKey:@"results"];
         if(value){
             return YES;
         } else {
@@ -117,12 +117,12 @@ NSString *TRANSPARENCY_ID = @"42ccd9758603419ba38a2546d96a0f02";
 }
 
 -(void)testGetTopDonorIndustriesForLawmaker{
-    NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticianTopDonorIndustriesForLawmakerNotification";
+    NSString *politicianDataChanged = @"SunlightFactoryDidReceiveGetTopDonorIndustriesForLawmakerNotification";
     
     id observerMock = [OCMockObject observerMock];
     [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
     [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
-        NSMutableDictionary *value = [userInfo objectForKey:@"getTopDonorIndustriesForLawmaker"];
+        NSMutableDictionary *value = [userInfo objectForKey:@"results"];
         if(value){
             return YES;
         } else {
@@ -135,12 +135,12 @@ NSString *TRANSPARENCY_ID = @"42ccd9758603419ba38a2546d96a0f02";
 }
 
 -(void)testGetTransparencyID{
-    NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticianTransparencyIdNotification";
+    NSString *politicianDataChanged = @"SunlightFactoryDidReceiveGetTransparencyIDNotification";
     
     id observerMock = [OCMockObject observerMock];
     [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
     [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
-        NSMutableDictionary *value = [userInfo objectForKey:@"getTransparencyID"];
+        NSMutableDictionary *value = [userInfo objectForKey:@"results"];
         if(value){
             return YES;
         } else {
@@ -153,12 +153,12 @@ NSString *TRANSPARENCY_ID = @"42ccd9758603419ba38a2546d96a0f02";
 }
 
 -(void)testGetTopDonorSectorsForLawmaker{
-    NSString *politicianDataChanged = @"SunlightFactoryDidReceivePoliticianTopDonorSectorsForLawmakerNotification";
+    NSString *politicianDataChanged = @"SunlightFactoryDidReceiveGetTopDonorSectorsForLawmakerNotification";
     
     id observerMock = [OCMockObject observerMock];
     [[NSNotificationCenter defaultCenter] addMockObserver:observerMock name:politicianDataChanged object:nil];
     [[observerMock expect] notificationWithName:politicianDataChanged object:[OCMArg any] userInfo:[OCMArg checkWithBlock:^BOOL(NSDictionary *userInfo) {
-        NSMutableDictionary *value = [userInfo objectForKey:@"getTopDonorSectorsForLawmaker"];
+        NSMutableDictionary *value = [userInfo objectForKey:@"results"];
         if(value){
             return YES;
         } else {

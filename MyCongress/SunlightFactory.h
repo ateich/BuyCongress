@@ -13,6 +13,7 @@
 }
 
 -(void)getAllLawmakers;
+-(void)searchForEntity:(NSString*)entity;
 -(void)getLawmakersByZipCode:(NSString*)zip;
 -(NSString*)convertSectorCode:(NSString*)code;
 -(void)getTopDonorsForLawmaker:(NSString*)lawmakerID;

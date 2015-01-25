@@ -10,9 +10,11 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "Tokens.h"
 #import "ReadabilityFactory.h"
+#import "SunlightFactory.h"
 
 @interface ActionViewController (){
     ReadabilityFactory *readabilityFactory;
+    SunlightFactory *sunlightAPI;
 }
 
 //@property(strong,nonatomic) IBOutlet UIImageView *imageView;
@@ -25,8 +27,11 @@
     [super viewDidLoad];
     
     readabilityFactory = [[ReadabilityFactory alloc] init];
+    sunlightAPI = [[SunlightFactory alloc] init];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveReadableArticle:) name:@"ReadabilityFactoryDidReceiveReadableArticleNotification" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveEntityData:) name:@"SunlightFactoryDidReceiveSearchForEntityNotification" object:nil];
     
     for (NSExtensionItem *item in self.extensionContext.inputItems) {
         for (NSItemProvider *itemProvider in item.attachments) {
@@ -57,11 +62,45 @@
     NSLog(@"Notification received");
     NSDictionary *userInfo = [notification userInfo];
     NSString *articleHTML = [[userInfo objectForKey:@"content"] objectForKey:@"content"];
-    [self parseReadableArticleForProperNouns:articleHTML];
+    
+    //contains a dictionary of keys: word types and values: dictionary of words
+    NSMutableDictionary *properNouns = [self parseReadableArticleForProperNouns:articleHTML];
+    [self checkIfProperNounsArePoliticians:[properNouns objectForKey:@"PersonalName"]];
 }
 
--(void)parseReadableArticleForProperNouns:(NSString*)content{
-    NSMutableArray *properNouns = [[NSMutableArray alloc] init];
+-(void)checkIfProperNounsArePoliticians:(NSMutableDictionary*)properNouns{
+    if(properNouns){
+        for (NSString *person in properNouns) {
+            NSLog(@"%@", person);
+            //check if this person is a recognized politician
+            //doing this check locally would greatly increase performance
+            //vs making an api call for each person to verify they are a politican
+            //  then making additional transparency calls for each verified person
+            [sunlightAPI searchForEntity:person];
+        }
+    }
+}
+
+-(void)didReceiveEntityData:(NSNotification*)notification{
+    NSDictionary *userInfo = [notification userInfo];
+    NSArray *politicians = [userInfo objectForKey:@"results"];
+    NSLog(@"%@", politicians);
+    
+    if(politicians.count > 0){
+//        NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
+//        NSLog(@"transparency id: %@", transparencyID);
+        NSLog(@"%@", [politicians description]);
+        
+//        [sunlightAPI getTopDonorsForLawmaker:transparencyID];
+//        [sunlightAPI getTopDonorIndustriesForLawmaker:transparencyID];
+//        [sunlightAPI getTopDonorSectorsForLawmaker:transparencyID];
+    } else {
+        NSLog(@"[PoliticianDetailViewController.m] WARNING: Politician not found while checking for transparency id - Donation data will not be shown");
+    }
+}
+
+-(NSMutableDictionary*)parseReadableArticleForProperNouns:(NSString*)content{
+    NSMutableDictionary *properNouns = [[NSMutableDictionary alloc] init];
     
     //strip out all HTML tags and political titles
     content = [self stringByStrippingHTML:content];
@@ -75,11 +114,13 @@
     [tagger enumerateTagsInRange:NSMakeRange(0, [content length]) scheme:NSLinguisticTagSchemeNameType options:tagOptions usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
         NSString *token = [content substringWithRange:tokenRange];
         if(![tag isEqualToString:@"OtherWord"]){
-//            NSLog(@"%@: %@", token, tag);
-            [properNouns addObject:token];
+            if(![properNouns objectForKey:tag]){
+                [properNouns setObject:[[NSMutableDictionary alloc] init] forKey:tag];
+            }
+            [[properNouns objectForKey:tag] setObject:@YES forKey:token];
         }
     }];
-    NSLog(@"%@", [properNouns description]);
+    return properNouns;
 }
 
 -(NSString*)removePoliticalTitles:(NSString*)content{
@@ -96,6 +137,7 @@
     for(int i=0; i<wordsToRemove.count; i++){
         content = [content stringByReplacingOccurrencesOfString:[wordsToRemove objectAtIndex:i] withString:@". "];
     }
+    content = [content stringByReplacingOccurrencesOfString:@"." withString:@" "];
     
     return content;
 }
