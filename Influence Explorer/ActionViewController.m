@@ -90,7 +90,17 @@
     if(politicians.count > 0){
 //        NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
 //        NSLog(@"transparency id: %@", transparencyID);
-        NSLog(@"Found: %@", [[[politicians objectAtIndex:0] objectForKey:@"name"] description]);
+        NSString *name = [[politicians objectAtIndex:0] objectForKey:@"name"];
+        
+        //compare number of words in original query and result to remove innacurate results
+        NSNumber *numberOfWordsInQuery = [userInfo objectForKey:@"numberOfWordsInQuery"];
+        long wordsInResult = [[name componentsSeparatedByString:@" "] count] -1;
+        
+        int threshold = 2;
+        if(wordsInResult <= [numberOfWordsInQuery intValue] + threshold){
+            NSLog(@"Found: %@", name);
+        }
+        
         
 //        [sunlightAPI getTopDonorsForLawmaker:transparencyID];
 //        [sunlightAPI getTopDonorIndustriesForLawmaker:transparencyID];

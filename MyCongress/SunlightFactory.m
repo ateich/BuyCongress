@@ -13,10 +13,10 @@ NSString *sunlightKey;
 NSString *sunlightURL = @"http://congress.api.sunlightfoundation.com";
 NSString *transparencyURL = @"http://transparencydata.com/api/1.0";
 NSMutableDictionary *sectorCodes;
-NSMutableDictionary *asyncCalls;
 NSMutableDictionary *asyncDataStore;
 
 NSMutableDictionary *reverseConnectionLookup;
+NSMutableDictionary *entityQueryStore;
 
 
 @implementation SunlightFactory
@@ -44,9 +44,9 @@ NSMutableDictionary *reverseConnectionLookup;
        @"Administrative Use", @"Z",
        nil];
     
-    asyncCalls = [[NSMutableDictionary alloc] init];
     asyncDataStore = [[NSMutableDictionary alloc] init];
     reverseConnectionLookup = [[NSMutableDictionary alloc] init];
+    entityQueryStore = [[NSMutableDictionary alloc] init];
     
     return self;
 }
@@ -97,9 +97,15 @@ NSMutableDictionary *reverseConnectionLookup;
 -(void)getRequest:(NSString*)url withCallingMethod:(NSString*)callingMethod{
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60.0];
     
+    
     [request setHTTPMethod:@"GET"];
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    [asyncCalls setObject:connection forKey:callingMethod];
+    
+    if([callingMethod isEqualToString:@"searchForEntity"]){
+        long wordsInQuery = [[url componentsSeparatedByString:@"+"] count] -1;
+        [entityQueryStore setObject:[NSNumber numberWithLong:wordsInQuery] forKey:[connection description]];
+    }
+    
     [reverseConnectionLookup setObject:callingMethod forKey:[connection description]];
 }
 
@@ -127,6 +133,15 @@ NSMutableDictionary *reverseConnectionLookup;
     
     NSString *postNotificationName = [NSString stringWithFormat:@"SunlightFactoryDidReceive%@Notification", cappedString];
 //    NSLog(@"%@", postNotificationName);
+    
+    if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"searchForEntity"]){
+        NSNumber *queryWordCount = [entityQueryStore objectForKey:[connection description]];
+        if(jsonObjects){
+            NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] initWithDictionary:userInfo];
+            [extraInfo setObject:queryWordCount forKey:@"numberOfWordsInQuery"];
+            userInfo = extraInfo;
+        }
+    }
     
     if(jsonObjects){
         [[NSNotificationCenter defaultCenter] postNotificationName:postNotificationName object:self userInfo:userInfo];
