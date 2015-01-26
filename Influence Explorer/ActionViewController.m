@@ -71,7 +71,7 @@
 -(void)checkIfProperNounsArePoliticians:(NSMutableDictionary*)properNouns{
     if(properNouns){
         for (NSString *person in properNouns) {
-            NSLog(@"%@", person);
+            NSLog(@"Parsed: %@", person);
             //check if this person is a recognized politician
             //doing this check locally would greatly increase performance
             //vs making an api call for each person to verify they are a politican
@@ -84,12 +84,13 @@
 -(void)didReceiveEntityData:(NSNotification*)notification{
     NSDictionary *userInfo = [notification userInfo];
     NSArray *politicians = [userInfo objectForKey:@"results"];
-    NSLog(@"%@", politicians);
+//    NSLog(@"%@", politicians);
+    
     
     if(politicians.count > 0){
 //        NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
 //        NSLog(@"transparency id: %@", transparencyID);
-        NSLog(@"%@", [politicians description]);
+        NSLog(@"Found: %@", [[[politicians objectAtIndex:0] objectForKey:@"name"] description]);
         
 //        [sunlightAPI getTopDonorsForLawmaker:transparencyID];
 //        [sunlightAPI getTopDonorIndustriesForLawmaker:transparencyID];
@@ -104,6 +105,7 @@
     
     //strip out all HTML tags and political titles
     content = [self stringByStrippingHTML:content];
+    content = [self stringByStrippingLocations:content];
     content = [self removePoliticalTitles:content];
     
     //Get all names of people and organizations with NSLinguisticTagger
@@ -117,6 +119,7 @@
             if(![properNouns objectForKey:tag]){
                 [properNouns setObject:[[NSMutableDictionary alloc] init] forKey:tag];
             }
+            NSLog(@"%@ : %@", tag, token);
             [[properNouns objectForKey:tag] setObject:@YES forKey:token];
         }
     }];
@@ -125,19 +128,23 @@
 
 -(NSString*)removePoliticalTitles:(NSString*)content{
     NSMutableArray *wordsToRemove = [[NSMutableArray alloc] init];
-    [wordsToRemove addObject:@"Sen."];
-    [wordsToRemove addObject:@"Sen"];
-    [wordsToRemove addObject:@"Rep."];
-    [wordsToRemove addObject:@"Rep"];
-    [wordsToRemove addObject:@"Speaker"];
-    [wordsToRemove addObject:@"Leader"];
-    [wordsToRemove addObject:@"Whip"];
-    [wordsToRemove addObject:@"Chairman"];
+    [wordsToRemove addObjectsFromArray:[[NSArray alloc] initWithObjects:
+                                        @"Sen",
+                                        @"Rep",
+                                        @"Speaker",
+                                        @"Leader",
+                                        @"Whip",
+                                        @"Chairman",
+                                        @"Mayor",
+                                        nil]];
     
     for(int i=0; i<wordsToRemove.count; i++){
         content = [content stringByReplacingOccurrencesOfString:[wordsToRemove objectAtIndex:i] withString:@". "];
     }
-    content = [content stringByReplacingOccurrencesOfString:@"." withString:@" "];
+    
+    //These replacements were arrived upon by trial and error through testing articles on numerous websites
+    content = [content stringByReplacingOccurrencesOfString:@"." withString:@" .. "];
+    content = [content stringByReplacingOccurrencesOfString:@"of" withString:@"-"];
     
     return content;
 }
@@ -146,6 +153,14 @@
     NSRange r;
     while ((r = [s rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound)
         s = [s stringByReplacingCharactersInRange:r withString:@""];
+    return s;
+}
+
+-(NSString*)stringByStrippingLocations:(NSString*)s{
+//    /(\b of \b)([A-Z]\w+) ([A-Z]\w+)?
+    NSRange r;
+    while ((r = [s rangeOfString:@"(\\b of \\b)([A-Z]\\w+) ([A-Z]\\w+)?" options:NSRegularExpressionSearch]).location != NSNotFound)
+        s = [s stringByReplacingCharactersInRange:r withString:@" .. "];
     return s;
 }
 

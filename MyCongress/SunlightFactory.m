@@ -83,7 +83,7 @@ NSMutableDictionary *reverseConnectionLookup;
 -(void)searchForEntity:(NSString*)entity{
     entity = [entity stringByReplacingOccurrencesOfString:@" " withString:@"+"];
     NSString *url = [NSString stringWithFormat:@"%@/entities.json%@&search=%@", transparencyURL, sunlightKey, entity];
-    NSLog(@"URL: %@", url);
+//    NSLog(@"URL: %@", url);
     [self getRequest:url withCallingMethod:@"searchForEntity"];
 }
 
