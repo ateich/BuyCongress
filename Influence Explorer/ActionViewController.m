@@ -21,7 +21,9 @@
 
 @end
 
-@implementation ActionViewController
+@implementation ActionViewController{
+    UIView *body;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -50,6 +52,17 @@
             }
         }
     }
+    
+    body = [[UIView alloc] init];
+    [body setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:body];
+    [body setBackgroundColor:[UIColor greenColor]];
+    
+    NSDictionary *views = NSDictionaryOfVariableBindings(body);
+    NSNumber *topMarginWrapped = [[NSNumber alloc] initWithDouble:_navBar.frame.size.height + _navBar.frame.origin.y];
+    NSDictionary *metrics = @{@"topMargin":topMarginWrapped};
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[body]-0-|" options:0 metrics:metrics views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topMargin-[body]-0-|" options:0 metrics:metrics views:views]];
 }
 
 -(void)parseUrlForArticle:(NSURL*)url{
@@ -86,10 +99,7 @@
     NSArray *politicians = [userInfo objectForKey:@"results"];
 //    NSLog(@"%@", politicians);
     
-    
     if(politicians.count > 0){
-//        NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
-//        NSLog(@"transparency id: %@", transparencyID);
         NSString *name = [[politicians objectAtIndex:0] objectForKey:@"name"];
         
         //compare number of words in original query and result to remove innacurate results
@@ -99,15 +109,47 @@
         int threshold = 2;
         if(wordsInResult <= [numberOfWordsInQuery intValue] + threshold){
             NSLog(@"Found: %@", name);
+            
+            //What do I do once I have received a result?
+            //Display it in a card.
+            [self createCardWithBasicInformation:[politicians objectAtIndex:0]];
+            
+            //Name
+            
+            
+            //        NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
+            //        NSLog(@"transparency id: %@", transparencyID);
+            
+            //        [sunlightAPI getTopDonorsForLawmaker:transparencyID];
+            //        [sunlightAPI getTopDonorIndustriesForLawmaker:transparencyID];
+            //        [sunlightAPI getTopDonorSectorsForLawmaker:transparencyID];
         }
         
-        
-//        [sunlightAPI getTopDonorsForLawmaker:transparencyID];
-//        [sunlightAPI getTopDonorIndustriesForLawmaker:transparencyID];
-//        [sunlightAPI getTopDonorSectorsForLawmaker:transparencyID];
     } else {
         NSLog(@"[PoliticianDetailViewController.m] WARNING: Politician not found while checking for transparency id - Donation data will not be shown");
     }
+}
+
+-(void)createCardWithBasicInformation:(NSMutableDictionary*)data{
+    UIView *card = [[UIView alloc] init];
+    [card setBackgroundColor:[UIColor blueColor]];
+    [card setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [body addSubview:card];
+    
+    UILabel *name = [[UILabel alloc] init];
+    [name setBackgroundColor:[UIColor redColor]];
+    [name setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [name setText:@"TEST VALUE"];
+    [card addSubview:name];
+    
+    NSDictionary *views = NSDictionaryOfVariableBindings(card, name);
+    NSDictionary *metrics = @{@"cardMargin": @10};
+    
+    [body addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[card]-cardMargin-|" options:0 metrics:metrics views:views]];
+    [body addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-cardMargin-[card]" options:0 metrics:metrics views:views]];
+    
+    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[name]-cardMargin-|" options:0 metrics:metrics views:views]];
+    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-cardMargin-[name]" options:0 metrics:metrics views:views]];
 }
 
 -(NSMutableDictionary*)parseReadableArticleForProperNouns:(NSString*)content{
