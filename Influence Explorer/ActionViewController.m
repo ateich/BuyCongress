@@ -15,6 +15,10 @@
 @interface ActionViewController (){
     ReadabilityFactory *readabilityFactory;
     SunlightFactory *sunlightAPI;
+    UIScrollView *scrollView;
+    UIView *contentView;
+    UIView *bottomCard;
+    NSArray *bottomMostConstraints;
 }
 
 //@property(strong,nonatomic) IBOutlet UIImageView *imageView;
@@ -22,7 +26,7 @@
 @end
 
 @implementation ActionViewController{
-    UIView *body;
+    
 }
 
 - (void)viewDidLoad {
@@ -53,16 +57,30 @@
         }
     }
     
-    body = [[UIView alloc] init];
-    [body setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.view addSubview:body];
-    [body setBackgroundColor:[UIColor greenColor]];
+    scrollView = [[UIScrollView alloc] init];
+    [scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:scrollView];
+        [scrollView setBackgroundColor:[UIColor greenColor]];
     
-    NSDictionary *views = NSDictionaryOfVariableBindings(body);
-    NSNumber *topMarginWrapped = [[NSNumber alloc] initWithDouble:_navBar.frame.size.height + _navBar.frame.origin.y];
-    NSDictionary *metrics = @{@"topMargin":topMarginWrapped};
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[body]-0-|" options:0 metrics:metrics views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topMargin-[body]-0-|" options:0 metrics:metrics views:views]];
+    contentView = [[UIView alloc] init];
+        [contentView setBackgroundColor:[UIColor purpleColor]];
+    [contentView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [scrollView addSubview:contentView];
+    
+    //AUTO LAYOUT (VFL)
+    NSDictionary *views = NSDictionaryOfVariableBindings(scrollView, contentView);
+    NSNumber *topMargin = [NSNumber numberWithDouble: _navBar.frame.size.height + _navBar.frame.origin.y];
+    NSDictionary *metrics = @{@"topMargin": topMargin, @"sectionPadding": @20};
+    
+    //Scroll View Layout
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[scrollView]-0-|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topMargin-[scrollView]-0-|" options:0 metrics:metrics views:views]];
+    [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[contentView]-0-|" options:0 metrics:nil views:views]];
+    [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[contentView]-0-|" options:0 metrics:nil views:views]];
+    [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView(==scrollView)]|" options:0 metrics:nil views:views]];
+    
+    //Entire page layout, vertically
+//    views = NSDictionaryOfVariableBindings(contentView);
 }
 
 -(void)parseUrlForArticle:(NSURL*)url{
@@ -131,25 +149,50 @@
 }
 
 -(void)createCardWithBasicInformation:(NSMutableDictionary*)data{
+    
+    NSLog(@"card data: %@", [data description]);
+    
     UIView *card = [[UIView alloc] init];
     [card setBackgroundColor:[UIColor blueColor]];
     [card setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [body addSubview:card];
+    [contentView addSubview:card];
     
     UILabel *name = [[UILabel alloc] init];
-    [name setBackgroundColor:[UIColor redColor]];
     [name setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [name setText:@"TEST VALUE"];
+    [name setText:[data objectForKey:@"name"]];
     [card addSubview:name];
     
-    NSDictionary *views = NSDictionaryOfVariableBindings(card, name);
+    NSDictionary *views;
     NSDictionary *metrics = @{@"cardMargin": @10};
     
-    [body addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[card]-cardMargin-|" options:0 metrics:metrics views:views]];
-    [body addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-cardMargin-[card]" options:0 metrics:metrics views:views]];
+    /*
+     * Add card to view
+     */
+    //if this card will be the first card on screen, bind it to the top
+    if(!bottomCard){
+        views = NSDictionaryOfVariableBindings(card, name);
+        [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-cardMargin-[card]" options:0 metrics:metrics views:views]];
+    } else {
+        views = NSDictionaryOfVariableBindings(card, name, bottomCard);
+        [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[bottomCard]-cardMargin-[card]" options:0 metrics:metrics views:views]];
+    }
     
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[card]-cardMargin-|" options:0 metrics:metrics views:views]];
+    
+    [contentView removeConstraints:bottomMostConstraints];
+    bottomMostConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[card]-cardMargin-|" options:0 metrics:metrics views:views];
+    [contentView addConstraints:bottomMostConstraints];
+    bottomCard = card;
+    
+    /*
+     * Add data to card
+     */
+    views = NSDictionaryOfVariableBindings(card, name);
+    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-cardMargin-[name]-cardMargin-|" options:0 metrics:metrics views:views]];
     [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[name]-cardMargin-|" options:0 metrics:metrics views:views]];
-    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-cardMargin-[name]" options:0 metrics:metrics views:views]];
+    
+    //STRICTLY FOR SCROLLVIEW TESTING - DELETE LATER
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[card(==100)]" options:0 metrics:nil views:views]];
 }
 
 -(NSMutableDictionary*)parseReadableArticleForProperNouns:(NSString*)content{
