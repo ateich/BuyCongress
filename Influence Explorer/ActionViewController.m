@@ -157,9 +157,24 @@
     [card setTranslatesAutoresizingMaskIntoConstraints:NO];
     [contentView addSubview:card];
     
+    NSMutableString *nameString = [data objectForKey:@"name"];
+    NSArray *splitByComma = [nameString componentsSeparatedByString:@","];
+    if(splitByComma.count == 2){
+        nameString = [NSMutableString stringWithFormat:@"%@ %@", [splitByComma objectAtIndex:1], [splitByComma objectAtIndex:0]];
+    }
+    nameString = [NSMutableString stringWithString:[nameString capitalizedString]];
+    
+    //remove anything between parentheses
+    NSRegularExpression *regex = [NSRegularExpression
+                                  regularExpressionWithPattern:@"\\(.+?\\)"
+                                  options:NSRegularExpressionCaseInsensitive
+                                  error:NULL];
+    
+    [regex replaceMatchesInString:nameString options:0 range:NSMakeRange(0, [nameString length]) withTemplate:@""];
+    
     UILabel *name = [[UILabel alloc] init];
     [name setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [name setText:[data objectForKey:@"name"]];
+    [name setText:nameString];
     [card addSubview:name];
     
     NSDictionary *views;
@@ -188,7 +203,7 @@
      * Add data to card
      */
     views = NSDictionaryOfVariableBindings(card, name);
-    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-cardMargin-[name]-cardMargin-|" options:0 metrics:metrics views:views]];
+    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-cardMargin-[name]" options:0 metrics:metrics views:views]];
     [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[name]-cardMargin-|" options:0 metrics:metrics views:views]];
     
     //STRICTLY FOR SCROLLVIEW TESTING - DELETE LATER
