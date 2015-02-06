@@ -243,10 +243,12 @@
         NSString *labelText = [NSString stringWithFormat:@"%@ - %@", donorName, totalAmount];
         labelText = [[labelText lowercaseString] capitalizedString];
         UILabel *label = [[UILabel alloc] init];
-        [label setNumberOfLines:0];
+//        [label setNumberOfLines:0];
         [section addSubview:label];
         [label setTranslatesAutoresizingMaskIntoConstraints:NO];
         label.text = labelText;
+        label.adjustsFontSizeToFitWidth = YES;
+        
         
         NSDictionary *views;
         

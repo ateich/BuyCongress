@@ -88,6 +88,9 @@
         [state setTranslatesAutoresizingMaskIntoConstraints:NO];
         [cell addSubview:state];
         
+        //formatting
+        [state setTextColor:[UIColor grayColor]];
+        
         state.text = [NSString stringWithFormat:@"%@ - %@", thisPolitician.party, thisPolitician.state];
         
         //LEFT
