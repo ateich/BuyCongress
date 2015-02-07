@@ -11,6 +11,7 @@
 #import "Tokens.h"
 #import "ReadabilityFactory.h"
 #import "SunlightFactory.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface ActionViewController (){
     ReadabilityFactory *readabilityFactory;
@@ -156,6 +157,8 @@
     [card setBackgroundColor:[UIColor blueColor]];
     [card setTranslatesAutoresizingMaskIntoConstraints:NO];
     [contentView addSubview:card];
+    card.layer.cornerRadius = 5;
+    card.clipsToBounds = YES;
     
     NSMutableString *nameString = [data objectForKey:@"name"];
     NSArray *splitByComma = [nameString componentsSeparatedByString:@","];
