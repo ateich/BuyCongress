@@ -7,6 +7,7 @@
 //
 
 #import "PoliticianDetailViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 //Need to change this to a scrollview
 @interface PoliticianDetailViewController (){
@@ -62,7 +63,28 @@
     UIImageView *photo = [[UIImageView alloc] init];
     [photo setBackgroundColor:[UIColor blackColor]];
     [photo setTranslatesAutoresizingMaskIntoConstraints:NO];
+    UIImage *politicianPhoto = [UIImage imageNamed:[NSString stringWithFormat:@"%@.jpg", politician.bioguideID]];
+    [photo setImage:politicianPhoto];
+    [photo setContentMode:UIViewContentModeScaleAspectFit];
+    
+    double photoSize = 112.5;
+    
+    UIColor *bgAndBorderColor = [UIColor blackColor];
+//    UIColor *bgAndBorderColor = [UIColor colorWithRed:112.0/255 green:138.0/255 blue:153.0/255 alpha:1];
+    photo.layer.backgroundColor=[bgAndBorderColor CGColor];
+    photo.layer.cornerRadius=photoSize/2;
+    photo.layer.borderWidth=2.0;
+    photo.layer.masksToBounds = YES;
+    photo.layer.borderColor=[bgAndBorderColor CGColor];
+    
     [contentView addSubview:photo];
+    
+    if(!politicianPhoto){
+        NSLog(@"MISSING PHOTO %@.jpg", politician.bioguideID);
+        
+        //Hide the image if there isn't one to show
+        photoSize = 0;
+    }
     
     //Contact Section
     contactSection =[[UIView alloc] init];
@@ -96,12 +118,12 @@
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView(==scrollView)]|" options:0 metrics:nil views:views]];
     
     //Entire page layout, vertically
-    NSDictionary *metrics = @{@"sectionPadding": @20};
+    NSDictionary *metrics = @{@"sectionPadding": @20, @"photoSize": [NSNumber numberWithDouble:photoSize]};
     views = NSDictionaryOfVariableBindings(contentView, photo, contactSection, individualDonorsSection, industryDonorsSection, sectorDonorsSection);
-    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-sectionPadding-[photo(75)]-sectionPadding-[contactSection]-sectionPadding-[individualDonorsSection]-sectionPadding-[industryDonorsSection]-sectionPadding-[sectorDonorsSection]|" options:0 metrics:metrics views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-sectionPadding-[photo(photoSize)]-sectionPadding-[contactSection]-sectionPadding-[individualDonorsSection]-sectionPadding-[industryDonorsSection]-sectionPadding-[sectorDonorsSection]|" options:0 metrics:metrics views:views]];
     
     //Photo layout
-    [contentView addConstraint:[NSLayoutConstraint constraintWithItem:photo attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:75]];
+    [contentView addConstraint:[NSLayoutConstraint constraintWithItem:photo attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:photoSize]];
     [scrollView addConstraint:[NSLayoutConstraint constraintWithItem:photo attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:contentView attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
     
     [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[contactSection]-0-|" options:0 metrics:nil views:views]];
