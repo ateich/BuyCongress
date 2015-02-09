@@ -154,11 +154,12 @@
     NSLog(@"card data: %@", [data description]);
     
     UIView *card = [[UIView alloc] init];
-    [card setBackgroundColor:[UIColor blueColor]];
+    [card setBackgroundColor:[UIColor whiteColor]];
     [card setTranslatesAutoresizingMaskIntoConstraints:NO];
     [contentView addSubview:card];
     card.layer.cornerRadius = 5;
     card.clipsToBounds = YES;
+    card.alpha = 0;
     
     NSMutableString *nameString = [data objectForKey:@"name"];
     NSArray *splitByComma = [nameString componentsSeparatedByString:@","];
@@ -211,6 +212,11 @@
     
     //STRICTLY FOR SCROLLVIEW TESTING - DELETE LATER
     [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[card(==100)]" options:0 metrics:nil views:views]];
+    
+    //Animate card appearing
+    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        card.alpha = 1;
+     } completion:^(BOOL finished){}];
 }
 
 -(NSMutableDictionary*)parseReadableArticleForProperNouns:(NSString*)content{
