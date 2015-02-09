@@ -61,10 +61,10 @@
     scrollView = [[UIScrollView alloc] init];
     [scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:scrollView];
-        [scrollView setBackgroundColor:[UIColor greenColor]];
+//        [scrollView setBackgroundColor:[UIColor greenColor]];
     
     contentView = [[UIView alloc] init];
-        [contentView setBackgroundColor:[UIColor purpleColor]];
+//        [contentView setBackgroundColor:[UIColor purpleColor]];
     [contentView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [scrollView addSubview:contentView];
     
@@ -217,6 +217,12 @@
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         card.alpha = 1;
      } completion:^(BOOL finished){}];
+    
+    //Add a shadow to the card
+    card.layer.masksToBounds = NO;
+    card.layer.shadowOffset = CGSizeMake(0, 3);
+    card.layer.shadowRadius = 3;
+    card.layer.shadowOpacity = 0.5;
 }
 
 -(NSMutableDictionary*)parseReadableArticleForProperNouns:(NSString*)content{
