@@ -17,6 +17,7 @@ NSMutableDictionary *asyncDataStore;
 
 NSMutableDictionary *reverseConnectionLookup;
 NSMutableDictionary *entityQueryStore;
+NSMutableDictionary *entityLawmakerIdStore;
 
 
 @implementation SunlightFactory
@@ -47,6 +48,7 @@ NSMutableDictionary *entityQueryStore;
     asyncDataStore = [[NSMutableDictionary alloc] init];
     reverseConnectionLookup = [[NSMutableDictionary alloc] init];
     entityQueryStore = [[NSMutableDictionary alloc] init];
+    entityLawmakerIdStore = [[NSMutableDictionary alloc] init];
     
     return self;
 }
@@ -104,6 +106,15 @@ NSMutableDictionary *entityQueryStore;
     if([callingMethod isEqualToString:@"searchForEntity"]){
         long wordsInQuery = [[url componentsSeparatedByString:@"+"] count] -1;
         [entityQueryStore setObject:[NSNumber numberWithLong:wordsInQuery] forKey:[connection description]];
+    } else if([callingMethod isEqualToString:@"getTopDonorIndustriesForLawmaker"]){
+        NSLog(@"URL: %@", url);
+        
+        //get politician id from url
+        //http://transparencydata.com/api/1.0/aggregates/pol/c343c50275e6481e9b7b0c9c0cc430e5/contributors/industries.json?apikey=d5ac2a8391d94345b8e93d5c69dd8739
+        NSString *lawmakerID = [[url componentsSeparatedByString:@"http://transparencydata.com/api/1.0/aggregates/pol/"] objectAtIndex:1];
+        lawmakerID = [[lawmakerID componentsSeparatedByString:@"/"] objectAtIndex:0];
+        
+        [entityLawmakerIdStore setObject:lawmakerID forKey:[connection description]];
     }
     
     [reverseConnectionLookup setObject:callingMethod forKey:[connection description]];
@@ -139,6 +150,12 @@ NSMutableDictionary *entityQueryStore;
         if(jsonObjects){
             NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] initWithDictionary:userInfo];
             [extraInfo setObject:queryWordCount forKey:@"numberOfWordsInQuery"];
+            userInfo = extraInfo;
+        }
+    } else if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getTopDonorIndustriesForLawmaker"]){
+        if(jsonObjects){
+            NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] initWithDictionary:userInfo];
+            [extraInfo setObject:[entityLawmakerIdStore objectForKey:[connection description]] forKey:@"callingLawmakerId"];
             userInfo = extraInfo;
         }
     }

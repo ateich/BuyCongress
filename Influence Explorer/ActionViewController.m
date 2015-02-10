@@ -20,6 +20,9 @@
     UIView *contentView;
     UIView *bottomCard;
     NSArray *bottomMostConstraints;
+    NSString *topDonorIndustriesLoaded;
+    
+    NSMutableDictionary *cardDonorIndustryLabels;
 }
 
 //@property(strong,nonatomic) IBOutlet UIImageView *imageView;
@@ -32,6 +35,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    cardDonorIndustryLabels = [[NSMutableDictionary alloc] init];
     
     readabilityFactory = [[ReadabilityFactory alloc] init];
     sunlightAPI = [[SunlightFactory alloc] init];
@@ -82,6 +87,9 @@
     
     //Entire page layout, vertically
 //    views = NSDictionaryOfVariableBindings(contentView);
+    
+    topDonorIndustriesLoaded = @"SunlightFactoryDidReceiveGetTopDonorIndustriesForLawmakerNotification";
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianIndustryData:) name:topDonorIndustriesLoaded object:nil];
 }
 
 -(void)parseUrlForArticle:(NSURL*)url{
@@ -119,34 +127,80 @@
 //    NSLog(@"%@", politicians);
     
     if(politicians.count > 0){
-        NSString *name = [[politicians objectAtIndex:0] objectForKey:@"name"];
         
-        //compare number of words in original query and result to remove innacurate results
-        NSNumber *numberOfWordsInQuery = [userInfo objectForKey:@"numberOfWordsInQuery"];
-        long wordsInResult = [[name componentsSeparatedByString:@" "] count] -1;
+        //find the first non-individual
+        //  if no non-individuals found, do nothing
+        int foundNonIndividualAtPosition = -1;
+        for (int i=0; i<politicians.count; i++) {
+            if(![[[politicians objectAtIndex:i] objectForKey:@"type"] isEqualToString:@"individual"]){
+                foundNonIndividualAtPosition = i;
+                break;
+            }
+        }
         
-        int threshold = 2;
-        if(wordsInResult <= [numberOfWordsInQuery intValue] + threshold){
-            NSLog(@"Found: %@", name);
+        if(foundNonIndividualAtPosition >= 0){
+            NSString *name = [[politicians objectAtIndex:0] objectForKey:@"name"];
             
-            //What do I do once I have received a result?
-            //Display it in a card.
-            [self createCardWithBasicInformation:[politicians objectAtIndex:0]];
+            //compare number of words in original query and result to remove innacurate results
+            NSNumber *numberOfWordsInQuery = [userInfo objectForKey:@"numberOfWordsInQuery"];
+            long wordsInResult = [[name componentsSeparatedByString:@" "] count] -1;
             
-            //Name
-            
-            
-            //        NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
-            //        NSLog(@"transparency id: %@", transparencyID);
-            
-            //        [sunlightAPI getTopDonorsForLawmaker:transparencyID];
-            //        [sunlightAPI getTopDonorIndustriesForLawmaker:transparencyID];
-            //        [sunlightAPI getTopDonorSectorsForLawmaker:transparencyID];
+            int threshold = 2;
+            if(wordsInResult <= [numberOfWordsInQuery intValue] + threshold){
+                NSLog(@"Found: %@", name);
+                
+                //What do I do once I have received a result?
+                //Display it in a card.
+                [self createCardWithBasicInformation:[politicians objectAtIndex:0]];
+                
+    //            NSLog(@"Card data: %@", [[politicians objectAtIndex:0] description]);
+                
+                if([[[politicians objectAtIndex:0] objectForKey:@"type"] isEqualToString:@"politician"]){
+                    NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
+                    NSLog(@"transparency id: %@", transparencyID);
+                
+                    //        [sunlightAPI getTopDonorsForLawmaker:transparencyID];
+                    [sunlightAPI getTopDonorIndustriesForLawmaker:transparencyID];
+                    //        [sunlightAPI getTopDonorSectorsForLawmaker:transparencyID];
+                }
+            }
         }
         
     } else {
         NSLog(@"[PoliticianDetailViewController.m] WARNING: Politician not found while checking for transparency id - Donation data will not be shown");
     }
+}
+
+-(void)didReceivePoliticianIndustryData:(NSNotification*)notification{
+    NSDictionary *userInfo = [notification userInfo];
+    NSString *callingLawmakerId = [userInfo objectForKey:@"callingLawmakerId"];
+    NSArray *donorIndustries = [userInfo objectForKey:@"results"];
+//    NSLog(@"Donor Industries: %@", [donorIndustries description]);
+    
+    NSString *topDonorIndustries = @"Top Contributing Industries: ";
+    bool showDonors = NO;
+    //show only top 3 donor industries
+    if(donorIndustries.count >= 3){
+        showDonors = YES;
+        for (int i=0; i<3; i++) {
+            topDonorIndustries = [NSString stringWithFormat:@"%@%@, ", topDonorIndustries, [[[donorIndustries objectAtIndex:i] objectForKey:@"name"] capitalizedString]];
+        }
+    }
+    if(showDonors){
+        topDonorIndustries = [topDonorIndustries substringToIndex:[topDonorIndustries length]-2];
+        NSLog(@"%@", topDonorIndustries);
+        //update card with callingLawmakerId
+        UILabel *donorsLabel = [cardDonorIndustryLabels objectForKey:callingLawmakerId];
+        donorsLabel.text = topDonorIndustries;
+        donorsLabel.numberOfLines = 0;
+        
+        [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            donorsLabel.alpha = 1;
+        } completion:^(BOOL finished){}];
+    }
+    
+//    [industryDonorsSection setAlpha:0.0f];
+//    [self createDonorDataSectionWithDonors:donorIndustries andSection:industryDonorsSection andTitle:@"Top Donors by Industry"];
 }
 
 -(void)createCardWithBasicInformation:(NSMutableDictionary*)data{
@@ -181,6 +235,13 @@
     [name setText:nameString];
     [card addSubview:name];
     
+    UILabel *industryDonors = [[UILabel alloc] init];
+    [industryDonors setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [card addSubview:industryDonors];
+    industryDonors.alpha = 0;
+    
+    [cardDonorIndustryLabels setObject:industryDonors forKey:[data objectForKey:@"id"]];
+    
     NSDictionary *views;
     NSDictionary *metrics = @{@"cardMargin": @10};
     
@@ -206,9 +267,12 @@
     /*
      * Add data to card
      */
-    views = NSDictionaryOfVariableBindings(card, name);
+    views = NSDictionaryOfVariableBindings(card, name, industryDonors);
     [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-cardMargin-[name]" options:0 metrics:metrics views:views]];
     [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[name]-cardMargin-|" options:0 metrics:metrics views:views]];
+    
+    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[name]-cardMargin-[industryDonors]" options:0 metrics:metrics views:views]];
+    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[industryDonors]-cardMargin-|" options:0 metrics:metrics views:views]];
     
     //STRICTLY FOR SCROLLVIEW TESTING - DELETE LATER
     [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[card(==100)]" options:0 metrics:nil views:views]];
@@ -223,6 +287,10 @@
     card.layer.shadowOffset = CGSizeMake(0, 3);
     card.layer.shadowRadius = 3;
     card.layer.shadowOpacity = 0.5;
+}
+
+-(void)addIndustryDonorsToCard:(NSString *)donors forLawmaker:(NSString*)lawmakerId{
+    
 }
 
 -(NSMutableDictionary*)parseReadableArticleForProperNouns:(NSString*)content{
