@@ -179,7 +179,8 @@
     
     NSString *topDonorIndustries = @"Top Contributing Industries: ";
     bool showDonors = NO;
-    //show only top 3 donor industries
+    //show donors if there are any,
+    //  only show top 3 donor industries
     if(donorIndustries.count >= 3){
         showDonors = YES;
         for (int i=0; i<3; i++) {
@@ -188,8 +189,7 @@
     }
     if(showDonors){
         topDonorIndustries = [topDonorIndustries substringToIndex:[topDonorIndustries length]-2];
-        NSLog(@"%@", topDonorIndustries);
-        //update card with callingLawmakerId
+        
         UILabel *donorsLabel = [cardDonorIndustryLabels objectForKey:callingLawmakerId];
         donorsLabel.text = topDonorIndustries;
         donorsLabel.numberOfLines = 0;
@@ -216,9 +216,10 @@
     card.alpha = 0;
     
     NSMutableString *nameString = [data objectForKey:@"name"];
+    
     NSArray *splitByComma = [nameString componentsSeparatedByString:@","];
     if(splitByComma.count == 2){
-        nameString = [NSMutableString stringWithFormat:@"%@ %@", [splitByComma objectAtIndex:1], [splitByComma objectAtIndex:0]];
+        nameString = [NSMutableString stringWithFormat:@"%@ %@", [[splitByComma objectAtIndex:1] substringFromIndex:1], [splitByComma objectAtIndex:0]];
     }
     nameString = [NSMutableString stringWithString:[nameString capitalizedString]];
     
