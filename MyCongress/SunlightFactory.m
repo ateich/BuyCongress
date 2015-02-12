@@ -72,26 +72,22 @@ NSMutableDictionary *entityLawmakerIdStore;
 
 -(void)getTopDonorIndustriesForLawmaker:(NSString*)lawmakerID{
     NSString *url = [NSString stringWithFormat:@"%@/aggregates/pol/%@/contributors/industries.json%@", transparencyURL, lawmakerID, sunlightKey];
-//    NSLog(@"URL: %@", url);
     [self getRequest:url withCallingMethod:@"getTopDonorIndustriesForLawmaker"];
 }
 
 -(void)getTopDonorSectorsForLawmaker:(NSString*)lawmakerID{
     NSString *url = [NSString stringWithFormat:@"%@/aggregates/pol/%@/contributors/sectors.json%@", transparencyURL, lawmakerID, sunlightKey];
-//    NSLog(@"URL: %@", url);
     [self getRequest:url withCallingMethod:@"getTopDonorSectorsForLawmaker"];
 }
 
 -(void)searchForEntity:(NSString*)entity{
     entity = [entity stringByReplacingOccurrencesOfString:@" " withString:@"+"];
     NSString *url = [NSString stringWithFormat:@"%@/entities.json%@&search=%@", transparencyURL, sunlightKey, entity];
-//    NSLog(@"URL: %@", url);
     [self getRequest:url withCallingMethod:@"searchForEntity"];
 }
 
 -(void)getLawmakerTransparencyIDFromFirstName:(NSString*)first andLastName:(NSString*)last{
     NSString *url = [NSString stringWithFormat:@"%@/entities.json%@&search=%@+%@&type=politician", transparencyURL, sunlightKey, first, last];
-//    NSLog(@"URL: %@", url);
     [self getRequest:url withCallingMethod:@"getTransparencyID"];
 }
 
@@ -102,7 +98,6 @@ NSMutableDictionary *entityLawmakerIdStore;
     organization = [organization stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
     
     NSString *url = [NSString stringWithFormat:@"%@/contributions.json%@&contributor_ft=%@&recipient_ft=%@", transparencyURL, sunlightKey, organization, politician];
-    NSLog(@"getContributionsFromOrganizationToPolitician URL: %@", url);
     [self getRequest:url withCallingMethod:@"getContributionsFromOrganizationToPolitician"];
 }
 
@@ -118,7 +113,6 @@ NSMutableDictionary *entityLawmakerIdStore;
         long wordsInQuery = [[url componentsSeparatedByString:@"+"] count] -1;
         [entityQueryStore setObject:[NSNumber numberWithLong:wordsInQuery] forKey:[connection description]];
     } else if([callingMethod isEqualToString:@"getTopDonorIndustriesForLawmaker"]){
-        NSLog(@"URL: %@", url);
         
         //get politician id from url
         //http://transparencydata.com/api/1.0/aggregates/pol/c343c50275e6481e9b7b0c9c0cc430e5/contributors/industries.json?apikey=d5ac2a8391d94345b8e93d5c69dd8739
@@ -154,7 +148,6 @@ NSMutableDictionary *entityLawmakerIdStore;
     NSString *cappedString = [methodName stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:firstCapChar];
     
     NSString *postNotificationName = [NSString stringWithFormat:@"SunlightFactoryDidReceive%@Notification", cappedString];
-    NSLog(@"%@", postNotificationName);
     
     if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"searchForEntity"]){
         NSNumber *queryWordCount = [entityQueryStore objectForKey:[connection description]];
@@ -171,7 +164,6 @@ NSMutableDictionary *entityLawmakerIdStore;
         }
     } else if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getContributionsFromOrganizationToPolitician"]){
         if(jsonObjects){
-            NSLog(@"getContributionsFromOrganizationToPolitician connection URL: %@", [[[connection currentRequest] URL] description]);
             
             //split URL to get contributor_ft & recipient_ft
             NSString *urlPath = [[[connection currentRequest] URL] description];

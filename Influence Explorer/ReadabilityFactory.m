@@ -28,15 +28,12 @@
 }
 
 -(void)makeReadableArticleFromUrl:(NSString*)url{
-    NSLog(@"makeReadableArticleFromUrl");
     [self getRequest:url withCallingMethod:@"getReadableArticle"];
 }
 
 #pragma mark - Async request helper functions
 -(void)getRequest:(NSString*)url withCallingMethod:(NSString*)callingMethod{
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60.0];
-    
-    NSLog(@"get request");
     
     [request setHTTPMethod:@"GET"];
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -49,7 +46,6 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
-    NSLog(@"Received some data");
     if(connection == asyncCalls[@"getReadableArticle"]){
         [[asyncDataStore objectForKey:@"getReadableArticle"] appendData:data];
     }
@@ -60,9 +56,6 @@
     NSError *error;
     NSDictionary *userInfo;
     NSString *postNotificationName;
-    
-    NSLog(@"finsihed loading");
-    
     
     //Parse JSON data for the given connection
     if(connection == asyncCalls[@"getReadableArticle"]){

@@ -55,7 +55,6 @@
                 [itemProvider loadItemForTypeIdentifier:(NSString *)kUTTypeURL options:nil completionHandler:^(NSURL *url, NSError *error) {
                     if(url) {
                         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                            NSLog(@"%@", [url description]);
                             [self parseUrlForArticle:url];
                         }];
                     } else if(error){
@@ -100,12 +99,10 @@
 
 -(void)parseUrlForArticle:(NSURL*)url{
     NSString *apiUrl = [NSString stringWithFormat:@"https://readability.com/api/content/v1/parser?url=%@?currentPage=all&token=%@", [url absoluteString], [Tokens getReadabilityToken]];
-    NSLog(@"%@", apiUrl);
     [readabilityFactory makeReadableArticleFromUrl:apiUrl];
 }
 
 -(void)didReceiveReadableArticle:(NSNotification*)notification{
-    NSLog(@"Notification received");
     NSDictionary *userInfo = [notification userInfo];
     NSString *articleHTML = [[userInfo objectForKey:@"content"] objectForKey:@"content"];
     
@@ -117,7 +114,6 @@
 -(void)checkIfProperNounsArePoliticians:(NSMutableDictionary*)properNouns{
     if(properNouns){
         for (NSString *person in properNouns) {
-            NSLog(@"Parsed: %@", person);
             //check if this person is a recognized politician
             //doing this check locally would greatly increase performance
             //vs making an api call for each person to verify they are a politican
@@ -130,7 +126,6 @@
 -(void)didReceiveEntityData:(NSNotification*)notification{
     NSDictionary *userInfo = [notification userInfo];
     NSArray *politicians = [userInfo objectForKey:@"results"];
-//    NSLog(@"%@", politicians);
     
     if(politicians.count > 0){
         
@@ -154,17 +149,13 @@
             
             int threshold = 2;
             if(wordsInResult <= [numberOfWordsInQuery intValue] + threshold){
-                NSLog(@"Found: %@", name);
                 
                 //What do I do once I have received a result?
                 //Display it in a card.
                 [self createCardWithBasicInformation:politicianDict];
                 
-    //            NSLog(@"Card data: %@", [politicianDict description]);
-                
                 if([[politicianDict objectForKey:@"type"] isEqualToString:@"politician"]){
                     NSString *transparencyID = [politicianDict objectForKey:@"id"];
-                    NSLog(@"transparency id: %@", transparencyID);
                     
                     [politicainsFound addObject:[politicianDict objectForKey:@"name"]];
                 
@@ -175,12 +166,10 @@
                     NSArray *organizationsFoundSoFar = [NSArray arrayWithArray:organizationsFound];
                     //for each organization that has already been created as a card
                     for (int i=0; i<organizationsFoundSoFar.count; i++) {
-                        NSLog(@"Found %@ with %@", [organizationsFoundSoFar objectAtIndex:i], name);
                         [sunlightAPI getContributionsFromOrganization:[organizationsFoundSoFar objectAtIndex:i] ToPolitician:name];
                     }
                     
                 } else if([[politicianDict objectForKey:@"type"] isEqualToString:@"organization"]){
-                    NSLog(@"FOUND AN ORGANIZATION");
                     NSArray *politiciansFoundSoFar = [NSArray arrayWithArray:politicainsFound];
                     //make API call to see if each politician found so far was donated money from this organization
                     for (int i=0; i<politiciansFoundSoFar.count; i++) {
@@ -199,18 +188,13 @@
 
 -(void)didReceiveContributionDataFromOrganizationToPolitician:(NSNotification*)notification{
     NSDictionary *userInfo = [notification userInfo];
-//    NSString *callingLawmakerId = [userInfo objectForKey:@"callingLawmakerId"];
     
     NSString *politician = [userInfo objectForKey:@"politician"];
     NSString *organization = [userInfo objectForKey:@"organization"];
-    
-    //need access to the politician and organization used in the query
-    
     NSArray *donations = [userInfo objectForKey:@"results"];
     
     double totalDonated = 0;
     for (int i=0; i<donations.count; i++) {
-//        NSLog(@"Donations at %i: %@", i, [[donations objectAtIndex:i] description]);
         totalDonated += [[[donations objectAtIndex:i] objectForKey:@"amount"] doubleValue];
     }
     
@@ -219,7 +203,6 @@
         [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
         NSString *total = [numberFormatter stringFromNumber:[NSNumber numberWithDouble:totalDonated]];
         
-//        NSLog(@"Total Donated: %@", total);
         NSLog(@"%@ Donated %@ to %@", organization, total, politician);
         //display "Donated ${total} to {Politician}" in the appropriate organization card
     }
@@ -229,18 +212,18 @@
     NSDictionary *userInfo = [notification userInfo];
     NSString *callingLawmakerId = [userInfo objectForKey:@"callingLawmakerId"];
     NSArray *donorIndustries = [userInfo objectForKey:@"results"];
-//    NSLog(@"Donor Industries: %@", [donorIndustries description]);
     
     NSString *topDonorIndustries = @"Top Contributing Industries: ";
     bool showDonors = NO;
-    //show donors if there are any,
-    //  only show top 3 donor industries
+    
+    //if there are donors, only show the top 3
     if(donorIndustries.count >= 3){
         showDonors = YES;
         for (int i=0; i<3; i++) {
             topDonorIndustries = [NSString stringWithFormat:@"%@%@, ", topDonorIndustries, [[[donorIndustries objectAtIndex:i] objectForKey:@"name"] capitalizedString]];
         }
     }
+    
     if(showDonors){
         topDonorIndustries = [topDonorIndustries substringToIndex:[topDonorIndustries length]-2];
         
@@ -252,15 +235,9 @@
             donorsLabel.alpha = 1;
         } completion:^(BOOL finished){}];
     }
-    
-//    [industryDonorsSection setAlpha:0.0f];
-//    [self createDonorDataSectionWithDonors:donorIndustries andSection:industryDonorsSection andTitle:@"Top Donors by Industry"];
 }
 
 -(void)createCardWithBasicInformation:(NSMutableDictionary*)data{
-    
-    NSLog(@"card data: %@", [data description]);
-    
     UIView *card = [[UIView alloc] init];
     [card setBackgroundColor:[UIColor whiteColor]];
     [card setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -300,9 +277,7 @@
     NSDictionary *views;
     NSDictionary *metrics = @{@"cardMargin": @10};
     
-    /*
-     * Add card to view
-     */
+    //Add card to view
     //if this card will be the first card on screen, bind it to the top
     if(!bottomCard){
         views = NSDictionaryOfVariableBindings(card, name);
@@ -319,9 +294,7 @@
     [contentView addConstraints:bottomMostConstraints];
     bottomCard = card;
     
-    /*
-     * Add data to card
-     */
+    //Add data to card
     views = NSDictionaryOfVariableBindings(card, name, industryDonors);
     [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-cardMargin-[name]" options:0 metrics:metrics views:views]];
     [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[name]-cardMargin-|" options:0 metrics:metrics views:views]];
@@ -344,10 +317,6 @@
     card.layer.shadowOpacity = 0.5;
 }
 
--(void)addIndustryDonorsToCard:(NSString *)donors forLawmaker:(NSString*)lawmakerId{
-    
-}
-
 -(NSMutableDictionary*)parseReadableArticleForProperNouns:(NSString*)content{
     NSMutableDictionary *properNouns = [[NSMutableDictionary alloc] init];
     
@@ -367,7 +336,6 @@
             if(![properNouns objectForKey:tag]){
                 [properNouns setObject:[[NSMutableDictionary alloc] init] forKey:tag];
             }
-            NSLog(@"%@ : %@", tag, token);
             [[properNouns objectForKey:tag] setObject:@YES forKey:token];
         }
     }];
@@ -419,7 +387,6 @@
 
 - (IBAction)done {
     // Return any edited content to the host app.
-    // This template doesn't do anything, so we just echo the passed in items.
     [self.extensionContext completeRequestReturningItems:self.extensionContext.inputItems completionHandler:nil];
 }
 
