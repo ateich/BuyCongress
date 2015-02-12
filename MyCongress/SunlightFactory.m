@@ -95,6 +95,17 @@ NSMutableDictionary *entityLawmakerIdStore;
     [self getRequest:url withCallingMethod:@"getTransparencyID"];
 }
 
+-(void)getContributionsFromOrganization:(NSString*)organization ToPolitician:(NSString*)politician{
+    
+    //Remove spaces from query
+    politician = [politician stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+    organization = [organization stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+    
+    NSString *url = [NSString stringWithFormat:@"%@/contributions.json%@&contributor_ft=%@&recipient_ft=%@", transparencyURL, sunlightKey, organization, politician];
+    NSLog(@"getContributionsFromOrganizationToPolitician URL: %@", url);
+    [self getRequest:url withCallingMethod:@"getContributionsFromOrganizationToPolitician"];
+}
+
 #pragma mark - Async request helper functions
 -(void)getRequest:(NSString*)url withCallingMethod:(NSString*)callingMethod{
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60.0];
@@ -143,7 +154,7 @@ NSMutableDictionary *entityLawmakerIdStore;
     NSString *cappedString = [methodName stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:firstCapChar];
     
     NSString *postNotificationName = [NSString stringWithFormat:@"SunlightFactoryDidReceive%@Notification", cappedString];
-//    NSLog(@"%@", postNotificationName);
+    NSLog(@"%@", postNotificationName);
     
     if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"searchForEntity"]){
         NSNumber *queryWordCount = [entityQueryStore objectForKey:[connection description]];
@@ -156,6 +167,22 @@ NSMutableDictionary *entityLawmakerIdStore;
         if(jsonObjects){
             NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] initWithDictionary:userInfo];
             [extraInfo setObject:[entityLawmakerIdStore objectForKey:[connection description]] forKey:@"callingLawmakerId"];
+            userInfo = extraInfo;
+        }
+    } else if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getContributionsFromOrganizationToPolitician"]){
+        if(jsonObjects){
+            NSLog(@"getContributionsFromOrganizationToPolitician connection URL: %@", [[[connection currentRequest] URL] description]);
+            
+            //split URL to get contributor_ft & recipient_ft
+            NSString *urlPath = [[[connection currentRequest] URL] description];
+            urlPath = [[urlPath componentsSeparatedByString:@"contributor_ft="] objectAtIndex:1];
+            NSArray *parts = [urlPath componentsSeparatedByString:@"&recipient_ft="];
+            NSString *contributor_ft = [[parts objectAtIndex:0] stringByReplacingOccurrencesOfString:@"%20" withString:@" "];
+            NSString *recipient_ft = [[parts objectAtIndex:1] stringByReplacingOccurrencesOfString:@"%20" withString:@" "];
+            
+            NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] initWithDictionary:userInfo];
+            [extraInfo setObject:recipient_ft forKey:@"politician"];
+            [extraInfo setObject:contributor_ft forKey:@"organization"];
             userInfo = extraInfo;
         }
     }

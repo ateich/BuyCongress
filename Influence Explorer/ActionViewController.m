@@ -23,6 +23,8 @@
     NSString *topDonorIndustriesLoaded;
     
     NSMutableDictionary *cardDonorIndustryLabels;
+    NSMutableArray *politicainsFound;
+    NSMutableArray *organizationsFound;
 }
 
 //@property(strong,nonatomic) IBOutlet UIImageView *imageView;
@@ -37,6 +39,8 @@
     [super viewDidLoad];
     
     cardDonorIndustryLabels = [[NSMutableDictionary alloc] init];
+    politicainsFound = [[NSMutableArray alloc] init];
+    organizationsFound = [[NSMutableArray alloc] init];
     
     readabilityFactory = [[ReadabilityFactory alloc] init];
     sunlightAPI = [[SunlightFactory alloc] init];
@@ -90,6 +94,8 @@
     
     topDonorIndustriesLoaded = @"SunlightFactoryDidReceiveGetTopDonorIndustriesForLawmakerNotification";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianIndustryData:) name:topDonorIndustriesLoaded object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveContributionDataFromOrganizationToPolitician:) name:@"SunlightFactoryDidReceiveGetContributionsFromOrganizationToPoliticianNotification" object:nil];
 }
 
 -(void)parseUrlForArticle:(NSURL*)url{
@@ -139,7 +145,8 @@
         }
         
         if(foundNonIndividualAtPosition >= 0){
-            NSString *name = [[politicians objectAtIndex:0] objectForKey:@"name"];
+            NSMutableDictionary *politicianDict = [politicians objectAtIndex:0];
+            NSString *name = [politicianDict objectForKey:@"name"];
             
             //compare number of words in original query and result to remove innacurate results
             NSNumber *numberOfWordsInQuery = [userInfo objectForKey:@"numberOfWordsInQuery"];
@@ -151,23 +158,70 @@
                 
                 //What do I do once I have received a result?
                 //Display it in a card.
-                [self createCardWithBasicInformation:[politicians objectAtIndex:0]];
+                [self createCardWithBasicInformation:politicianDict];
                 
-    //            NSLog(@"Card data: %@", [[politicians objectAtIndex:0] description]);
+    //            NSLog(@"Card data: %@", [politicianDict description]);
                 
-                if([[[politicians objectAtIndex:0] objectForKey:@"type"] isEqualToString:@"politician"]){
-                    NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
+                if([[politicianDict objectForKey:@"type"] isEqualToString:@"politician"]){
+                    NSString *transparencyID = [politicianDict objectForKey:@"id"];
                     NSLog(@"transparency id: %@", transparencyID);
+                    
+                    [politicainsFound addObject:[politicianDict objectForKey:@"name"]];
                 
                     //        [sunlightAPI getTopDonorsForLawmaker:transparencyID];
                     [sunlightAPI getTopDonorIndustriesForLawmaker:transparencyID];
                     //        [sunlightAPI getTopDonorSectorsForLawmaker:transparencyID];
+                    
+                    NSArray *organizationsFoundSoFar = [NSArray arrayWithArray:organizationsFound];
+                    //for each organization that has already been created as a card
+                    for (int i=0; i<organizationsFoundSoFar.count; i++) {
+                        NSLog(@"Found %@ with %@", [organizationsFoundSoFar objectAtIndex:i], name);
+                        [sunlightAPI getContributionsFromOrganization:[organizationsFoundSoFar objectAtIndex:i] ToPolitician:name];
+                    }
+                    
+                } else if([[politicianDict objectForKey:@"type"] isEqualToString:@"organization"]){
+                    NSLog(@"FOUND AN ORGANIZATION");
+                    NSArray *politiciansFoundSoFar = [NSArray arrayWithArray:politicainsFound];
+                    //make API call to see if each politician found so far was donated money from this organization
+                    for (int i=0; i<politiciansFoundSoFar.count; i++) {
+                        //make api call here
+                        [sunlightAPI getContributionsFromOrganization:name ToPolitician:[politiciansFoundSoFar objectAtIndex:i]];
+                    }
+                    [organizationsFound addObject:name];
                 }
             }
         }
         
     } else {
         NSLog(@"[PoliticianDetailViewController.m] WARNING: Politician not found while checking for transparency id - Donation data will not be shown");
+    }
+}
+
+-(void)didReceiveContributionDataFromOrganizationToPolitician:(NSNotification*)notification{
+    NSDictionary *userInfo = [notification userInfo];
+//    NSString *callingLawmakerId = [userInfo objectForKey:@"callingLawmakerId"];
+    
+    NSString *politician = [userInfo objectForKey:@"politician"];
+    NSString *organization = [userInfo objectForKey:@"organization"];
+    
+    //need access to the politician and organization used in the query
+    
+    NSArray *donations = [userInfo objectForKey:@"results"];
+    
+    double totalDonated = 0;
+    for (int i=0; i<donations.count; i++) {
+//        NSLog(@"Donations at %i: %@", i, [[donations objectAtIndex:i] description]);
+        totalDonated += [[[donations objectAtIndex:i] objectForKey:@"amount"] doubleValue];
+    }
+    
+    if(totalDonated > 0){
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+        NSString *total = [numberFormatter stringFromNumber:[NSNumber numberWithDouble:totalDonated]];
+        
+//        NSLog(@"Total Donated: %@", total);
+        NSLog(@"%@ Donated %@ to %@", organization, total, politician);
+        //display "Donated ${total} to {Politician}" in the appropriate organization card
     }
 }
 

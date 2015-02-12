@@ -21,5 +21,6 @@
 -(void)getTopDonorSectorsForLawmaker:(NSString*)lawmakerID;
 -(void)getLawmakersByLatitude:(NSString*)latitude andLongitude:(NSString*)longitude;
 -(void)getLawmakerTransparencyIDFromFirstName:(NSString*)first andLastName:(NSString*)last;
+-(void)getContributionsFromOrganization:(NSString*)organization ToPolitician:(NSString*)politician;
 
 @end
