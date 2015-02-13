@@ -25,6 +25,8 @@
     NSMutableDictionary *cardDonorIndustryLabels;
     NSMutableArray *politicainsFound;
     NSMutableArray *organizationsFound;
+    
+    NSMutableDictionary *organizationDonations;
 }
 
 //@property(strong,nonatomic) IBOutlet UIImageView *imageView;
@@ -41,6 +43,7 @@
     cardDonorIndustryLabels = [[NSMutableDictionary alloc] init];
     politicainsFound = [[NSMutableArray alloc] init];
     organizationsFound = [[NSMutableArray alloc] init];
+    organizationDonations = [[NSMutableDictionary alloc] init];
     
     readabilityFactory = [[ReadabilityFactory alloc] init];
     sunlightAPI = [[SunlightFactory alloc] init];
@@ -203,8 +206,48 @@
         [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
         NSString *total = [numberFormatter stringFromNumber:[NSNumber numberWithDouble:totalDonated]];
         
-        NSLog(@"%@ Donated %@ to %@", organization, total, politician);
-        //display "Donated ${total} to {Politician}" in the appropriate organization card
+        NSMutableDictionary *organizationDict = [organizationDonations objectForKey:[organization capitalizedString]];
+        UILabel *container = [organizationDict objectForKey:@"superView"];
+        
+        UILabel *donationLabel = [[UILabel alloc] init];
+        donationLabel.alpha = 0;
+        donationLabel.numberOfLines = 0;
+        [donationLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        donationLabel.text  = [NSString stringWithFormat:@"Donated %@ to %@", total, politician];
+        [container addSubview: donationLabel];
+        
+        //VFL
+        
+        UILabel *lowestDonationVertically = [organizationDict objectForKey:@"lowestView"];
+        
+        NSDictionary *views = NSDictionaryOfVariableBindings(donationLabel);
+        [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[donationLabel]-|" options:0 metrics:nil views:views]];
+        
+        if ([organizationDict objectForKey:@"bottomConstraint"]) {
+            //remove old bottom constraint
+            NSLayoutConstraint *bottomConstraint = [organizationDict objectForKey:@"bottomConstraint"];
+            [container removeConstraint:bottomConstraint];
+        }
+        
+        if(!lowestDonationVertically){
+            NSArray *bottomConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[donationLabel]" options:0 metrics:nil views:views];
+            [container addConstraints:bottomConstraints];
+        } else {
+            views = NSDictionaryOfVariableBindings(donationLabel, lowestDonationVertically);
+            [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[lowestDonationVertically]-[donationLabel]" options:0 metrics:nil views:views]];
+        }
+        
+        NSArray *bottomConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[donationLabel]-|" options:0 metrics:nil views:views];
+        [container addConstraints:bottomConstraint];
+        [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[donationLabel]-|" options:0 metrics:nil views:views]];
+        
+        [organizationDict setObject:donationLabel forKey:@"lowestView"];
+        [organizationDict setObject:bottomConstraint forKey:@"bottomConstraint"];
+        
+        [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            container.alpha = 1;
+            donationLabel.alpha = 1;
+        } completion:^(BOOL finished){}];
     }
 }
 
@@ -274,6 +317,11 @@
     
     [cardDonorIndustryLabels setObject:industryDonors forKey:[data objectForKey:@"id"]];
     
+    NSMutableDictionary *viewAndConstraints = [[NSMutableDictionary alloc] init];
+    [viewAndConstraints setObject:industryDonors forKey:@"superView"];
+    
+    [organizationDonations setObject:viewAndConstraints forKey:nameString];
+    
     NSDictionary *views;
     NSDictionary *metrics = @{@"cardMargin": @10};
     
@@ -294,16 +342,17 @@
     [contentView addConstraints:bottomMostConstraints];
     bottomCard = card;
     
+    
     //Add data to card
     views = NSDictionaryOfVariableBindings(card, name, industryDonors);
     [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-cardMargin-[name]" options:0 metrics:metrics views:views]];
     [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[name]-cardMargin-|" options:0 metrics:metrics views:views]];
     
-    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[name]-cardMargin-[industryDonors]" options:0 metrics:metrics views:views]];
+    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[name]-cardMargin-[industryDonors]-|" options:0 metrics:metrics views:views]];
     [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[industryDonors]-cardMargin-|" options:0 metrics:metrics views:views]];
     
     //STRICTLY FOR SCROLLVIEW TESTING - DELETE LATER
-    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[card(==100)]" options:0 metrics:nil views:views]];
+//    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[card(==100)]" options:0 metrics:nil views:views]];
     
     //Animate card appearing
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
