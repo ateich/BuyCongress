@@ -82,8 +82,11 @@
     if(!politicianPhoto){
         NSLog(@"MISSING PHOTO %@.jpg", politician.bioguideID);
         
+        //Set to default image
+        [photo setImage:[UIImage imageNamed:@"MissingImageInverted.jpg"]];
+        
         //Hide the image if there isn't one to show
-        photoSize = 0;
+//        photoSize = 0;
     }
     
     //Contact Section
@@ -236,7 +239,7 @@
     top.text = title;
     
     NSNumber *leftMargin = [NSNumber numberWithInt:25];
-    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"topMargin":@10};
+    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"topMargin":@10, @"largeTopMargin":@15};
     
     [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[top]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(top)]];
     [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[top]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(top)]];
@@ -263,7 +266,13 @@
         totalAmount = [numberFormatter stringFromNumber:total];
         
         NSString *labelText = donorName;//[NSString stringWithFormat:@"%@ - %@", donorName, totalAmount];
-        labelText = [[labelText lowercaseString] capitalizedString];
+        
+        //If donor is written in ALL CAPS, make it proper nouns (All Caps)
+        if ([[labelText uppercaseStringWithLocale:[NSLocale currentLocale]] isEqualToString:labelText])
+        {
+            labelText = [[labelText lowercaseString] capitalizedString];
+        }
+        
         UILabel *label = [[UILabel alloc] init];
         [label setNumberOfLines:0];
         [section addSubview:label];
@@ -287,7 +296,7 @@
             [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-topMargin-[label]-[moneyLabel]-|" options:0 metrics:metrics views:views]];
         } else {
             views = NSDictionaryOfVariableBindings(top, label, moneyLabel);
-            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-topMargin-[label]-[moneyLabel]" options:0 metrics:metrics views:views]];
+            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-largeTopMargin-[label]-[moneyLabel]" options:0 metrics:metrics views:views]];
         }
         [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[label]-0-|" options:0 metrics:metrics views:views]];
         [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[moneyLabel]-0-|" options:0 metrics:metrics views:views]];

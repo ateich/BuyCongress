@@ -29,6 +29,8 @@
 		9548F68B1A5EFC3700AC6565 /* website.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6861A5EFC3700AC6565 /* website.png */; };
 		9548F68E1A5F3E6F00AC6565 /* ContactActionsFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9548F68D1A5F3E6F00AC6565 /* ContactActionsFactory.m */; };
 		9548F6901A5F3F8400AC6565 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9548F68F1A5F3F8400AC6565 /* MessageUI.framework */; };
+		9562713A1A92554700655DDE /* MissingImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 956271381A92554700655DDE /* MissingImage.jpg */; };
+		9562713B1A92554700655DDE /* MissingImageInverted.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 956271391A92554700655DDE /* MissingImageInverted.jpg */; };
 		9564E3291A570A9A0040F1D6 /* SunlightFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3281A570A9A0040F1D6 /* SunlightFactory.m */; };
 		9564E3311A5757ED0040F1D6 /* Politician.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3301A5757ED0040F1D6 /* Politician.m */; };
 		956F1D6A1A5CAE4900AAA14C /* PoliticianDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 956F1D691A5CAE4900AAA14C /* PoliticianDetailViewController.m */; };
@@ -942,6 +944,8 @@
 		9548F68C1A5F3E6F00AC6565 /* ContactActionsFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactActionsFactory.h; sourceTree = "<group>"; };
 		9548F68D1A5F3E6F00AC6565 /* ContactActionsFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactActionsFactory.m; sourceTree = "<group>"; };
 		9548F68F1A5F3F8400AC6565 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		956271381A92554700655DDE /* MissingImage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = MissingImage.jpg; sourceTree = "<group>"; };
+		956271391A92554700655DDE /* MissingImageInverted.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = MissingImageInverted.jpg; sourceTree = "<group>"; };
 		9564E3271A570A9A0040F1D6 /* SunlightFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SunlightFactory.h; sourceTree = "<group>"; };
 		9564E3281A570A9A0040F1D6 /* SunlightFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunlightFactory.m; sourceTree = "<group>"; };
 		9564E32F1A5757ED0040F1D6 /* Politician.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Politician.h; sourceTree = "<group>"; };
@@ -2025,6 +2029,8 @@
 		959D468C1A858675006804F6 /* Politicians */ = {
 			isa = PBXGroup;
 			children = (
+				956271381A92554700655DDE /* MissingImage.jpg */,
+				956271391A92554700655DDE /* MissingImageInverted.jpg */,
 				959D468D1A858675006804F6 /* A000014.jpg */,
 				959D468E1A858675006804F6 /* A000022.jpg */,
 				959D468F1A858675006804F6 /* A000055.jpg */,
@@ -3063,6 +3069,7 @@
 				959D4B931A858679006804F6 /* L000111.jpg in Resources */,
 				959D4A921A858679006804F6 /* D000136.jpg in Resources */,
 				959D4BE21A858679006804F6 /* M001152.jpg in Resources */,
+				9562713A1A92554700655DDE /* MissingImage.jpg in Resources */,
 				959D4A181A858679006804F6 /* B001251.jpg in Resources */,
 				959D4C601A858679006804F6 /* R000571.jpg in Resources */,
 				959D4A3F1A858679006804F6 /* C000071.jpg in Resources */,
@@ -3382,6 +3389,7 @@
 				959D4AEC1A858679006804F6 /* F000462.jpg in Resources */,
 				959D4B301A858679006804F6 /* H001040.jpg in Resources */,
 				959D4AFF1A858679006804F6 /* G000552.jpg in Resources */,
+				9562713B1A92554700655DDE /* MissingImageInverted.jpg in Resources */,
 				959D4C4C1A858679006804F6 /* R000004.jpg in Resources */,
 				959D4A5B1A858679006804F6 /* C001041.jpg in Resources */,
 				959D4B8E1A858679006804F6 /* K000384.jpg in Resources */,
