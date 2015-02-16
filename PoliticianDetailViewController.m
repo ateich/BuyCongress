@@ -262,30 +262,41 @@
         [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
         totalAmount = [numberFormatter stringFromNumber:total];
         
-        NSString *labelText = [NSString stringWithFormat:@"%@ - %@", donorName, totalAmount];
+        NSString *labelText = donorName;//[NSString stringWithFormat:@"%@ - %@", donorName, totalAmount];
         labelText = [[labelText lowercaseString] capitalizedString];
         UILabel *label = [[UILabel alloc] init];
-//        [label setNumberOfLines:0];
+        [label setNumberOfLines:0];
         [section addSubview:label];
         [label setTranslatesAutoresizingMaskIntoConstraints:NO];
         label.text = labelText;
         label.adjustsFontSizeToFitWidth = YES;
         
+        UILabel *moneyLabel = [[UILabel alloc] init];
+        [label setNumberOfLines:0];
+        [section addSubview:moneyLabel];
+        [moneyLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        moneyLabel.text = totalAmount;
+        moneyLabel.adjustsFontSizeToFitWidth = YES;
+        [moneyLabel setTextColor:[UIColor grayColor]];
+        
         
         NSDictionary *views;
         
         if(donors.count-1 == i){
-            views = NSDictionaryOfVariableBindings(top, label);
-            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-topMargin-[label]-|" options:0 metrics:metrics views:views]];
+            views = NSDictionaryOfVariableBindings(top, label, moneyLabel);
+            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-topMargin-[label]-[moneyLabel]-|" options:0 metrics:metrics views:views]];
         } else {
-            views = NSDictionaryOfVariableBindings(top, label);
-            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-topMargin-[label]" options:0 metrics:metrics views:views]];
+            views = NSDictionaryOfVariableBindings(top, label, moneyLabel);
+            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-topMargin-[label]-[moneyLabel]" options:0 metrics:metrics views:views]];
         }
         [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[label]-0-|" options:0 metrics:metrics views:views]];
+        [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[moneyLabel]-0-|" options:0 metrics:metrics views:views]];
         
-        top = label;
+        top = moneyLabel;
     }
 //    [section setBackgroundColor:[UIColor purpleColor]];
+    
+    
     
     [UIView animateWithDuration:1.0f animations:^{
         [section setAlpha:1.0f];
