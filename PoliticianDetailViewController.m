@@ -35,6 +35,8 @@
     NSLayoutConstraint *donorsBySectorHeaderTop;
     
     SunlightFactory *sunlightAPI;
+    
+    int attemptsToGetTransparencyId;
 }
 
 @end
@@ -45,6 +47,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    attemptsToGetTransparencyId = 0;
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     self.title = [NSString stringWithFormat:@"%@. %@ %@", politician.title, politician.firstName, politician.lastName];
@@ -350,18 +354,29 @@
     NSDictionary *userInfo = [notification userInfo];
     NSArray *politicians = [userInfo objectForKey:@"results"];
     
-    transparencyIdLoaded = @"SunlightFactoryDidReceiveGetTransparencyIDNotification";
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:transparencyIdLoaded object:nil];
+    attemptsToGetTransparencyId++;
     
     if(politicians.count > 0){
         NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
         NSLog(@"transparency id: %@", transparencyID);
+        
+        transparencyIdLoaded = @"SunlightFactoryDidReceiveGetTransparencyIDNotification";
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:transparencyIdLoaded object:nil];
         
         [sunlightAPI getTopDonorsForLawmaker:transparencyID];
         [sunlightAPI getTopDonorIndustriesForLawmaker:transparencyID];
         [sunlightAPI getTopDonorSectorsForLawmaker:transparencyID];
     } else {
         NSLog(@"[PoliticianDetailViewController.m] WARNING: Politician not found while checking for transparency id - Donation data will not be shown");
+        
+        if(attemptsToGetTransparencyId < 2){
+            NSString *shortenedFirstName = [politician.firstName substringToIndex:3];
+            [sunlightAPI getLawmakerTransparencyIDFromFirstName:shortenedFirstName andLastName:politician.lastName];
+        } else {
+            transparencyIdLoaded = @"SunlightFactoryDidReceiveGetTransparencyIDNotification";
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:transparencyIdLoaded object:nil];
+        }
+        
     }
 }
 
