@@ -312,20 +312,13 @@
     } completion:^(BOOL finished) {}];
 }
 
-//top donors by sector
--(void)createDonorSectorSection{
-    
-}
-
-//top donors by industry
--(void)createDonorIndustrySection{
-    
-}
-
 - (void)didReceivePoliticianData:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
     NSLog(@"%@", [userInfo description]);
     NSArray *donors = [userInfo objectForKey:@"results"];
+    
+    topDonorLoaded = @"SunlightFactoryDidReceiveGetTopDonorsForLawmakerNotification";
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:topDonorLoaded object:nil];
     
     [individualDonorsSection setAlpha:0.0f];
     [self createDonorDataSectionWithDonors:donors andSection:individualDonorsSection andTitle:@"Top Individual Donors"];
@@ -335,6 +328,9 @@
     NSDictionary *userInfo = [notification userInfo];
     NSArray *donorIndustries = [userInfo objectForKey:@"results"];
     
+    topDonorIndustriesLoaded = @"SunlightFactoryDidReceiveGetTopDonorIndustriesForLawmakerNotification";
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:topDonorIndustriesLoaded object:nil];
+    
     [industryDonorsSection setAlpha:0.0f];
     [self createDonorDataSectionWithDonors:donorIndustries andSection:industryDonorsSection andTitle:@"Top Donors by Industry"];
 }
@@ -343,6 +339,9 @@
     NSDictionary *userInfo = [notification userInfo];
     NSArray *donorSectors = [userInfo objectForKey:@"results"];
     
+    topDonorSectorsLoaded = @"SunlightFactoryDidReceiveGetTopDonorSectorsForLawmakerNotification";
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:topDonorSectorsLoaded object:nil];
+    
     [sectorDonorsSection setAlpha:0.0f];
     [self createDonorDataSectionWithDonors:donorSectors andSection:sectorDonorsSection andTitle:@"Top Donors by Sector"];
 }
@@ -350,6 +349,9 @@
 -(void)didReceiveTransparencyId:(NSNotification*)notification{
     NSDictionary *userInfo = [notification userInfo];
     NSArray *politicians = [userInfo objectForKey:@"results"];
+    
+    transparencyIdLoaded = @"SunlightFactoryDidReceiveGetTransparencyIDNotification";
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:transparencyIdLoaded object:nil];
     
     if(politicians.count > 0){
         NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
