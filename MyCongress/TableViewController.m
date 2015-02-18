@@ -144,7 +144,9 @@
         [aPolitician setState: [thisPoliticiansData objectForKey:@"state_name"]];
         [aPolitician setBioguideID:[thisPoliticiansData objectForKey:@"bioguide_id"]];
         
-        [politiciansFromData addObject:aPolitician];
+        if([aPolitician.title isEqualToString:@"Sen"] || [aPolitician.title isEqualToString:@"Rep"]){
+            [politiciansFromData addObject:aPolitician];
+        }
     }
     return politiciansFromData;
 }
