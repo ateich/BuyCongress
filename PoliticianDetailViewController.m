@@ -318,7 +318,6 @@
 
 - (void)didReceivePoliticianData:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
-    NSLog(@"%@", [userInfo description]);
     NSArray *donors = [userInfo objectForKey:@"results"];
     
     topDonorLoaded = @"SunlightFactoryDidReceiveGetTopDonorsForLawmakerNotification";
@@ -358,7 +357,6 @@
     
     if(politicians.count > 0){
         NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
-        NSLog(@"transparency id: %@", transparencyID);
         
         transparencyIdLoaded = @"SunlightFactoryDidReceiveGetTransparencyIDNotification";
         [[NSNotificationCenter defaultCenter] removeObserver:self name:transparencyIdLoaded object:nil];

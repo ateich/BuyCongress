@@ -37,6 +37,13 @@
     
 }
 
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ReadabilityFactoryDidReceiveReadableArticleNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveSearchForEntityNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveGetTopDonorIndustriesForLawmakerNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveGetContributionsFromOrganizationToPoliticianNotification" object:nil];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -51,6 +58,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveReadableArticle:) name:@"ReadabilityFactoryDidReceiveReadableArticleNotification" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveEntityData:) name:@"SunlightFactoryDidReceiveSearchForEntityNotification" object:nil];
+    
+    topDonorIndustriesLoaded = @"SunlightFactoryDidReceiveGetTopDonorIndustriesForLawmakerNotification";
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianIndustryData:) name:topDonorIndustriesLoaded object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveContributionDataFromOrganizationToPolitician:) name:@"SunlightFactoryDidReceiveGetContributionsFromOrganizationToPoliticianNotification" object:nil];
     
     for (NSExtensionItem *item in self.extensionContext.inputItems) {
         for (NSItemProvider *itemProvider in item.attachments) {
@@ -90,14 +102,6 @@
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[contentView]-0-|" options:0 metrics:nil views:views]];
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[contentView]-0-|" options:0 metrics:nil views:views]];
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView(==scrollView)]|" options:0 metrics:nil views:views]];
-    
-    //Entire page layout, vertically
-//    views = NSDictionaryOfVariableBindings(contentView);
-    
-    topDonorIndustriesLoaded = @"SunlightFactoryDidReceiveGetTopDonorIndustriesForLawmakerNotification";
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianIndustryData:) name:topDonorIndustriesLoaded object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveContributionDataFromOrganizationToPolitician:) name:@"SunlightFactoryDidReceiveGetContributionsFromOrganizationToPoliticianNotification" object:nil];
 }
 
 -(void)parseUrlForArticle:(NSURL*)url{
@@ -106,6 +110,8 @@
 }
 
 -(void)didReceiveReadableArticle:(NSNotification*)notification{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ReadabilityFactoryDidReceiveReadableArticleNotification" object:nil];
+    
     NSDictionary *userInfo = [notification userInfo];
     NSString *articleHTML = [[userInfo objectForKey:@"content"] objectForKey:@"content"];
     
