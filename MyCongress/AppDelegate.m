@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "ColorScheme.h"
 
 @interface AppDelegate ()
 
@@ -16,7 +17,37 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    // Set tab and navigation bar color
+    [[UITabBar appearance] setBarTintColor:[ColorScheme navBarColor]];
+    [[UINavigationBar appearance] setBarTintColor:[ColorScheme navBarColor]];
+    
+    // set the text color for selected state
+    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[ColorScheme textColor],NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
+    
+    // set the text color for unselected state
+    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[ColorScheme headerColor], NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
+    
+    // set the selected icon color
+    [[UITabBar appearance] setTintColor:[ColorScheme textColor]];
+    
+    
+    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+    UITabBar *tabBar = tabBarController.tabBar;
+    
+    for(UITabBarItem *tab in tabBar.items){
+        tab.image = [tab.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        tab.selectedImage = [tab.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+    
+    //set nav bar back button and text color
+    [[UINavigationBar appearance] setTintColor:[ColorScheme textColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [ColorScheme textColor]}];
+    
+    
+    // Set the dark color to selected tab (the dimmed background)
+//    [[UITabBar appearance] setSelectionIndicatorImage:[AppDelegate imageFromColor:[UIColor colorWithRed:26/255.0 green:163/255.0 blue:133/255.0 alpha:1] forSize:CGSizeMake(64, 49) withCornerRadius:0]];
+    
+    
     return YES;
 }
 

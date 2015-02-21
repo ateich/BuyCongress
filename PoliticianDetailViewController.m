@@ -8,6 +8,7 @@
 
 #import "PoliticianDetailViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ColorScheme.h"
 
 //Need to change this to a scrollview
 @interface PoliticianDetailViewController (){
@@ -37,6 +38,10 @@
     SunlightFactory *sunlightAPI;
     
     int attemptsToGetTransparencyId;
+    
+    UIColor *textColor;
+    UIColor *subTextColor;
+    UIColor *headerColor;
 }
 
 @end
@@ -48,9 +53,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    attemptsToGetTransparencyId = 0;
+//    headerColor = [UIColor colorWithRed:239.0/255.0 green:72.0/255.0 blue:54.0/255.0 alpha:1.0];
+//    rgba(149, 165, 166,1.0)
+    headerColor = [ColorScheme headerColor];
+    textColor = [ColorScheme textColor];
+    subTextColor = [ColorScheme subTextColor];
+    UIColor *backgroundColor = [ColorScheme backgroundColor];
     
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    attemptsToGetTransparencyId = 0;
+    [self.view setBackgroundColor:backgroundColor];
     self.title = [NSString stringWithFormat:@"%@. %@ %@", politician.title, politician.firstName, politician.lastName];
     
     scrollView = [[UIScrollView alloc] init];
@@ -63,9 +74,9 @@
     [contentView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [scrollView addSubview:contentView];
     
-    //Politician's Photo
+    //Politician's Photo rgba(41, 128, 185,1.0)
     UIImageView *photo = [[UIImageView alloc] init];
-    [photo setBackgroundColor:[UIColor blackColor]];
+    [photo setBackgroundColor:textColor];//[UIColor blackColor]];
     [photo setTranslatesAutoresizingMaskIntoConstraints:NO];
     UIImage *politicianPhoto = [UIImage imageNamed:[NSString stringWithFormat:@"%@.jpg", politician.bioguideID]];
     [photo setImage:politicianPhoto];
@@ -73,8 +84,7 @@
     
     double photoSize = 112.5;
     
-    UIColor *bgAndBorderColor = [UIColor blackColor];
-//    UIColor *bgAndBorderColor = [UIColor colorWithRed:112.0/255 green:138.0/255 blue:153.0/255 alpha:1];
+    UIColor *bgAndBorderColor = textColor;
     photo.layer.backgroundColor=[bgAndBorderColor CGColor];
     photo.layer.cornerRadius=photoSize/2;
     photo.layer.borderWidth=2.0;
@@ -174,8 +184,10 @@
     
     //create section header
     UILabel *header = [[UILabel alloc] init];
+    [header setTextColor:headerColor];
     [header setTranslatesAutoresizingMaskIntoConstraints:NO];
     header.text = @"Contact";
+    [header setFont:[UIFont boldSystemFontOfSize:16]];
     [contactSection addSubview:header];
 
     [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[header]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(header)]];
@@ -237,6 +249,7 @@
 
 -(void)createDonorDataSectionWithDonors:(NSArray*)donors andSection:(UIView*)section andTitle:(NSString*)title {
     UILabel *top = [[UILabel alloc] init];
+    [top setTextColor:headerColor];
     [top setTranslatesAutoresizingMaskIntoConstraints:NO];
     [top setFont:[UIFont boldSystemFontOfSize:16]];
     [section addSubview:top];
@@ -278,6 +291,7 @@
         }
         
         UILabel *label = [[UILabel alloc] init];
+        [label setTextColor:textColor];
         [label setNumberOfLines:0];
         [section addSubview:label];
         [label setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -285,12 +299,13 @@
         label.adjustsFontSizeToFitWidth = YES;
         
         UILabel *moneyLabel = [[UILabel alloc] init];
-        [label setNumberOfLines:0];
+        [moneyLabel setTextColor:subTextColor];
+        [moneyLabel setNumberOfLines:0];
         [section addSubview:moneyLabel];
         [moneyLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         moneyLabel.text = totalAmount;
         moneyLabel.adjustsFontSizeToFitWidth = YES;
-        [moneyLabel setTextColor:[UIColor grayColor]];
+//        [moneyLabel setTextColor:[UIColor grayColor]];
         
         
         NSDictionary *views;
