@@ -26,13 +26,13 @@
     [[UINavigationBar appearance] setBarTintColor:[ColorScheme navBarColor]];
     
     // set the text color for selected state
-    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[ColorScheme textColor],NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
+    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
     
     // set the text color for unselected state
-    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[ColorScheme headerColor], NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
+    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor grayColor], NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
     
     // set the selected icon color
-    [[UITabBar appearance] setTintColor:[ColorScheme textColor]];
+    [[UITabBar appearance] setTintColor:[UIColor whiteColor]];
     
     
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
@@ -44,8 +44,9 @@
     }
     
     //set nav bar back button and text color
-    [[UINavigationBar appearance] setTintColor:[ColorScheme textColor]];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [ColorScheme textColor]}];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     
     // Set the dark color to selected tab (the dimmed background)
