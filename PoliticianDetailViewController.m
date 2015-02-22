@@ -126,6 +126,7 @@
     
     //AUTO LAYOUT (VFL)
     NSDictionary *views = NSDictionaryOfVariableBindings(scrollView, contentView);
+    NSDictionary *metrics = @{@"sectionPadding": @20, @"photoSize": [NSNumber numberWithDouble:photoSize], @"sideMargin":@0};
     
     //Scroll View Layout
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[scrollView]-0-|" options:0 metrics:nil views:views]];
@@ -135,7 +136,6 @@
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView(==scrollView)]|" options:0 metrics:nil views:views]];
     
     //Entire page layout, vertically
-    NSDictionary *metrics = @{@"sectionPadding": @20, @"photoSize": [NSNumber numberWithDouble:photoSize]};
     views = NSDictionaryOfVariableBindings(contentView, photo, contactSection, individualDonorsSection, industryDonorsSection, sectorDonorsSection);
     [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-sectionPadding-[photo(photoSize)]-sectionPadding-[contactSection]-sectionPadding-[individualDonorsSection]-sectionPadding-[industryDonorsSection]-sectionPadding-[sectorDonorsSection]|" options:0 metrics:metrics views:views]];
     
@@ -143,10 +143,10 @@
     [contentView addConstraint:[NSLayoutConstraint constraintWithItem:photo attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:photoSize]];
     [scrollView addConstraint:[NSLayoutConstraint constraintWithItem:photo attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:contentView attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
     
-    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[contactSection]-0-|" options:0 metrics:nil views:views]];
-    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[individualDonorsSection]-0-|" options:0 metrics:nil views:views]];
-    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[industryDonorsSection]-0-|" options:0 metrics:nil views:views]];
-    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[sectorDonorsSection]-0-|" options:0 metrics:nil views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[contactSection]-0-|" options:0 metrics:metrics views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[individualDonorsSection]-0-|" options:0 metrics:metrics views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[industryDonorsSection]-0-|" options:0 metrics:metrics views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[sectorDonorsSection]-0-|" options:0 metrics:metrics views:views]];
     
     [self createContactSection];
 
@@ -248,6 +248,7 @@
 }
 
 -(void)createDonorDataSectionWithDonors:(NSArray*)donors andSection:(UIView*)section andTitle:(NSString*)title {
+    
     UILabel *top = [[UILabel alloc] init];
     [top setTextColor:headerColor];
     [top setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -256,12 +257,17 @@
     top.text = title;
     
     NSNumber *leftMargin = [NSNumber numberWithInt:25];
-    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"topMargin":@10, @"largeTopMargin":@15};
+    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"topMargin":@10, @"largeTopMargin":@15, @"sideMargin":@10};
     
     [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[top]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(top)]];
     [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[top]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(top)]];
     
     for(int i=0; i<donors.count; i++){
+        UIView *card = [[UIView alloc] init];
+        [card setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [card setBackgroundColor:[UIColor whiteColor]];
+        [section addSubview:card];
+        
         NSDictionary *donor = [donors objectAtIndex:i];
         NSString *totalAmount;
         
@@ -282,7 +288,7 @@
         [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
         totalAmount = [numberFormatter stringFromNumber:total];
         
-        NSString *labelText = donorName;//[NSString stringWithFormat:@"%@ - %@", donorName, totalAmount];
+        NSString *labelText = donorName;
         
         //If donor is written in ALL CAPS, make it proper nouns (All Caps)
         if ([[labelText uppercaseStringWithLocale:[NSLocale currentLocale]] isEqualToString:labelText])
@@ -293,7 +299,6 @@
         UILabel *label = [[UILabel alloc] init];
         [label setTextColor:textColor];
         [label setNumberOfLines:0];
-        [section addSubview:label];
         [label setTranslatesAutoresizingMaskIntoConstraints:NO];
         label.text = labelText;
         label.adjustsFontSizeToFitWidth = YES;
@@ -301,28 +306,30 @@
         UILabel *moneyLabel = [[UILabel alloc] init];
         [moneyLabel setTextColor:subTextColor];
         [moneyLabel setNumberOfLines:0];
-        [section addSubview:moneyLabel];
         [moneyLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         moneyLabel.text = totalAmount;
         moneyLabel.adjustsFontSizeToFitWidth = YES;
-//        [moneyLabel setTextColor:[UIColor grayColor]];
         
         
-        NSDictionary *views;
+        NSDictionary *views = NSDictionaryOfVariableBindings(top, moneyLabel, label, card);
+        
+        //Add labels to card
+        [card addSubview:label];
+        [card addSubview:moneyLabel];
+        
+        [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topMargin-[label]-[moneyLabel]-topMargin-|" options:0 metrics:metrics views:views]];
+        [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[label]-leftMargin-|" options:0 metrics:metrics views:views]];
+        [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[moneyLabel]-leftMargin-|" options:0 metrics:metrics views:views]];
         
         if(donors.count-1 == i){
-            views = NSDictionaryOfVariableBindings(top, label, moneyLabel);
-            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-topMargin-[label]-[moneyLabel]-|" options:0 metrics:metrics views:views]];
+            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-largeTopMargin-[card]-|" options:0 metrics:metrics views:views]];
         } else {
-            views = NSDictionaryOfVariableBindings(top, label, moneyLabel);
-            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-largeTopMargin-[label]-[moneyLabel]" options:0 metrics:metrics views:views]];
+            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-largeTopMargin-[card]" options:0 metrics:metrics views:views]];
         }
-        [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[label]-0-|" options:0 metrics:metrics views:views]];
-        [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[moneyLabel]-0-|" options:0 metrics:metrics views:views]];
+        [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-sideMargin-[card]-sideMargin-|" options:0 metrics:metrics views:views]];
         
         top = moneyLabel;
     }
-//    [section setBackgroundColor:[UIColor purpleColor]];
     
     
     

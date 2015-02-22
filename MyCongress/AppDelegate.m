@@ -18,7 +18,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Set tab and navigation bar color
+    
+    [[UITabBar appearance] setTranslucent:NO];
     [[UITabBar appearance] setBarTintColor:[ColorScheme navBarColor]];
+    
+    [[UINavigationBar appearance] setTranslucent:NO];
     [[UINavigationBar appearance] setBarTintColor:[ColorScheme navBarColor]];
     
     // set the text color for selected state
