@@ -42,6 +42,8 @@
     UIColor *textColor;
     UIColor *subTextColor;
     UIColor *headerColor;
+    
+    NSNumber *leftMargin;
 }
 
 @end
@@ -52,6 +54,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    leftMargin = @15;
     
 //    headerColor = [UIColor colorWithRed:239.0/255.0 green:72.0/255.0 blue:54.0/255.0 alpha:1.0];
 //    rgba(149, 165, 166,1.0)
@@ -179,8 +183,8 @@
 //    [contactSection setBackgroundColor:[UIColor yellowColor]];
     [contactSection setTranslatesAutoresizingMaskIntoConstraints:NO];
     
-    NSNumber *leftMargin = [[NSNumber alloc] initWithInt:25];
-    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"buttonSize":@30, @"buttonSpacer":@15, @"topMargin":@10};
+//    NSNumber *halfMargin = @([leftMargin intValue]/2);
+    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"buttonSize":@30, @"buttonSpacer":@15, @"topMargin":leftMargin};
     
     //create section header
     UILabel *header = [[UILabel alloc] init];
@@ -192,12 +196,18 @@
 
     [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[header]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(header)]];
     
+    //Add contact card
+//    UIView *card = [[UIView alloc] init];
+//    [card setTranslatesAutoresizingMaskIntoConstraints:NO];
+//    [card setBackgroundColor:[UIColor whiteColor]];
+//    [contactSection addSubview:card];
+    
     NSMutableArray *contactMethods = [[NSMutableArray alloc] init];
     if(politician.twitter){
-        //        [contactMethods addObject:[NSArray arrayWithObjects:@"twitter", @"TEST", nil]];
+//        [contactMethods addObject:[NSArray arrayWithObjects:@"twitter", @"TEST", nil]];
     }
     if(politician.youtubeID){
-        //        [contactMethods addObject:[NSArray arrayWithObjects:@"youtube", @"TEST", nil]];
+//        [contactMethods addObject:[NSArray arrayWithObjects:@"youtube", @"TEST", nil]];
     }
     if(politician.phone){
         [contactMethods addObject:[NSArray arrayWithObjects:@"phone", @"makePhoneCall", nil]];
@@ -214,10 +224,11 @@
 
     
     UIView *buttonsView = [[UIView alloc] init];
+    [buttonsView setBackgroundColor:[UIColor whiteColor]];
     [contactSection addSubview:buttonsView];
     [buttonsView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[header]-0-[buttonsView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(buttonsView, header)]];
-    [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[buttonsView]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(buttonsView, header)]];
+    [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[header]-topMargin-[buttonsView]|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(buttonsView, header)]];
+    [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[buttonsView]-leftMargin-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(buttonsView, header)]];
     
     
     //Create a contact button for each available contact method
@@ -239,7 +250,7 @@
         } else {
             [buttonsView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[leftSide]-buttonSpacer-[contactButton(==buttonSize)]" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(contactButton, leftSide)]];
         }
-        [buttonsView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topMargin-[contactButton(==buttonSize)]|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(contactButton)]];
+        [buttonsView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topMargin-[contactButton(==buttonSize)]-topMargin-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(contactButton)]];
         
         
         //Save this button to be used in left positioning the next button
@@ -248,7 +259,6 @@
 }
 
 -(void)createDonorDataSectionWithDonors:(NSArray*)donors andSection:(UIView*)section andTitle:(NSString*)title {
-    
     UILabel *top = [[UILabel alloc] init];
     [top setTextColor:headerColor];
     [top setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -256,8 +266,10 @@
     [section addSubview:top];
     top.text = title;
     
-    NSNumber *leftMargin = [NSNumber numberWithInt:25];
-    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"topMargin":@10, @"largeTopMargin":@15, @"sideMargin":@10};
+    UIView *topCard = top;
+    
+    NSNumber *halfMargin = @([leftMargin intValue]/2);
+    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"topMargin":halfMargin, @"largeTopMargin":halfMargin, @"sideMargin":@10};
     
     [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[top]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(top)]];
     [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[top]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(top)]];
@@ -311,7 +323,7 @@
         moneyLabel.adjustsFontSizeToFitWidth = YES;
         
         
-        NSDictionary *views = NSDictionaryOfVariableBindings(top, moneyLabel, label, card);
+        NSDictionary *views = NSDictionaryOfVariableBindings(topCard, moneyLabel, label, card);
         
         //Add labels to card
         [card addSubview:label];
@@ -322,13 +334,13 @@
         [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[moneyLabel]-leftMargin-|" options:0 metrics:metrics views:views]];
         
         if(donors.count-1 == i){
-            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-largeTopMargin-[card]-|" options:0 metrics:metrics views:views]];
+            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topCard]-largeTopMargin-[card]-|" options:0 metrics:metrics views:views]];
         } else {
-            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-largeTopMargin-[card]" options:0 metrics:metrics views:views]];
+            [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topCard]-largeTopMargin-[card]" options:0 metrics:metrics views:views]];
         }
-        [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-sideMargin-[card]-sideMargin-|" options:0 metrics:metrics views:views]];
+        [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[card]-leftMargin-|" options:0 metrics:metrics views:views]];
         
-        top = moneyLabel;
+        topCard = card;
     }
     
     
