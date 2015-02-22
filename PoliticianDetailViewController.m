@@ -130,7 +130,7 @@
     
     //AUTO LAYOUT (VFL)
     NSDictionary *views = NSDictionaryOfVariableBindings(scrollView, contentView);
-    NSDictionary *metrics = @{@"sectionPadding": @20, @"photoSize": [NSNumber numberWithDouble:photoSize], @"sideMargin":@0};
+    NSDictionary *metrics = @{@"sectionPadding": @20,@"lessSectionPadding":@10, @"photoSize": [NSNumber numberWithDouble:photoSize], @"sideMargin":@0};
     
     //Scroll View Layout
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[scrollView]-0-|" options:0 metrics:nil views:views]];
@@ -141,7 +141,7 @@
     
     //Entire page layout, vertically
     views = NSDictionaryOfVariableBindings(contentView, photo, contactSection, individualDonorsSection, industryDonorsSection, sectorDonorsSection);
-    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-sectionPadding-[photo(photoSize)]-sectionPadding-[contactSection]-sectionPadding-[individualDonorsSection]-sectionPadding-[industryDonorsSection]-sectionPadding-[sectorDonorsSection]|" options:0 metrics:metrics views:views]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-sectionPadding-[photo(photoSize)]-lessSectionPadding-[contactSection]-sectionPadding-[individualDonorsSection]-sectionPadding-[industryDonorsSection]-sectionPadding-[sectorDonorsSection]|" options:0 metrics:metrics views:views]];
     
     //Photo layout
     [contentView addConstraint:[NSLayoutConstraint constraintWithItem:photo attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:photoSize]];
@@ -184,8 +184,8 @@
     [contactSection setTranslatesAutoresizingMaskIntoConstraints:NO];
     contactSection.alpha = 0;
     
-//    NSNumber *halfMargin = @([leftMargin intValue]/2);
-    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"buttonSize":@30, @"buttonSpacer":@15, @"topMargin":leftMargin};
+    NSNumber *halfMargin = @([leftMargin intValue]/2);
+    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"buttonSize":@30, @"buttonSpacer":@15, @"topMargin":leftMargin, @"halfMargin":halfMargin};
     
     //create section header
     UILabel *header = [[UILabel alloc] init];
@@ -228,7 +228,7 @@
     [buttonsView setBackgroundColor:[UIColor whiteColor]];
     [contactSection addSubview:buttonsView];
     [buttonsView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[header]-topMargin-[buttonsView]|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(buttonsView, header)]];
+    [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[header]-halfMargin-[buttonsView]|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(buttonsView, header)]];
     [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[buttonsView]-leftMargin-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(buttonsView, header)]];
     
     
@@ -274,7 +274,8 @@
     UIView *topCard = top;
     
     NSNumber *halfMargin = @([leftMargin intValue]/2);
-    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"topMargin":halfMargin, @"largeTopMargin":halfMargin, @"sideMargin":@10};
+    NSNumber *quarterMargin = @([halfMargin intValue]/2);
+    NSDictionary *metrics = @{@"leftMargin":leftMargin, @"topMargin":halfMargin, @"largeTopMargin":halfMargin, @"sideMargin":@10, @"quarterMargin":quarterMargin};
     
     [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[top]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(top)]];
     [section addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[top]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(top)]];
@@ -334,7 +335,7 @@
         [card addSubview:label];
         [card addSubview:moneyLabel];
         
-        [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topMargin-[label]-[moneyLabel]-topMargin-|" options:0 metrics:metrics views:views]];
+        [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topMargin-[label]-quarterMargin-[moneyLabel]-topMargin-|" options:0 metrics:metrics views:views]];
         [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[label]-leftMargin-|" options:0 metrics:metrics views:views]];
         [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[moneyLabel]-leftMargin-|" options:0 metrics:metrics views:views]];
         
