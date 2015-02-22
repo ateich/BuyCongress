@@ -234,15 +234,19 @@
     
     //Create a contact button for each available contact method
     for(int i=0; i<contactMethods.count; i++){
-        UIButton *contactButton = [[UIButton alloc] init];
-        [contactSection addSubview:contactButton];
+        UIButton *contactButton = [UIButton buttonWithType:UIButtonTypeSystem];//[[UIButton alloc] init];
         
         //set button selector with variable?
         SEL aSelector = NSSelectorFromString([[contactMethods objectAtIndex:i] objectAtIndex:1]);
         [contactButton addTarget:self action:aSelector forControlEvents:UIControlEventTouchDown];
-        
         [contactButton setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [contactButton setBackgroundImage:[UIImage imageNamed:[[contactMethods objectAtIndex:i] objectAtIndex:0]] forState:UIControlStateNormal];
+        
+        //Change button color
+        UIImage *buttonImage = [UIImage imageNamed:[[contactMethods objectAtIndex:i] objectAtIndex:0]];
+        [buttonImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        
+        [contactButton setImage:buttonImage forState:UIControlStateNormal];
+        [contactButton setTintColor:[ColorScheme textColor]];
         
         [buttonsView addSubview:contactButton];
         

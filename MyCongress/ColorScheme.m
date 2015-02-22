@@ -44,7 +44,8 @@
 + (UIColor *)headerColor{
     //    return [UIColor colorWithRed:149.0/255.0 green:165.0/255.0 blue:166.0/255.0 alpha:1.0];
 //    return [UIColor colorWithRed:252.0/255.0 green:87.0/255.0 blue:94.0/255.0 alpha:1.0];
-    return [UIColor blackColor];
+//    return [UIColor blackColor];
+    return [self textColor];
     //    return [UIColor colorWithRed:79.0/255.0 green:103.0/255.0 blue:255.0/255.0 alpha:1.0];
 }
 

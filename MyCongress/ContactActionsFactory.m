@@ -22,11 +22,14 @@
 
 -(void)composeEmail {
     MFMailComposeViewController* controller = [[MFMailComposeViewController alloc] init];
+    
     controller.mailComposeDelegate = self;
     [controller setSubject:@"My Subject"];
     [controller setMessageBody:@"Hello there." isHTML:NO];
     if (controller){
-        [currentViewController presentViewController:controller animated:YES completion:nil];
+        [currentViewController presentViewController:controller animated:YES completion:^{
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+        }];
     }
 }
 
