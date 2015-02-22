@@ -182,6 +182,7 @@
 -(void)createContactSection{
 //    [contactSection setBackgroundColor:[UIColor yellowColor]];
     [contactSection setTranslatesAutoresizingMaskIntoConstraints:NO];
+    contactSection.alpha = 0;
     
 //    NSNumber *halfMargin = @([leftMargin intValue]/2);
     NSDictionary *metrics = @{@"leftMargin":leftMargin, @"buttonSize":@30, @"buttonSpacer":@15, @"topMargin":leftMargin};
@@ -256,6 +257,10 @@
         //Save this button to be used in left positioning the next button
         leftSide = contactButton;
     }
+    
+    [UIView animateWithDuration:1.0f animations:^{
+        [contactSection setAlpha:1.0f];
+    } completion:^(BOOL finished) {}];
 }
 
 -(void)createDonorDataSectionWithDonors:(NSArray*)donors andSection:(UIView*)section andTitle:(NSString*)title {
