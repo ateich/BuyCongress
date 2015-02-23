@@ -9,6 +9,7 @@
 #import "TableViewController.h"
 #import "Politician.h"
 #import "PoliticianDetailViewController.h"
+#import "ColorScheme.h"
 
 @interface TableViewController (){
     PoliticianDetailViewController *detailViewController;
@@ -20,16 +21,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    //TEST DATA
+    self.tableView.backgroundColor = [ColorScheme backgroundColor];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.politicians = [[NSMutableArray alloc] init];
-//    [self.politicians addObject:@"TEST"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -47,69 +41,56 @@
     return self.politicians.count;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 65.0;
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *cellIdentifier = [NSString stringWithFormat:@"Cell%ld%ld",(long)indexPath.section,(long)indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    if(cell == nil){
+    if(true){//cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        [cell setBackgroundColor:[UIColor clearColor]];
+        
+        UIView *card = [[UIView alloc] init];
+        [card setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [card setBackgroundColor:[ColorScheme cardColor]];
+        [cell addSubview:card];
+        
+        NSNumber *leftMargin = @15;
+        NSNumber *halfMargin = @([leftMargin intValue]/2);
+        NSNumber *quarterMargin = @([halfMargin intValue]/2);
+        
+        NSDictionary *views = NSDictionaryOfVariableBindings(card);
+        NSDictionary *metrics = @{@"leftMargin":leftMargin, @"topMargin":halfMargin, @"largeTopMargin":halfMargin, @"sideMargin":@10, @"quarterMargin":quarterMargin};
+        
+        [cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-largeTopMargin-[card]-0-|" options:0 metrics:metrics views:views]];
+        [cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[card]-leftMargin-|" options:0 metrics:metrics views:views]];
         
         Politician *thisPolitician = (Politician*)[self.politicians objectAtIndex:indexPath.row];
-        int pictureWidth = 75;
+//        int pictureWidth = 75;
         
         //Politician's Title and Name
         UILabel *name = [[UILabel alloc] init];
         [name setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [cell addSubview:name];
-        
         name.text = [NSString stringWithFormat:@"%@. %@ %@", thisPolitician.title, thisPolitician.firstName, thisPolitician.lastName];
-        
-        //LEFT
-        NSLayoutConstraint *nameLeftConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeLeading multiplier:1.0 constant:pictureWidth];
-        
-        //RIGHT
-        NSLayoutConstraint *nameRightConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0];
-        
-        //TOP
-        NSLayoutConstraint *nameTopConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeTop multiplier:1.0 constant:0];
-        
-        //HEIGHT
-        NSLayoutConstraint *nameHeightConstraint = [NSLayoutConstraint constraintWithItem:name attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:cell.frame.size.height/2];
-        
-        [cell addConstraint:nameLeftConstraint];
-        [cell addConstraint:nameRightConstraint];
-        [cell addConstraint:nameTopConstraint];
-        [cell addConstraint:nameHeightConstraint];
         
         
         //Politician's Party and State
         UILabel *state = [[UILabel alloc] init];
         [state setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [cell addSubview:state];
-        
-        //formatting
         [state setTextColor:[UIColor grayColor]];
-        
         state.text = [NSString stringWithFormat:@"%@ - %@", thisPolitician.party, thisPolitician.state];
         
-        //LEFT
-        NSLayoutConstraint *stateLeftConstraint = [NSLayoutConstraint constraintWithItem:state attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeLeading multiplier:1.0 constant:pictureWidth];
+        [card addSubview:name];
+        [card addSubview:state];
+        views = NSDictionaryOfVariableBindings(name, state);
         
-        //RIGHT
-        NSLayoutConstraint *stateRightConstraint = [NSLayoutConstraint constraintWithItem:state attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0];
-        
-        //TOP
-        NSLayoutConstraint *stateTopConstraint = [NSLayoutConstraint constraintWithItem:state attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:name attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
-        
-        //HEIGHT
-        NSLayoutConstraint *stateHeightConstraint = [NSLayoutConstraint constraintWithItem:state attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:cell.frame.size.height/2];
-        
-        [cell addConstraint:stateLeftConstraint];
-        [cell addConstraint:stateRightConstraint];
-        [cell addConstraint:stateTopConstraint];
-        [cell addConstraint:stateHeightConstraint];
-        
+        [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topMargin-[name]-quarterMargin-[state]-topMargin-|" options:0 metrics:metrics views:views]];
+        [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[name]-|" options:0 metrics:metrics views:views]];
+        [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[state]-|" options:0 metrics:metrics views:views]];
     }
     
     return cell;
