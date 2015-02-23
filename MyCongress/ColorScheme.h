@@ -16,5 +16,7 @@
 + (UIColor *)subTextColor;
 + (UIColor *)backgroundColor;
 + (UIColor *)navBarColor;
++ (UIColor *)placeholderImageColor;
++ (UIColor *)cardColor;
 
 @end

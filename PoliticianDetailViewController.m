@@ -57,8 +57,6 @@
     
     leftMargin = @15;
     
-//    headerColor = [UIColor colorWithRed:239.0/255.0 green:72.0/255.0 blue:54.0/255.0 alpha:1.0];
-//    rgba(149, 165, 166,1.0)
     headerColor = [ColorScheme headerColor];
     textColor = [ColorScheme textColor];
     subTextColor = [ColorScheme subTextColor];
@@ -71,25 +69,23 @@
     scrollView = [[UIScrollView alloc] init];
     [scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:scrollView];
-//    [scrollView setBackgroundColor:[UIColor greenColor]];
     
     contentView = [[UIView alloc] init];
-//    [contentView setBackgroundColor:[UIColor redColor]];
     [contentView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [scrollView addSubview:contentView];
     
-    //Politician's Photo rgba(41, 128, 185,1.0)
     UIImageView *photo = [[UIImageView alloc] init];
-    [photo setBackgroundColor:textColor];//[UIColor blackColor]];
+//    [photo setBackgroundColor:textColor];
     [photo setTranslatesAutoresizingMaskIntoConstraints:NO];
-    UIImage *politicianPhoto = [UIImage imageNamed:[NSString stringWithFormat:@"%@.jpg", politician.bioguideID]];
+    UIImage *politicianPhoto = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png", politician.bioguideID]];
     [photo setImage:politicianPhoto];
     [photo setContentMode:UIViewContentModeScaleAspectFit];
+    [photo setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"background.jpg"]]];
     
     double photoSize = 112.5;
     
     UIColor *bgAndBorderColor = textColor;
-    photo.layer.backgroundColor=[bgAndBorderColor CGColor];
+//    photo.layer.backgroundColor=[bgAndBorderColor CGColor];
     photo.layer.cornerRadius=photoSize/2;
     photo.layer.borderWidth=2.0;
     photo.layer.masksToBounds = YES;
@@ -101,10 +97,11 @@
         NSLog(@"MISSING PHOTO %@.jpg", politician.bioguideID);
         
         //Set to default image
-        [photo setImage:[UIImage imageNamed:@"MissingImageInverted.jpg"]];
+        UIImage *noPhoto = [UIImage imageNamed:@"MissingImage.png"];
+        noPhoto = [noPhoto imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         
-        //Hide the image if there isn't one to show
-//        photoSize = 0;
+        [photo setImage:noPhoto];
+        [photo setTintColor:[ColorScheme placeholderImageColor]];
     }
     
     //Contact Section
@@ -287,7 +284,7 @@
     for(int i=0; i<donors.count; i++){
         UIView *card = [[UIView alloc] init];
         [card setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [card setBackgroundColor:[UIColor whiteColor]];
+        [card setBackgroundColor:[ColorScheme cardColor]];
         [section addSubview:card];
         
         NSDictionary *donor = [donors objectAtIndex:i];
@@ -316,6 +313,12 @@
         if ([[labelText uppercaseStringWithLocale:[NSLocale currentLocale]] isEqualToString:labelText])
         {
             labelText = [[labelText lowercaseString] capitalizedString];
+        }
+        
+        //If donor is a person, change formatting from Last, First to First Last
+        if([labelText containsString:@","]){
+            NSArray *nameSplit = [labelText componentsSeparatedByString:@", "];
+            labelText = [NSString stringWithFormat:@"%@ %@", [nameSplit objectAtIndex:1], [nameSplit objectAtIndex:0]];
         }
         
         UILabel *label = [[UILabel alloc] init];
