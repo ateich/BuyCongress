@@ -12,6 +12,8 @@
 #import "ReadabilityFactory.h"
 #import "SunlightFactory.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ColorScheme.h"
+#import <objc/runtime.h>
 
 @interface ActionViewController (){
     ReadabilityFactory *readabilityFactory;
@@ -37,6 +39,32 @@
     
 }
 
+//static UIStatusBarStyle statusBarStyle;
+//
+//static UIStatusBarStyle preferredStatusBarStyle(id self, SEL _cmd)
+//{
+//    return statusBarStyle;
+//}
+//
+//void setPreferredStatusBarStyleOnRootVC(UIStatusBarStyle style, UIViewController *vc)
+//{
+//    statusBarStyle = style;
+//    static BOOL swizzeld = NO;
+//    if(swizzeld)
+//    {
+//        [vc setNeedsStatusBarAppearanceUpdate];
+//        return;
+//    }
+//    
+//    swizzeld = YES;
+//    
+//    UIViewController *parent;
+//    while((parent = vc.parentViewController))
+//        vc = parent;
+//    
+//    class_addMethod(vc.class, @selector(preferredStatusBarStyle), (IMP)&preferredStatusBarStyle, "v@:");
+//}
+
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ReadabilityFactoryDidReceiveReadableArticleNotification" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveSearchForEntityNotification" object:nil];
@@ -46,6 +74,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+//    statusBarStyle = UIStatusBarStyleLightContent;
+    
+    [self.view setBackgroundColor:[ColorScheme backgroundColor]];
+    
+    [[UINavigationBar appearance] setTranslucent:NO];
+    [[UINavigationBar appearance] setBarTintColor:[ColorScheme navBarColor]];
+    
+    
+    //set nav bar back button and text color
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     cardDonorIndustryLabels = [[NSMutableDictionary alloc] init];
     politicainsFound = [[NSMutableArray alloc] init];
@@ -215,18 +256,38 @@
         NSMutableDictionary *organizationDict = [organizationDonations objectForKey:[organization capitalizedString]];
         UILabel *container = [organizationDict objectForKey:@"superView"];
         
+        UILabel *headerLabel = [[UILabel alloc] init];
+        headerLabel.numberOfLines = 0;
+        [headerLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [headerLabel setFont:[UIFont boldSystemFontOfSize:14]];
+        [headerLabel setTextColor:[ColorScheme textColor]];
+        headerLabel.text  = @"Donated to Politicians";
+        [container addSubview:headerLabel];
+        
+        UILabel *politicianLabel = [[UILabel alloc] init];
+        politicianLabel.numberOfLines = 0;
+        [politicianLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [politicianLabel setFont:[UIFont systemFontOfSize:14]];
+        [politicianLabel setTextColor:[ColorScheme textColor]];
+        politicianLabel.text  = politician;
+        [container addSubview:politicianLabel];
+        
         UILabel *donationLabel = [[UILabel alloc] init];
-        donationLabel.alpha = 0;
         donationLabel.numberOfLines = 0;
         [donationLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-        donationLabel.text  = [NSString stringWithFormat:@"Donated %@ to %@", total, politician];
-        [container addSubview: donationLabel];
+        [donationLabel setFont:[UIFont systemFontOfSize:14]];
+        [donationLabel setTextColor:[ColorScheme subTextColor]];
+        donationLabel.text  = total;
+        [container addSubview:donationLabel];
         
         //VFL
         
         UILabel *lowestDonationVertically = [organizationDict objectForKey:@"lowestView"];
+        NSDictionary *metrics = @{@"topMargin":@7.5};
         
-        NSDictionary *views = NSDictionaryOfVariableBindings(donationLabel);
+        NSDictionary *views = NSDictionaryOfVariableBindings(headerLabel, politicianLabel, donationLabel);
+        [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[headerLabel]-|" options:0 metrics:nil views:views]];
+        [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[politicianLabel]-|" options:0 metrics:nil views:views]];
         [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[donationLabel]-|" options:0 metrics:nil views:views]];
         
         if ([organizationDict objectForKey:@"bottomConstraint"]) {
@@ -236,23 +297,22 @@
         }
         
         if(!lowestDonationVertically){
-            NSArray *bottomConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[donationLabel]" options:0 metrics:nil views:views];
+            NSArray *bottomConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[headerLabel]-[politicianLabel]-[donationLabel]" options:0 metrics:nil views:views];
             [container addConstraints:bottomConstraints];
         } else {
             views = NSDictionaryOfVariableBindings(donationLabel, lowestDonationVertically);
-            [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[lowestDonationVertically]-[donationLabel]" options:0 metrics:nil views:views]];
+            [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[lowestDonationVertically]-topMargin-[headerLabel]-[politicianLabel]-[donationLabel]" options:0 metrics:metrics views:views]];
         }
         
         NSArray *bottomConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[donationLabel]-|" options:0 metrics:nil views:views];
         [container addConstraints:bottomConstraint];
-        [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[donationLabel]-|" options:0 metrics:nil views:views]];
+//        [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[donationLabel]-|" options:0 metrics:nil views:views]];
         
         [organizationDict setObject:donationLabel forKey:@"lowestView"];
         [organizationDict setObject:bottomConstraint forKey:@"bottomConstraint"];
         
         [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
             container.alpha = 1;
-            donationLabel.alpha = 1;
         } completion:^(BOOL finished){}];
     }
 }
@@ -262,7 +322,8 @@
     NSString *callingLawmakerId = [userInfo objectForKey:@"callingLawmakerId"];
     NSArray *donorIndustries = [userInfo objectForKey:@"results"];
     
-    NSString *topDonorIndustries = @"Top Contributing Industries: ";
+    NSString *topDonorIndustriesHeader = @"Top Contributing Industries";
+    NSString *topDonorIndustries = @"";
     bool showDonors = NO;
     
     //if there are donors, only show the top 3
@@ -276,12 +337,33 @@
     if(showDonors){
         topDonorIndustries = [topDonorIndustries substringToIndex:[topDonorIndustries length]-2];
         
-        UILabel *donorsLabel = [cardDonorIndustryLabels objectForKey:callingLawmakerId];
+        UIView *container = [cardDonorIndustryLabels objectForKey:callingLawmakerId];
+        
+        UILabel *headerLabel = [[UILabel alloc] init];
+        [headerLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [headerLabel setFont:[UIFont boldSystemFontOfSize:14]];
+        [headerLabel setTextColor:[ColorScheme textColor]];
+        headerLabel.text = topDonorIndustriesHeader;
+        headerLabel.numberOfLines = 0;
+        [container addSubview:headerLabel];
+        
+        UILabel *donorsLabel = [[UILabel alloc] init];
+        [donorsLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [donorsLabel setFont:[UIFont systemFontOfSize:14]];
+        [donorsLabel setTextColor:[ColorScheme subTextColor]];
         donorsLabel.text = topDonorIndustries;
         donorsLabel.numberOfLines = 0;
+        [container addSubview:donorsLabel];
+        
+        
+        NSDictionary *views = NSDictionaryOfVariableBindings(headerLabel, donorsLabel);
+        NSDictionary *metrics = @{@"cardMargin": @15, @"verticalMargin":@7.5};
+        [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[headerLabel]-[donorsLabel]-|" options:0 metrics:metrics views:views]];
+        [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[headerLabel]-|" options:0 metrics:metrics views:views]];
+        [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[donorsLabel]-|" options:0 metrics:metrics views:views]];
         
         [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            donorsLabel.alpha = 1;
+            container.alpha = 1;
         } completion:^(BOOL finished){}];
     }
 }
@@ -291,8 +373,8 @@
     [card setBackgroundColor:[UIColor whiteColor]];
     [card setTranslatesAutoresizingMaskIntoConstraints:NO];
     [contentView addSubview:card];
-    card.layer.cornerRadius = 5;
-    card.clipsToBounds = YES;
+//    card.layer.cornerRadius = 5;
+//    card.clipsToBounds = YES;
     card.alpha = 0;
     
     NSMutableString *nameString = [data objectForKey:@"name"];
@@ -313,49 +395,55 @@
     
     UILabel *name = [[UILabel alloc] init];
     [name setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [name setFont:[UIFont boldSystemFontOfSize:16]];
+    [name setTextColor:[ColorScheme headerColor]];
+    [name setNumberOfLines:0];
     [name setText:nameString];
     [card addSubview:name];
     
-    UILabel *industryDonors = [[UILabel alloc] init];
-    [industryDonors setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [card addSubview:industryDonors];
-    industryDonors.alpha = 0;
+    UIView *donorView = [[UIView alloc] init];
+    [donorView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    donorView.alpha = 0;
+    [card addSubview:donorView];
     
-    [cardDonorIndustryLabels setObject:industryDonors forKey:[data objectForKey:@"id"]];
+    [cardDonorIndustryLabels setObject:donorView forKey:[data objectForKey:@"id"]];
     
     NSMutableDictionary *viewAndConstraints = [[NSMutableDictionary alloc] init];
-    [viewAndConstraints setObject:industryDonors forKey:@"superView"];
+    [viewAndConstraints setObject:donorView forKey:@"superView"];
     
     [organizationDonations setObject:viewAndConstraints forKey:nameString];
     
     NSDictionary *views;
-    NSDictionary *metrics = @{@"cardMargin": @10};
+    NSDictionary *metrics = @{@"cardMargin": @15, @"verticalMargin":@7.5};
     
     //Add card to view
     //if this card will be the first card on screen, bind it to the top
     if(!bottomCard){
-        views = NSDictionaryOfVariableBindings(card, name);
-        [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-cardMargin-[card]" options:0 metrics:metrics views:views]];
+        views = NSDictionaryOfVariableBindings(card, name, donorView);
+        [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-verticalMargin-[card]" options:0 metrics:metrics views:views]];
     } else {
-        views = NSDictionaryOfVariableBindings(card, name, bottomCard);
-        [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[bottomCard]-cardMargin-[card]" options:0 metrics:metrics views:views]];
+        views = NSDictionaryOfVariableBindings(card, name, bottomCard, donorView);
+        [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[bottomCard]-verticalMargin-[card]" options:0 metrics:metrics views:views]];
     }
     
     [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[card]-cardMargin-|" options:0 metrics:metrics views:views]];
     
     [contentView removeConstraints:bottomMostConstraints];
-    bottomMostConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[card]-cardMargin-|" options:0 metrics:metrics views:views];
+    bottomMostConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[card]-verticalMargin-|" options:0 metrics:metrics views:views];
     [contentView addConstraints:bottomMostConstraints];
     bottomCard = card;
     
     
     //Add data to card
-    views = NSDictionaryOfVariableBindings(card, name, industryDonors);
+    views = NSDictionaryOfVariableBindings(card, name, donorView);
     [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-cardMargin-[name]" options:0 metrics:metrics views:views]];
     [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[name]-cardMargin-|" options:0 metrics:metrics views:views]];
     
-    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[name]-cardMargin-[industryDonors]-|" options:0 metrics:metrics views:views]];
-    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardMargin-[industryDonors]-cardMargin-|" options:0 metrics:metrics views:views]];
+    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[name]-[donorView]-|" options:0 metrics:metrics views:views]];
+    [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[donorView]-|" options:0 metrics:metrics views:views]];
+    
+//    [donorView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[industryDonors]-|" options:0 metrics:metrics views:views]];
+//    [donorView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"" options:0 metrics:metrics views:views]];
     
     //STRICTLY FOR SCROLLVIEW TESTING - DELETE LATER
 //    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[card(==100)]" options:0 metrics:nil views:views]];
@@ -366,10 +454,10 @@
      } completion:^(BOOL finished){}];
     
     //Add a shadow to the card
-    card.layer.masksToBounds = NO;
-    card.layer.shadowOffset = CGSizeMake(0, 3);
-    card.layer.shadowRadius = 3;
-    card.layer.shadowOpacity = 0.5;
+//    card.layer.masksToBounds = NO;
+//    card.layer.shadowOffset = CGSizeMake(0, 3);
+//    card.layer.shadowRadius = 3;
+//    card.layer.shadowOpacity = 0.5;
 }
 
 -(NSMutableDictionary*)parseReadableArticleForProperNouns:(NSString*)content{

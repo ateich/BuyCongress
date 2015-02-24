@@ -23,6 +23,7 @@
 		952DCE8A1A3A678B0000DCF5 /* MyCongressTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE891A3A678B0000DCF5 /* MyCongressTests.m */; };
 		952DCE961A3A71920000DCF5 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 952DCE951A3A71920000DCF5 /* .travis.yml */; };
 		953F71C91A98130D00DAA47A /* ColorScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 953F71C81A98130D00DAA47A /* ColorScheme.m */; };
+		9543E5A71A9C216A005051B4 /* ColorScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 953F71C81A98130D00DAA47A /* ColorScheme.m */; };
 		9548F6871A5EFC3700AC6565 /* twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6821A5EFC3700AC6565 /* twitter.png */; };
 		9548F6881A5EFC3700AC6565 /* youtube.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6831A5EFC3700AC6565 /* youtube.png */; };
 		9548F6891A5EFC3700AC6565 /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6841A5EFC3700AC6565 /* phone.png */; };
@@ -3933,6 +3934,7 @@
 			files = (
 				958E23411A757D51008C733F /* SunlightFactory.m in Sources */,
 				9501750D1A73291C00989F9D /* ReadabilityFactory.m in Sources */,
+				9543E5A71A9C216A005051B4 /* ColorScheme.m in Sources */,
 				950175091A7323EC00989F9D /* Tokens.m in Sources */,
 				95D4654A1A7216CF00E20411 /* ActionViewController.m in Sources */,
 			);
