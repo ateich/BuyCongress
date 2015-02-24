@@ -19,6 +19,9 @@
     #define CHARACTER_LIMIT 5
     CLLocationManager *locationManager;
     TableViewController *tableViewController;
+    
+    UIButton *zipCodeSearchButton;
+    UIButton *locationSearchButton;
 }
 
 @end
@@ -75,8 +78,9 @@
     [searchByZipCode setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [searchByZipCode setTranslatesAutoresizingMaskIntoConstraints:NO];
     [searchByZipCode setTitle:@"Search By Zip Code" forState:UIControlStateNormal];
-    [searchByZipCode addTarget:self action:@selector(searchForPoliticiansByZipCode:) forControlEvents:UIControlEventTouchDown];
+    [searchByZipCode addTarget:self action:@selector(searchForPoliticiansByZipCode:) forControlEvents:UIControlEventTouchUpInside];
     [zipCard addSubview:searchByZipCode];
+    zipCodeSearchButton = searchByZipCode;
     
     UILabel *or = [[UILabel alloc] init];
     [or setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -91,7 +95,7 @@
     [locationButton setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme subTextColor]]forState:UIControlStateNormal];
     [locationButton setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme selectedButtonColor]]forState:UIControlStateHighlighted];
     [locationButton setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme selectedButtonColor]]forState:UIControlStateSelected];
-    [locationButton addTarget:self action:@selector(searchForPoliticiansByLocation:) forControlEvents:UIControlEventTouchDown];
+    [locationButton addTarget:self action:@selector(searchForPoliticiansByLocation:) forControlEvents:UIControlEventTouchUpInside];
     [locationCard addSubview:locationButton];
     
     UIButton *locationIcon = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -111,6 +115,7 @@
     [searchByCurrentLocation setTitle:@"Search By Current Location" forState:UIControlStateNormal];
 //    [searchByCurrentLocation addTarget:self action:@selector(searchForPoliticiansByLocation:) forControlEvents:UIControlEventTouchDown];
     [locationButton addSubview:searchByCurrentLocation];
+    locationSearchButton = locationButton;
     
     
     //AUTOLAYOUT
@@ -175,15 +180,18 @@
 }
 
 - (void)searchForPoliticiansByZipCode:(UIButton *)sender{
+    [sender setUserInteractionEnabled:NO];
     if(zipCodeField.text.length != 5){
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Incorrect Zip Code" message:@"Please enter a 5 digit zip code." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
+        [sender setUserInteractionEnabled:YES];
     } else {
         [sunlightAPI getLawmakersByZipCode:zipCodeField.text];
     }
 }
 
 - (void)searchForPoliticiansByLocation:(UIButton *)sender{
+    [sender setUserInteractionEnabled:NO];
     locationManager.delegate = self;
     locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
     
@@ -195,12 +203,14 @@
     NSDictionary *userInfo = [notification userInfo];
     NSMutableArray *politicianData = [[userInfo objectForKey:@"results"] objectForKey:@"results"];
     [self openTableOfPoliticians:politicianData];
+    [zipCodeSearchButton setUserInteractionEnabled:YES];
 }
 
 - (void)didReceivePoliticiansForLocation:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
     NSMutableArray *politicianData = [[userInfo objectForKey:@"results"] objectForKey:@"results"];
     [self openTableOfPoliticians:politicianData];
+    [locationSearchButton setUserInteractionEnabled:YES];
 }
 
 -(void)openTableOfPoliticians:(NSMutableArray*)data{
