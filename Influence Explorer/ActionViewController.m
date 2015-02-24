@@ -29,6 +29,8 @@
     NSMutableArray *organizationsFound;
     
     NSMutableDictionary *organizationDonations;
+    
+    UIActivityIndicatorView *loading;
 }
 
 //@property(strong,nonatomic) IBOutlet UIImageView *imageView;
@@ -143,6 +145,18 @@
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[contentView]-0-|" options:0 metrics:nil views:views]];
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[contentView]-0-|" options:0 metrics:nil views:views]];
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView(==scrollView)]|" options:0 metrics:nil views:views]];
+    
+    //Loading indicator
+    loading = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [loading setColor:[ColorScheme headerColor]];
+    [loading setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:loading];
+    [loading setHidesWhenStopped:YES];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
+    
+    [loading startAnimating];
 }
 
 -(void)parseUrlForArticle:(NSURL*)url{
@@ -311,7 +325,7 @@
         [organizationDict setObject:donationLabel forKey:@"lowestView"];
         [organizationDict setObject:bottomConstraint forKey:@"bottomConstraint"];
         
-        [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        [UIView animateWithDuration:[ColorScheme fadeInTime] delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
             container.alpha = 1;
         } completion:^(BOOL finished){}];
     }
@@ -362,13 +376,15 @@
         [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[headerLabel]-|" options:0 metrics:metrics views:views]];
         [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[donorsLabel]-|" options:0 metrics:metrics views:views]];
         
-        [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        [UIView animateWithDuration:[ColorScheme fadeInTime] delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
             container.alpha = 1;
         } completion:^(BOOL finished){}];
     }
 }
 
 -(void)createCardWithBasicInformation:(NSMutableDictionary*)data{
+    [loading stopAnimating];
+    
     UIView *card = [[UIView alloc] init];
     [card setBackgroundColor:[UIColor whiteColor]];
     [card setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -449,7 +465,7 @@
 //    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[card(==100)]" options:0 metrics:nil views:views]];
     
     //Animate card appearing
-    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+    [UIView animateWithDuration:[ColorScheme fadeInTime] delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         card.alpha = 1;
      } completion:^(BOOL finished){}];
     

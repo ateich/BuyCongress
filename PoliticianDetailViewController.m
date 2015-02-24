@@ -44,6 +44,7 @@
     UIColor *headerColor;
     
     NSNumber *leftMargin;
+    UIActivityIndicatorView *loading;
 }
 
 @end
@@ -174,6 +175,18 @@
     //get transparency id to use in receiving politician donor data
     sunlightAPI = [[SunlightFactory alloc] init];
     [sunlightAPI getLawmakerTransparencyIDFromFirstName:politician.firstName andLastName:politician.lastName];
+    
+    //Loading indicator
+    loading = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [loading setColor:[ColorScheme headerColor]];
+    [loading setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:loading];
+    [loading setHidesWhenStopped:YES];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
+    
+    [loading startAnimating];
 }
 
 -(void)createContactSection{
@@ -259,7 +272,7 @@
         leftSide = contactButton;
     }
     
-    [UIView animateWithDuration:1.0f animations:^{
+    [UIView animateWithDuration:[ColorScheme fadeInTime] animations:^{
         [contactSection setAlpha:1.0f];
     } completion:^(BOOL finished) {}];
 }
@@ -357,8 +370,8 @@
     }
     
     
-    
-    [UIView animateWithDuration:1.0f animations:^{
+    [loading stopAnimating];
+    [UIView animateWithDuration:[ColorScheme fadeInTime] animations:^{
         [section setAlpha:1.0f];
     } completion:^(BOOL finished) {}];
 }

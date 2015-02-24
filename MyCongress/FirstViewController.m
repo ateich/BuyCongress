@@ -22,6 +22,8 @@
     
     UIButton *zipCodeSearchButton;
     UIButton *locationSearchButton;
+    
+    UIActivityIndicatorView *loading;
 }
 
 @end
@@ -177,6 +179,16 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticiansForLocation:) name:@"SunlightFactoryDidReceiveGetLawmakersByLatitudeAndLongitudeNotification" object:nil];
     
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Search" style:UIBarButtonItemStylePlain target:nil action:nil];
+    
+    //Loading indicator
+    loading = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [loading setColor:[ColorScheme headerColor]];
+    [loading setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:loading];
+    [loading setHidesWhenStopped:YES];
+
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
 }
 
 - (void)searchForPoliticiansByZipCode:(UIButton *)sender{
@@ -186,12 +198,15 @@
         [alert show];
         [sender setUserInteractionEnabled:YES];
     } else {
+        [loading startAnimating];
         [sunlightAPI getLawmakersByZipCode:zipCodeField.text];
     }
 }
 
 - (void)searchForPoliticiansByLocation:(UIButton *)sender{
     [sender setUserInteractionEnabled:NO];
+    [loading startAnimating];
+    
     locationManager.delegate = self;
     locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
     
@@ -204,6 +219,7 @@
     NSMutableArray *politicianData = [[userInfo objectForKey:@"results"] objectForKey:@"results"];
     [self openTableOfPoliticians:politicianData];
     [zipCodeSearchButton setUserInteractionEnabled:YES];
+    [loading stopAnimating];
 }
 
 - (void)didReceivePoliticiansForLocation:(NSNotification*)notification {
@@ -211,6 +227,7 @@
     NSMutableArray *politicianData = [[userInfo objectForKey:@"results"] objectForKey:@"results"];
     [self openTableOfPoliticians:politicianData];
     [locationSearchButton setUserInteractionEnabled:YES];
+    [loading stopAnimating];
 }
 
 -(void)openTableOfPoliticians:(NSMutableArray*)data{

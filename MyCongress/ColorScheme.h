@@ -21,4 +21,6 @@
 + (UIImage *)imageWithColor:(UIColor *)color;
 + (UIColor *)selectedButtonColor;
 
++(float)fadeInTime;
+
 @end

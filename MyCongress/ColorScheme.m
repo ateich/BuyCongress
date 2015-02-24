@@ -56,6 +56,10 @@
     return image;
 }
 
++(float)fadeInTime{
+    return 0.5;
+}
+
 
 
 @end
