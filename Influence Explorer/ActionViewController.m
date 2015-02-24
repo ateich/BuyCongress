@@ -160,11 +160,13 @@
 }
 
 -(void)parseUrlForArticle:(NSURL*)url{
+    NSLog(@"parse url for article");
     NSString *apiUrl = [NSString stringWithFormat:@"https://readability.com/api/content/v1/parser?url=%@?currentPage=all&token=%@", [url absoluteString], [Tokens getReadabilityToken]];
     [readabilityFactory makeReadableArticleFromUrl:apiUrl];
 }
 
 -(void)didReceiveReadableArticle:(NSNotification*)notification{
+    NSLog(@"received parsed article");
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ReadabilityFactoryDidReceiveReadableArticleNotification" object:nil];
     
     NSDictionary *userInfo = [notification userInfo];
@@ -247,6 +249,18 @@
         
     } else {
         NSLog(@"[PoliticianDetailViewController.m] WARNING: Politician not found while checking for transparency id - Donation data will not be shown");
+        [loading stopAnimating];
+        UIAlertController *alertController = [UIAlertController  alertControllerWithTitle:@"Cannot parse article"  message:@"We are unable to extract information from this article."  preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+            
+            //Closes the extension, ignoring the perform selector warning
+            #pragma clang diagnostic push
+            #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            [_navItem.target performSelector:_navItem.action];
+            #pragma clang diagnostic pop
+        }]];
+        [self presentViewController:alertController animated:YES completion:nil];
     }
 }
 

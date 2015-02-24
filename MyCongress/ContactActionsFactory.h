@@ -14,7 +14,7 @@
 }
 
 -(void)setViewController:(UIViewController *)viewController;
--(void)composeEmail;
+-(void)composeEmail:(NSString*)emailAddress;
 -(void)makePhoneCall:(NSString*)phoneNumber;
 -(void)loadWebsite:(NSString*)url;
     

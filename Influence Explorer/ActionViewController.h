@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ActionViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *navItem;
 @property (weak, nonatomic) IBOutlet UINavigationBar *navBar;
 
 @end

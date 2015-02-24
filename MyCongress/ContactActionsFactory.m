@@ -20,15 +20,21 @@
     currentViewController = viewController;
 }
 
--(void)composeEmail {
+-(void)composeEmail:(NSString*)emailAddress {
     MFMailComposeViewController* controller = [[MFMailComposeViewController alloc] init];
     
     controller.mailComposeDelegate = self;
-    [controller setSubject:@"My Subject"];
-    [controller setMessageBody:@"Hello there." isHTML:NO];
+    [controller setToRecipients:[NSArray arrayWithObject:emailAddress]];
+    [controller setSubject:@""];
+    [controller setMessageBody:@"" isHTML:NO];
     if (controller){
+        
+        [controller.navigationBar setTintColor:[UIColor whiteColor]];
+        [controller.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+        
         [currentViewController presentViewController:controller animated:YES completion:^{
             [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+            
         }];
     }
 }

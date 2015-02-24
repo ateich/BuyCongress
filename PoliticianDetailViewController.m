@@ -444,7 +444,7 @@
 }
 
 -(void)sendEmail {
-    [contactActions composeEmail];
+    [contactActions composeEmail:politician.email];
 }
 
 -(void)makePhoneCall {
