@@ -18,5 +18,7 @@
 + (UIColor *)navBarColor;
 + (UIColor *)placeholderImageColor;
 + (UIColor *)cardColor;
++ (UIImage *)imageWithColor:(UIColor *)color;
++ (UIColor *)selectedButtonColor;
 
 @end

@@ -38,6 +38,24 @@
     return [UIColor whiteColor];
 }
 
++ (UIColor *)selectedButtonColor {
+    return [UIColor colorWithRed:51.0/255.0 green:102.0/255.0 blue:77.0/255.0 alpha:1.0];
+}
+
++ (UIImage *)imageWithColor:(UIColor *)color {
+    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
 
 
 @end

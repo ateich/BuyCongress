@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="My Congress" image="first" id="acW-dT-cKf"/>
+                    <tabBarItem key="tabBarItem" title="My Congress" image="Location" id="acW-dT-cKf"/>
                     <navigationItem key="navigationItem" title="BuyCongress" id="R9r-7I-jX7"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
@@ -75,7 +75,7 @@
                             <constraint firstAttribute="centerY" secondItem="zEq-FU-wV5" secondAttribute="centerY" id="qzY-Ky-pLD"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Browse Congress" image="second" id="cPa-gy-q4n"/>
+                    <tabBarItem key="tabBarItem" title="Browse Congress" image="Browse" id="cPa-gy-q4n"/>
                     <navigationItem key="navigationItem" title="Members of Congress" id="6GB-af-Eyh"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
@@ -121,7 +121,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="first" width="30" height="30"/>
-        <image name="second" width="30" height="30"/>
+        <image name="Browse" width="25" height="25"/>
+        <image name="Location" width="29" height="41"/>
     </resources>
 </document>

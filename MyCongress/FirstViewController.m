@@ -66,13 +66,13 @@
     [zipCodeField setTextAlignment:NSTextAlignmentCenter];
     [zipCodeField setKeyboardType:UIKeyboardTypeNumberPad];
     [zipCodeField setBackgroundColor:[ColorScheme backgroundColor]];
-//    [zipCodeField setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
     [zipCard addSubview:zipCodeField];
     
     UIButton *searchByZipCode = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [searchByZipCode setBackgroundColor:[ColorScheme subTextColor]];
+    [searchByZipCode setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme subTextColor]]forState:UIControlStateNormal];
+    [searchByZipCode setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme selectedButtonColor]]forState:UIControlStateHighlighted];
+    [searchByZipCode setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme selectedButtonColor]]forState:UIControlStateSelected];
     [searchByZipCode setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    [searchByZipCode setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
     [searchByZipCode setTranslatesAutoresizingMaskIntoConstraints:NO];
     [searchByZipCode setTitle:@"Search By Zip Code" forState:UIControlStateNormal];
     [searchByZipCode addTarget:self action:@selector(searchForPoliticiansByZipCode:) forControlEvents:UIControlEventTouchDown];
@@ -88,10 +88,14 @@
     
     UIButton *locationButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [locationButton setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [locationButton setBackgroundColor:[ColorScheme subTextColor]];
+    [locationButton setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme subTextColor]]forState:UIControlStateNormal];
+    [locationButton setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme selectedButtonColor]]forState:UIControlStateHighlighted];
+    [locationButton setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme selectedButtonColor]]forState:UIControlStateSelected];
+    [locationButton addTarget:self action:@selector(searchForPoliticiansByLocation:) forControlEvents:UIControlEventTouchDown];
     [locationCard addSubview:locationButton];
     
     UIButton *locationIcon = [UIButton buttonWithType:UIButtonTypeCustom];
+    [locationIcon setUserInteractionEnabled:NO];
     [locationIcon setTranslatesAutoresizingMaskIntoConstraints:NO];
     [locationIcon setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
     UIImage *locationImage = [[UIImage imageNamed:@"location.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -100,11 +104,12 @@
     [locationButton addSubview:locationIcon];
     
     UIButton *searchByCurrentLocation = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [searchByCurrentLocation setUserInteractionEnabled:NO];
     [searchByCurrentLocation setTranslatesAutoresizingMaskIntoConstraints:NO];
     [searchByCurrentLocation setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [searchByCurrentLocation setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
     [searchByCurrentLocation setTitle:@"Search By Current Location" forState:UIControlStateNormal];
-    [searchByCurrentLocation addTarget:self action:@selector(searchForPoliticiansByLocation:) forControlEvents:UIControlEventTouchDown];
+//    [searchByCurrentLocation addTarget:self action:@selector(searchForPoliticiansByLocation:) forControlEvents:UIControlEventTouchDown];
     [locationButton addSubview:searchByCurrentLocation];
     
     
