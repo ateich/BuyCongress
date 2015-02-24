@@ -33,63 +33,149 @@
     
     UIView *containerView = [[UIView alloc] init];
     [containerView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [containerView setBackgroundColor:[ColorScheme backgroundColor]];
     [self.view addSubview:containerView];
     
-    UIView *topSpacer = [[UIView alloc] init];
-    [topSpacer setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.view addSubview:topSpacer];
+    UILabel *instructions = [[UILabel alloc] init];
+    [instructions setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [instructions setTextAlignment:NSTextAlignmentCenter];
+    [instructions setFont:[UIFont boldSystemFontOfSize:16.0]];
+//    [instructions setBackgroundColor:[UIColor blueColor]];
+    [instructions setTextColor:[ColorScheme headerColor]];
+    instructions.numberOfLines = 0;
+    instructions.text = @"Search representatives by zip code";
+    instructions.text = [instructions.text capitalizedString];
+    [containerView addSubview:instructions];
     
-    UIView *bottomSpacer = [[UIView alloc] init];
-    [bottomSpacer setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.view addSubview:bottomSpacer];
+    UIView *zipCard = [[UIView alloc] init];
+    [zipCard setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [zipCard setBackgroundColor:[ColorScheme cardColor]];
+    [containerView addSubview:zipCard];
+    
+    UIView *locationCard = [[UIView alloc] init];
+    [locationCard setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [locationCard setBackgroundColor:[ColorScheme cardColor]];
+    [containerView addSubview:locationCard];
     
     zipCodeField = [[UITextField alloc] init];
     [zipCodeField setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [zipCodeField setFont:[UIFont systemFontOfSize:15.0]];
+    [zipCodeField setTextColor:[ColorScheme headerColor]];
     [zipCodeField setDelegate:self];
-    [zipCodeField setPlaceholder:@"Enter your Zip Code Here"];
+    [zipCodeField setPlaceholder:@"Tap Here To Enter Your Zip Code"];
     [zipCodeField setTextAlignment:NSTextAlignmentCenter];
     [zipCodeField setKeyboardType:UIKeyboardTypeNumberPad];
-    [containerView addSubview:zipCodeField];
+    [zipCodeField setBackgroundColor:[ColorScheme backgroundColor]];
+//    [zipCodeField setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
+    [zipCard addSubview:zipCodeField];
     
     UIButton *searchByZipCode = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [searchByZipCode setBackgroundColor:[ColorScheme subTextColor]];
+    [searchByZipCode setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    [searchByZipCode setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
     [searchByZipCode setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [searchByZipCode setTitle:@"Search by Zip Code" forState:UIControlStateNormal];
+    [searchByZipCode setTitle:@"Search By Zip Code" forState:UIControlStateNormal];
     [searchByZipCode addTarget:self action:@selector(searchForPoliticiansByZipCode:) forControlEvents:UIControlEventTouchDown];
-    [containerView addSubview:searchByZipCode];
+    [zipCard addSubview:searchByZipCode];
     
     UILabel *or = [[UILabel alloc] init];
     [or setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [or setText:@"or"];
+    [or setFont:[UIFont boldSystemFontOfSize:16.0]];
+    [or setTextColor:[ColorScheme headerColor]];
+    [or setText:[@"or use your current location" capitalizedString]];
     [or setTextAlignment:NSTextAlignmentCenter];
     [containerView addSubview:or];
     
+    UIButton *locationButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [locationButton setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [locationButton setBackgroundColor:[ColorScheme subTextColor]];
+    [locationCard addSubview:locationButton];
+    
+    UIButton *locationIcon = [UIButton buttonWithType:UIButtonTypeCustom];
+    [locationIcon setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [locationIcon setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
+    UIImage *locationImage = [[UIImage imageNamed:@"location.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [locationIcon setImage:locationImage forState:UIControlStateNormal];
+    [locationIcon setTintColor:[UIColor whiteColor]];
+    [locationButton addSubview:locationIcon];
+    
     UIButton *searchByCurrentLocation = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [searchByCurrentLocation setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [searchByCurrentLocation setTitle:@"Use My Current Location" forState:UIControlStateNormal];
+    [searchByCurrentLocation setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [searchByCurrentLocation setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
+    [searchByCurrentLocation setTitle:@"Search By Current Location" forState:UIControlStateNormal];
     [searchByCurrentLocation addTarget:self action:@selector(searchForPoliticiansByLocation:) forControlEvents:UIControlEventTouchDown];
-    [containerView addSubview:searchByCurrentLocation];
+    [locationButton addSubview:searchByCurrentLocation];
+    
     
     //AUTOLAYOUT
-    NSDictionary *metrics = @{@"tabBarHeight":[NSNumber numberWithDouble:self.tabBarController.tabBar.frame.size.height]};
-    NSDictionary *views = NSDictionaryOfVariableBindings(containerView, topSpacer, bottomSpacer, zipCodeField, searchByZipCode, or, searchByCurrentLocation);
+    NSNumber *leftMargin = @15;
+    NSNumber *halfMargin = @([leftMargin intValue]/2);
+    NSNumber *quarterMargin = @([halfMargin intValue]/2);
+    NSDictionary *metrics = @{@"tabBarHeight":[NSNumber numberWithDouble:self.tabBarController.tabBar.frame.size.height], @"leftMargin":leftMargin, @"topMargin":halfMargin, @"largeTopMargin":halfMargin, @"sideMargin":@10, @"quarterMargin":quarterMargin};
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[topSpacer]-[containerView]-[bottomSpacer(==topSpacer)]-|" options:0 metrics:metrics views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[containerView]-|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[topSpacer]-|" options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[bottomSpacer]-|" options:0 metrics:nil views:views]];
+    //Zip Code Card Spacers
+    UIView *spacer1 = [[UIView alloc] init];
+    UIView *spacer2 = [[UIView alloc] init];
+    UIView *spacer3 = [[UIView alloc] init];
     
-    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[zipCodeField]-[searchByZipCode]-[or]-[searchByCurrentLocation]-tabBarHeight-|" options:0 metrics:metrics views:views]];
-    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[zipCodeField]-|" options:0 metrics:nil views:views]];
-    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[searchByZipCode]-|" options:0 metrics:nil views:views]];
+    [spacer1 setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [spacer2 setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [spacer3 setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    [zipCard addSubview:spacer1];
+    [zipCard addSubview:spacer2];
+    [zipCard addSubview:spacer3];
+    
+    //Location Spacers
+    UIView *spacer4 = [[UIView alloc] init];
+    UIView *spacer5 = [[UIView alloc] init];
+    
+    [spacer4 setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [spacer5 setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    [locationButton addSubview:spacer4];
+    [locationButton addSubview:spacer5];
+    
+    NSDictionary *views = NSDictionaryOfVariableBindings(containerView, instructions, zipCard, locationCard, zipCodeField, searchByZipCode, or, locationIcon, searchByCurrentLocation, spacer1, spacer2, spacer3, spacer4, spacer5, locationButton);
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[containerView]-0-|" options:0 metrics:metrics views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[containerView]-0-|" options:0 metrics:nil views:views]];
+   
+    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(<=leftMargin,>=10@400,>=0)-[instructions(<=50)]-(<=leftMargin,>=10@400,>=0)-[zipCard(==locationCard)]-(<=leftMargin,>=10@250,>=5)-[or(==25@400)]-(<=leftMargin,>=10@250,>=5)-[locationCard]-(<=leftMargin,>=0)-|" options:0 metrics:metrics views:views]];
+    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[zipCard]-leftMargin-|" options:0 metrics:metrics views:views]];
+    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[locationCard]-leftMargin-|" options:0 metrics:metrics views:views]];
+    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[instructions]-leftMargin-|" options:0 metrics:metrics views:views]];
+    
+    
+    [zipCard addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[spacer1(==spacer2,==spacer3)]-[zipCodeField(==searchByZipCode)]-[spacer2]-[searchByZipCode(>=50@800)]-[spacer3]-|" options:0 metrics:metrics views:views]];
+    [zipCard addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[zipCodeField]-leftMargin-|" options:0 metrics:metrics views:views]];
+    [zipCard addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[searchByZipCode]-leftMargin-|" options:0 metrics:metrics views:views]];
+    
     [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[or]-|" options:0 metrics:nil views:views]];
-    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[searchByCurrentLocation]-|" options:0 metrics:nil views:views]];
+    
+    [locationCard addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-leftMargin-[locationButton]-(leftMargin@400)-|" options:0 metrics:metrics views:views]];
+    [locationCard addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[locationButton]-leftMargin-|" options:0 metrics:metrics views:views]];
+    
+    [locationButton addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[spacer4(==spacer5)]-[locationIcon]-0-[searchByCurrentLocation]-[spacer5]-|" options:0 metrics:metrics views:views]];
+    [locationButton addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[searchByCurrentLocation]-|" options:0 metrics:nil views:views]];
+    [locationButton addConstraint:[NSLayoutConstraint constraintWithItem:locationIcon attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:locationIcon attribute:NSLayoutAttributeHeight multiplier:0.70731707 constant:0.0f]];
+    [locationButton addConstraint:[NSLayoutConstraint constraintWithItem:locationIcon attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:locationButton attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0f]];
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticiansForZip:) name:@"SunlightFactoryDidReceiveGetLawmakersByZipCodeNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticiansForLocation:) name:@"SunlightFactoryDidReceiveGetLawmakersByLatitudeAndLongitudeNotification" object:nil];
+    
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Search" style:UIBarButtonItemStylePlain target:nil action:nil];
 }
 
 - (void)searchForPoliticiansByZipCode:(UIButton *)sender{
-    [sunlightAPI getLawmakersByZipCode:zipCodeField.text];
+    if(zipCodeField.text.length != 5){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Incorrect Zip Code" message:@"Please enter a 5 digit zip code." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    } else {
+        [sunlightAPI getLawmakersByZipCode:zipCodeField.text];
+    }
 }
 
 - (void)searchForPoliticiansByLocation:(UIButton *)sender{

@@ -46,7 +46,7 @@
     tableVC.view.frame = tableFrame;
     [self.view addSubview:tableVC.view];
     
-    //TO DO: Show user something so that they know the data is loading
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Browse" style:UIBarButtonItemStylePlain target:nil action:nil];
 }
 
 - (void)didReceivePoliticianData:(NSNotification*)notification {

@@ -24,6 +24,8 @@
     self.tableView.backgroundColor = [ColorScheme backgroundColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.politicians = [[NSMutableArray alloc] init];
+    
+    self.title = @"Members of Congress";
 }
 
 - (void)didReceiveMemoryWarning {
