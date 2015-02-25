@@ -25,6 +25,7 @@
 		953F71C91A98130D00DAA47A /* ColorScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 953F71C81A98130D00DAA47A /* ColorScheme.m */; };
 		9543E5A71A9C216A005051B4 /* ColorScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 953F71C81A98130D00DAA47A /* ColorScheme.m */; };
 		9543E5A81A9CF6B6005051B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 952DCE7A1A3A678B0000DCF5 /* Images.xcassets */; };
+		9543E5AE1A9D291D005051B4 /* InfluenceExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9543E5AD1A9D291D005051B4 /* InfluenceExplorerViewController.m */; };
 		9548F6871A5EFC3700AC6565 /* twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6821A5EFC3700AC6565 /* twitter.png */; };
 		9548F6881A5EFC3700AC6565 /* youtube.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6831A5EFC3700AC6565 /* youtube.png */; };
 		9548F6891A5EFC3700AC6565 /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6841A5EFC3700AC6565 /* phone.png */; };
@@ -940,6 +941,8 @@
 		952DCE951A3A71920000DCF5 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		953F71C71A98130D00DAA47A /* ColorScheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorScheme.h; sourceTree = "<group>"; };
 		953F71C81A98130D00DAA47A /* ColorScheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorScheme.m; sourceTree = "<group>"; };
+		9543E5AC1A9D291D005051B4 /* InfluenceExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfluenceExplorerViewController.h; sourceTree = "<group>"; };
+		9543E5AD1A9D291D005051B4 /* InfluenceExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfluenceExplorerViewController.m; sourceTree = "<group>"; };
 		9548F6821A5EFC3700AC6565 /* twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twitter.png; sourceTree = "<group>"; };
 		9548F6831A5EFC3700AC6565 /* youtube.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youtube.png; sourceTree = "<group>"; };
 		9548F6841A5EFC3700AC6565 /* phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phone.png; sourceTree = "<group>"; };
@@ -1971,6 +1974,8 @@
 				952DCE721A3A678B0000DCF5 /* FirstViewController.m */,
 				952DCE741A3A678B0000DCF5 /* SecondViewController.h */,
 				952DCE751A3A678B0000DCF5 /* SecondViewController.m */,
+				9543E5AC1A9D291D005051B4 /* InfluenceExplorerViewController.h */,
+				9543E5AD1A9D291D005051B4 /* InfluenceExplorerViewController.m */,
 				95DECD861A5B2CF100111AEC /* TableViewController.h */,
 				95DECD871A5B2CF100111AEC /* TableViewController.m */,
 				956F1D681A5CAE4900AAA14C /* PoliticianDetailViewController.h */,
@@ -3912,6 +3917,7 @@
 				952DCE761A3A678B0000DCF5 /* SecondViewController.m in Sources */,
 				953F71C91A98130D00DAA47A /* ColorScheme.m in Sources */,
 				956F1D6A1A5CAE4900AAA14C /* PoliticianDetailViewController.m in Sources */,
+				9543E5AE1A9D291D005051B4 /* InfluenceExplorerViewController.m in Sources */,
 				952DCE701A3A678B0000DCF5 /* AppDelegate.m in Sources */,
 				952DCE731A3A678B0000DCF5 /* FirstViewController.m in Sources */,
 				952DCE6D1A3A678B0000DCF5 /* main.m in Sources */,

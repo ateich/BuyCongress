@@ -31,6 +31,8 @@
     NSMutableDictionary *organizationDonations;
     
     UIActivityIndicatorView *loading;
+    
+    bool foundEntity;
 }
 
 //@property(strong,nonatomic) IBOutlet UIImageView *imageView;
@@ -172,9 +174,31 @@
     NSDictionary *userInfo = [notification userInfo];
     NSString *articleHTML = [[userInfo objectForKey:@"content"] objectForKey:@"content"];
     
+    NSLog(@"article length: %lu", (unsigned long)articleHTML.length);
+    
     //contains a dictionary of keys: word types and values: dictionary of words
     NSMutableDictionary *properNouns = [self parseReadableArticleForProperNouns:articleHTML];
     [self checkIfProperNounsArePoliticians:[properNouns objectForKey:@"PersonalName"]];
+    
+    //Close the extension if we don't find a politician is found within 3 seconds
+    [self performSelector:@selector(checkIfExtensionShouldQuit) withObject:nil afterDelay:3];
+}
+
+-(void)checkIfExtensionShouldQuit{
+    if(!foundEntity){
+        [loading stopAnimating];
+        UIAlertController *alertController = [UIAlertController  alertControllerWithTitle:@"Cannot parse article"  message:@"We are unable to extract information from this article."  preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+            
+            //Closes the extension, ignoring the perform selector warning
+            #pragma clang diagnostic push
+            #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            [_navItem.target performSelector:_navItem.action];
+            #pragma clang diagnostic pop
+        }]];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
 }
 
 -(void)checkIfProperNounsArePoliticians:(NSMutableDictionary*)properNouns{
@@ -194,6 +218,8 @@
     NSArray *politicians = [userInfo objectForKey:@"results"];
     
     if(politicians.count > 0){
+        
+        foundEntity = true;
         
         //find the first non-individual
         //  if no non-individuals found, do nothing
@@ -249,18 +275,6 @@
         
     } else {
         NSLog(@"[PoliticianDetailViewController.m] WARNING: Politician not found while checking for transparency id - Donation data will not be shown");
-        [loading stopAnimating];
-        UIAlertController *alertController = [UIAlertController  alertControllerWithTitle:@"Cannot parse article"  message:@"We are unable to extract information from this article."  preferredStyle:UIAlertControllerStyleAlert];
-        [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self dismissViewControllerAnimated:YES completion:nil];
-            
-            //Closes the extension, ignoring the perform selector warning
-            #pragma clang diagnostic push
-            #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-            [_navItem.target performSelector:_navItem.action];
-            #pragma clang diagnostic pop
-        }]];
-        [self presentViewController:alertController animated:YES completion:nil];
     }
 }
 

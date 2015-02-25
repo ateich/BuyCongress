@@ -41,6 +41,16 @@
             </objects>
             <point key="canvasLocation" x="54" y="704"/>
         </scene>
+        <!--Influence Explorer-->
+        <scene sceneID="TWh-HP-B6f">
+            <objects>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="CJX-nB-woX" customClass="InfluenceExplorerViewController" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Influence Explorer" id="YP9-ri-M7b"/>
+                </pageViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dos-cq-Sd7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-29" y="1418"/>
+        </scene>
         <!--Members of Congress-->
         <scene sceneID="wg7-f3-ORb">
             <objects>
@@ -113,6 +123,7 @@
                     <connections>
                         <segue destination="zbM-OT-LvA" kind="relationship" relationship="viewControllers" id="WpJ-nJ-kBO"/>
                         <segue destination="gqE-RR-z1q" kind="relationship" relationship="viewControllers" id="vUy-Ee-DMc"/>
+                        <segue destination="CJX-nB-woX" kind="relationship" relationship="viewControllers" id="iek-ae-PbZ"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
