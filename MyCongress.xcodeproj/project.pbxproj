@@ -25,7 +25,6 @@
 		953F71C91A98130D00DAA47A /* ColorScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 953F71C81A98130D00DAA47A /* ColorScheme.m */; };
 		9543E5A71A9C216A005051B4 /* ColorScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 953F71C81A98130D00DAA47A /* ColorScheme.m */; };
 		9543E5A81A9CF6B6005051B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 952DCE7A1A3A678B0000DCF5 /* Images.xcassets */; };
-		9543E5AE1A9D291D005051B4 /* InfluenceExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9543E5AD1A9D291D005051B4 /* InfluenceExplorerViewController.m */; };
 		9548F6871A5EFC3700AC6565 /* twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6821A5EFC3700AC6565 /* twitter.png */; };
 		9548F6881A5EFC3700AC6565 /* youtube.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6831A5EFC3700AC6565 /* youtube.png */; };
 		9548F6891A5EFC3700AC6565 /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 9548F6841A5EFC3700AC6565 /* phone.png */; };
@@ -770,6 +769,14 @@
 		9579151D1A9ACB10000C2E78 /* Y000063.png in Resources */ = {isa = PBXBuildFile; fileRef = 957912431A9ACB0F000C2E78 /* Y000063.png */; };
 		9579151E1A9ACB10000C2E78 /* Y000064.png in Resources */ = {isa = PBXBuildFile; fileRef = 957912441A9ACB0F000C2E78 /* Y000064.png */; };
 		9579151F1A9ACB10000C2E78 /* Y000065.png in Resources */ = {isa = PBXBuildFile; fileRef = 957912451A9ACB10000C2E78 /* Y000065.png */; };
+		957BACD61A9FAA42009362E6 /* InfluenceExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 957BACD51A9FAA42009362E6 /* InfluenceExplorerViewController.m */; };
+		957BACDD1A9FB0AF009362E6 /* PageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 957BACDB1A9FB0AF009362E6 /* PageViewController.m */; };
+		957BACE41A9FC5D3009362E6 /* Instruction1.png in Resources */ = {isa = PBXBuildFile; fileRef = 957BACE01A9FC5D3009362E6 /* Instruction1.png */; };
+		957BACE51A9FC5D3009362E6 /* Instruction2.png in Resources */ = {isa = PBXBuildFile; fileRef = 957BACE11A9FC5D3009362E6 /* Instruction2.png */; };
+		957BACE61A9FC5D3009362E6 /* Instruction3.png in Resources */ = {isa = PBXBuildFile; fileRef = 957BACE21A9FC5D3009362E6 /* Instruction3.png */; };
+		957BACE71A9FC5D3009362E6 /* Instruction4.png in Resources */ = {isa = PBXBuildFile; fileRef = 957BACE31A9FC5D3009362E6 /* Instruction4.png */; };
+		957BACE91A9FDADA009362E6 /* Instruction5.png in Resources */ = {isa = PBXBuildFile; fileRef = 957BACE81A9FDADA009362E6 /* Instruction5.png */; };
+		957BACEB1A9FDE75009362E6 /* Instruction0.png in Resources */ = {isa = PBXBuildFile; fileRef = 957BACEA1A9FDE75009362E6 /* Instruction0.png */; };
 		958DD7F11A9B02D800C633B1 /* location.png in Resources */ = {isa = PBXBuildFile; fileRef = 958DD7F01A9B02D800C633B1 /* location.png */; };
 		958E23411A757D51008C733F /* SunlightFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3281A570A9A0040F1D6 /* SunlightFactory.m */; };
 		959D4C0A1A858679006804F6 /* map-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = 959D48C21A858677006804F6 /* map-marker.png */; };
@@ -941,8 +948,6 @@
 		952DCE951A3A71920000DCF5 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		953F71C71A98130D00DAA47A /* ColorScheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorScheme.h; sourceTree = "<group>"; };
 		953F71C81A98130D00DAA47A /* ColorScheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorScheme.m; sourceTree = "<group>"; };
-		9543E5AC1A9D291D005051B4 /* InfluenceExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfluenceExplorerViewController.h; sourceTree = "<group>"; };
-		9543E5AD1A9D291D005051B4 /* InfluenceExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfluenceExplorerViewController.m; sourceTree = "<group>"; };
 		9548F6821A5EFC3700AC6565 /* twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twitter.png; sourceTree = "<group>"; };
 		9548F6831A5EFC3700AC6565 /* youtube.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youtube.png; sourceTree = "<group>"; };
 		9548F6841A5EFC3700AC6565 /* phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phone.png; sourceTree = "<group>"; };
@@ -1700,6 +1705,16 @@
 		957912431A9ACB0F000C2E78 /* Y000063.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Y000063.png; sourceTree = "<group>"; };
 		957912441A9ACB0F000C2E78 /* Y000064.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Y000064.png; sourceTree = "<group>"; };
 		957912451A9ACB10000C2E78 /* Y000065.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Y000065.png; sourceTree = "<group>"; };
+		957BACD41A9FAA42009362E6 /* InfluenceExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfluenceExplorerViewController.h; sourceTree = "<group>"; };
+		957BACD51A9FAA42009362E6 /* InfluenceExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfluenceExplorerViewController.m; sourceTree = "<group>"; };
+		957BACDA1A9FB0AF009362E6 /* PageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageViewController.h; sourceTree = "<group>"; };
+		957BACDB1A9FB0AF009362E6 /* PageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageViewController.m; sourceTree = "<group>"; };
+		957BACE01A9FC5D3009362E6 /* Instruction1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Instruction1.png; sourceTree = "<group>"; };
+		957BACE11A9FC5D3009362E6 /* Instruction2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Instruction2.png; sourceTree = "<group>"; };
+		957BACE21A9FC5D3009362E6 /* Instruction3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Instruction3.png; sourceTree = "<group>"; };
+		957BACE31A9FC5D3009362E6 /* Instruction4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Instruction4.png; sourceTree = "<group>"; };
+		957BACE81A9FDADA009362E6 /* Instruction5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Instruction5.png; sourceTree = "<group>"; };
+		957BACEA1A9FDE75009362E6 /* Instruction0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Instruction0.png; sourceTree = "<group>"; };
 		958DD7F01A9B02D800C633B1 /* location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location.png; sourceTree = "<group>"; };
 		959D48C21A858677006804F6 /* map-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-marker.png"; sourceTree = "<group>"; };
 		95C2F3711A9A45D600C7D05D /* MissingImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MissingImage.png; sourceTree = "<group>"; };
@@ -1919,6 +1934,7 @@
 		9548F6801A5EFC2600AC6565 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				957BACDF1A9FC5C5009362E6 /* Instructions */,
 				959D468C1A858675006804F6 /* Politicians */,
 				9548F6811A5EFC3700AC6565 /* Icons */,
 			);
@@ -1970,12 +1986,14 @@
 		9564E32D1A57564C0040F1D6 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				957BACD41A9FAA42009362E6 /* InfluenceExplorerViewController.h */,
+				957BACD51A9FAA42009362E6 /* InfluenceExplorerViewController.m */,
+				957BACDA1A9FB0AF009362E6 /* PageViewController.h */,
+				957BACDB1A9FB0AF009362E6 /* PageViewController.m */,
 				952DCE711A3A678B0000DCF5 /* FirstViewController.h */,
 				952DCE721A3A678B0000DCF5 /* FirstViewController.m */,
 				952DCE741A3A678B0000DCF5 /* SecondViewController.h */,
 				952DCE751A3A678B0000DCF5 /* SecondViewController.m */,
-				9543E5AC1A9D291D005051B4 /* InfluenceExplorerViewController.h */,
-				9543E5AD1A9D291D005051B4 /* InfluenceExplorerViewController.m */,
 				95DECD861A5B2CF100111AEC /* TableViewController.h */,
 				95DECD871A5B2CF100111AEC /* TableViewController.m */,
 				956F1D681A5CAE4900AAA14C /* PoliticianDetailViewController.h */,
@@ -2035,6 +2053,19 @@
 				956F1D7A1A5CC9B100AAA14C /* libOCMock.a */,
 			);
 			path = lib;
+			sourceTree = "<group>";
+		};
+		957BACDF1A9FC5C5009362E6 /* Instructions */ = {
+			isa = PBXGroup;
+			children = (
+				957BACEA1A9FDE75009362E6 /* Instruction0.png */,
+				957BACE81A9FDADA009362E6 /* Instruction5.png */,
+				957BACE01A9FC5D3009362E6 /* Instruction1.png */,
+				957BACE11A9FC5D3009362E6 /* Instruction2.png */,
+				957BACE21A9FC5D3009362E6 /* Instruction3.png */,
+				957BACE31A9FC5D3009362E6 /* Instruction4.png */,
+			);
+			name = Instructions;
 			sourceTree = "<group>";
 		};
 		959D468C1A858675006804F6 /* Politicians */ = {
@@ -3127,6 +3158,7 @@
 				95C2F4131A9A7B4A00C7D05D /* B001229.png in Resources */,
 				957912B61A9ACB10000C2E78 /* D000606.png in Resources */,
 				957913EF1A9ACB10000C2E78 /* M001159.png in Resources */,
+				957BACEB1A9FDE75009362E6 /* Instruction0.png in Resources */,
 				957912DD1A9ACB10000C2E78 /* F000116.png in Resources */,
 				95C2F40D1A9A7B4A00C7D05D /* B001135.png in Resources */,
 				957912AC1A9ACB10000C2E78 /* D000595.png in Resources */,
@@ -3137,6 +3169,7 @@
 				957913701A9ACB10000C2E78 /* K000008.png in Resources */,
 				95C2F4061A9A7B4A00C7D05D /* B000711.png in Resources */,
 				95C2F3E61A9A7B4A00C7D05D /* A000357.png in Resources */,
+				957BACE51A9FC5D3009362E6 /* Instruction2.png in Resources */,
 				9579138D1A9ACB10000C2E78 /* K000376.png in Resources */,
 				9579150F1A9ACB10000C2E78 /* W000807.png in Resources */,
 				9579148B1A9ACB10000C2E78 /* S000320.png in Resources */,
@@ -3274,6 +3307,7 @@
 				9579136F1A9ACB10000C2E78 /* J000296.png in Resources */,
 				95C2F4051A9A7B4A00C7D05D /* B000657.png in Resources */,
 				957915121A9ACB10000C2E78 /* W000810.png in Resources */,
+				957BACE91A9FDADA009362E6 /* Instruction5.png in Resources */,
 				957914EE1A9ACB10000C2E78 /* V000132.png in Resources */,
 				957914C51A9ACB10000C2E78 /* S001189.png in Resources */,
 				957913E21A9ACB10000C2E78 /* M001146.png in Resources */,
@@ -3638,6 +3672,7 @@
 				957913441A9ACB10000C2E78 /* H001052.png in Resources */,
 				95C2F4001A9A7B4A00C7D05D /* B000574.png in Resources */,
 				957914721A9ACB10000C2E78 /* R000586.png in Resources */,
+				957BACE61A9FC5D3009362E6 /* Instruction3.png in Resources */,
 				957914961A9ACB10000C2E78 /* S000749.png in Resources */,
 				957912821A9ACB10000C2E78 /* C001078.png in Resources */,
 				9579139F1A9ACB10000C2E78 /* L000287.png in Resources */,
@@ -3688,6 +3723,7 @@
 				957913311A9ACB10000C2E78 /* H001032.png in Resources */,
 				952DCE7E1A3A678B0000DCF5 /* LaunchScreen.xib in Resources */,
 				957912951A9ACB10000C2E78 /* C001097.png in Resources */,
+				957BACE71A9FC5D3009362E6 /* Instruction4.png in Resources */,
 				95C2F4381A9A7B4A00C7D05D /* B001272.png in Resources */,
 				957915111A9ACB10000C2E78 /* W000809.png in Resources */,
 				957912721A9ACB10000C2E78 /* C001062.png in Resources */,
@@ -3759,6 +3795,7 @@
 				957914A81A9ACB10000C2E78 /* S001156.png in Resources */,
 				957914891A9ACB10000C2E78 /* S000250.png in Resources */,
 				9579129F1A9ACB10000C2E78 /* D000216.png in Resources */,
+				957BACE41A9FC5D3009362E6 /* Instruction1.png in Resources */,
 				957913DE1A9ACB10000C2E78 /* M001140.png in Resources */,
 				957913BB1A9ACB10000C2E78 /* L000572.png in Resources */,
 				957912B01A9ACB10000C2E78 /* D000600.png in Resources */,
@@ -3917,13 +3954,14 @@
 				952DCE761A3A678B0000DCF5 /* SecondViewController.m in Sources */,
 				953F71C91A98130D00DAA47A /* ColorScheme.m in Sources */,
 				956F1D6A1A5CAE4900AAA14C /* PoliticianDetailViewController.m in Sources */,
-				9543E5AE1A9D291D005051B4 /* InfluenceExplorerViewController.m in Sources */,
+				957BACD61A9FAA42009362E6 /* InfluenceExplorerViewController.m in Sources */,
 				952DCE701A3A678B0000DCF5 /* AppDelegate.m in Sources */,
 				952DCE731A3A678B0000DCF5 /* FirstViewController.m in Sources */,
 				952DCE6D1A3A678B0000DCF5 /* main.m in Sources */,
 				9501750C1A73255600989F9D /* ReadabilityFactory.m in Sources */,
 				95DECD881A5B2CF100111AEC /* TableViewController.m in Sources */,
 				9564E3311A5757ED0040F1D6 /* Politician.m in Sources */,
+				957BACDD1A9FB0AF009362E6 /* PageViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
