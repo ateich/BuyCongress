@@ -162,19 +162,15 @@
 }
 
 -(void)parseUrlForArticle:(NSURL*)url{
-    NSLog(@"parse url for article");
     NSString *apiUrl = [NSString stringWithFormat:@"https://readability.com/api/content/v1/parser?url=%@?currentPage=all&token=%@", [url absoluteString], [Tokens getReadabilityToken]];
     [readabilityFactory makeReadableArticleFromUrl:apiUrl];
 }
 
 -(void)didReceiveReadableArticle:(NSNotification*)notification{
-    NSLog(@"received parsed article");
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ReadabilityFactoryDidReceiveReadableArticleNotification" object:nil];
     
     NSDictionary *userInfo = [notification userInfo];
     NSString *articleHTML = [[userInfo objectForKey:@"content"] objectForKey:@"content"];
-    
-    NSLog(@"article length: %lu", (unsigned long)articleHTML.length);
     
     //contains a dictionary of keys: word types and values: dictionary of words
     NSMutableDictionary *properNouns = [self parseReadableArticleForProperNouns:articleHTML];
@@ -347,15 +343,20 @@
         }
         
         NSArray *bottomConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[donationLabel]-|" options:0 metrics:nil views:views];
-        [container addConstraints:bottomConstraint];
-//        [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[donationLabel]-|" options:0 metrics:nil views:views]];
         
         [organizationDict setObject:donationLabel forKey:@"lowestView"];
         [organizationDict setObject:bottomConstraint forKey:@"bottomConstraint"];
         
+        [container setClipsToBounds:YES];
+        container.alpha = 1;
+        
+        [[self.view superview] layoutIfNeeded];
         [UIView animateWithDuration:[ColorScheme fadeInTime] delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            container.alpha = 1;
+            [container addConstraints:bottomConstraint];
+            [[self.view superview] layoutIfNeeded];
         } completion:^(BOOL finished){}];
+        
+        
     }
 }
 
@@ -400,12 +401,16 @@
         
         NSDictionary *views = NSDictionaryOfVariableBindings(headerLabel, donorsLabel);
         NSDictionary *metrics = @{@"cardMargin": @15, @"verticalMargin":@7.5};
-        [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[headerLabel]-[donorsLabel]-|" options:0 metrics:metrics views:views]];
         [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[headerLabel]-|" options:0 metrics:metrics views:views]];
         [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[donorsLabel]-|" options:0 metrics:metrics views:views]];
         
+        [container setClipsToBounds:YES];
+        container.alpha = 1;
+        
+        [[self.view superview] layoutIfNeeded];
         [UIView animateWithDuration:[ColorScheme fadeInTime] delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            container.alpha = 1;
+            [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[headerLabel]-[donorsLabel]-|" options:0 metrics:metrics views:views]];
+            [[self.view superview] layoutIfNeeded];
         } completion:^(BOOL finished){}];
     }
 }
@@ -486,22 +491,10 @@
     [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[name]-[donorView]-|" options:0 metrics:metrics views:views]];
     [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[donorView]-|" options:0 metrics:metrics views:views]];
     
-//    [donorView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[industryDonors]-|" options:0 metrics:metrics views:views]];
-//    [donorView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"" options:0 metrics:metrics views:views]];
-    
-    //STRICTLY FOR SCROLLVIEW TESTING - DELETE LATER
-//    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[card(==100)]" options:0 metrics:nil views:views]];
-    
     //Animate card appearing
     [UIView animateWithDuration:[ColorScheme fadeInTime] delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         card.alpha = 1;
      } completion:^(BOOL finished){}];
-    
-    //Add a shadow to the card
-//    card.layer.masksToBounds = NO;
-//    card.layer.shadowOffset = CGSizeMake(0, 3);
-//    card.layer.shadowRadius = 3;
-//    card.layer.shadowOpacity = 0.5;
 }
 
 -(NSMutableDictionary*)parseReadableArticleForProperNouns:(NSString*)content{

@@ -11,11 +11,14 @@
 #import "TableViewController.h"
 #import "Politician.h"
 #import "AttributionViewController.h"
+#import "ColorScheme.h"
 
 @interface SecondViewController (){
     NSString *politicianDataChanged;
     TableViewController *tableVC;
     AttributionViewController *attributions;
+    bool gatheredData;
+    UIActivityIndicatorView *loading;
 }
 
 @end
@@ -32,6 +35,8 @@
     [super viewDidLoad];
     
     attributions = [[AttributionViewController alloc] init];
+    
+    [self.view setBackgroundColor:[ColorScheme backgroundColor]];
     
     //Listen for changes to Politician Data
     politicianDataChanged = @"SunlightFactoryDidReceiveGetAllLawmakersNotification";
@@ -51,12 +56,34 @@
     [self.view addSubview:tableVC.view];
     
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Browse" style:UIBarButtonItemStylePlain target:nil action:nil];
+    
+    //Loading indicator
+    loading = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [loading setColor:[ColorScheme headerColor]];
+    [loading setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:loading];
+    [loading setHidesWhenStopped:YES];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
+    
+    [loading startAnimating];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    if(!gatheredData){
+        [loading startAnimating];
+        SunlightFactory *sunlight = [[SunlightFactory alloc] init];
+        [sunlight getAllLawmakers];
+    }
 }
 
 - (void)didReceivePoliticianData:(NSNotification*)notification {
+    gatheredData = true;
     NSDictionary *userInfo = [notification userInfo];
     NSArray *politicianData = [[userInfo objectForKey:@"results"] objectForKey:@"results"];
     [tableVC updateTableViewWithNewData:[tableVC createPoliticiansFromDataArray:politicianData]];
+    [loading stopAnimating];
 }
 
 - (void)didReceiveMemoryWarning {

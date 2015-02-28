@@ -103,7 +103,7 @@ NSMutableDictionary *entityLawmakerIdStore;
 
 #pragma mark - Async request helper functions
 -(void)getRequest:(NSString*)url withCallingMethod:(NSString*)callingMethod{
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60.0];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10.0];
     
     
     [request setHTTPMethod:@"GET"];
@@ -185,8 +185,21 @@ NSMutableDictionary *entityLawmakerIdStore;
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    // Uh oh...
-    NSLog(@"[SunlightFactory.m] ERROR: Connection Failed - %@", error);
+    NSLog(@"[SunlightFactory.m] ERROR: Connection Failed - %@", connection);
+    
+    NSLog(@"%@", [reverseConnectionLookup objectForKey:[connection description]]);
+    
+    //Send notification that tells calling view that a timeout has occurred for a call for essential data
+    if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getTransparencyID"] || [[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getTopDonorsForLawmaker"]){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SunlightFactoryDidReceiveConnectionTimedOutForDonationsNotification" object:self userInfo:nil];
+    } else if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getLawmakersByLatitudeAndLongitude"] ||
+              [[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getLawmakersByZipCode"]){
+        NSLog(@"timed out for search");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SunlightFactoryDidReceiveConnectionTimedOutForSearchNotification" object:self userInfo:nil];
+    } else if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getAllLawmakers"]){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SunlightFactoryDidReceiveConnectionTimedOutForAllLawmakersNotification" object:self userInfo:nil];
+    }
+    
 }
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse*)cachedResponse {

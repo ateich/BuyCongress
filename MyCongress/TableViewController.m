@@ -26,6 +26,18 @@
     self.politicians = [[NSMutableArray alloc] init];
     
     self.title = @"Members of Congress";
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionTimedOut:) name:@"SunlightFactoryDidReceiveConnectionTimedOutForAllLawmakersNotification" object:nil];
+
+    self.tableView.alpha = 0;
+}
+
+- (void)connectionTimedOut:(NSNotification*)notification{
+    UIAlertController *alertController = [UIAlertController  alertControllerWithTitle:@"Cannot gather data"  message:@"Please check your internet connection and try again."  preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [self.view.window.rootViewController presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -47,12 +59,11 @@
     return 65.0;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *cellIdentifier = [NSString stringWithFormat:@"Cell%ld%ld",(long)indexPath.section,(long)indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    if(true){//cell == nil){
+    if(cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         [cell setBackgroundColor:[UIColor clearColor]];
         
@@ -144,6 +155,10 @@
 -(void)updateTableViewWithNewData:(NSMutableArray *)data{
     self.politicians = data;
     [self.tableView reloadData];
+    
+    [UIView animateWithDuration:[ColorScheme fadeInTime] animations:^{
+        [self.tableView setAlpha:1.0f];
+    } completion:^(BOOL finished) {}];
 }
 
 /*

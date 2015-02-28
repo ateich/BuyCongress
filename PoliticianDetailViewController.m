@@ -172,6 +172,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceivePoliticianDataSectorData:) name:topDonorSectorsLoaded object:nil];
     
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionTimedOut:) name:@"SunlightFactoryDidReceiveConnectionTimedOutForDonationsNotification" object:nil];
+    
+    
     //get transparency id to use in receiving politician donor data
     sunlightAPI = [[SunlightFactory alloc] init];
     [sunlightAPI getLawmakerTransparencyIDFromFirstName:politician.firstName andLastName:politician.lastName];
@@ -189,8 +192,19 @@
     [loading startAnimating];
 }
 
+- (void)connectionTimedOut:(NSNotification*)notification{
+    UIAlertController *alertController = [UIAlertController  alertControllerWithTitle:@"Cannot gather data"  message:@"Please check your internet connection and try again."  preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+        [[self navigationController] popViewControllerAnimated:YES];
+    }]];
+    [self.view.window.rootViewController presentViewController:alertController animated:YES completion:nil];
+    
+    [loading stopAnimating];
+}
+
 -(void)createContactSection{
-//    [contactSection setBackgroundColor:[UIColor yellowColor]];
     [contactSection setTranslatesAutoresizingMaskIntoConstraints:NO];
     contactSection.alpha = 0;
     
@@ -206,12 +220,6 @@
     [contactSection addSubview:header];
 
     [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[header]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(header)]];
-    
-    //Add contact card
-//    UIView *card = [[UIView alloc] init];
-//    [card setTranslatesAutoresizingMaskIntoConstraints:NO];
-//    [card setBackgroundColor:[UIColor whiteColor]];
-//    [contactSection addSubview:card];
     
     NSMutableArray *contactMethods = [[NSMutableArray alloc] init];
     if(politician.twitter){
