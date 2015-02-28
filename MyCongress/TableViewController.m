@@ -13,23 +13,42 @@
 
 @interface TableViewController (){
     PoliticianDetailViewController *detailViewController;
+    NSMutableDictionary *alphabetLetterPositions;
+    NSArray *alphabetLetters;
+    NSMutableArray *politicianDataRowsInSection;
+    bool useFadeInAnimation;
+    bool hideSectionIndex;
 }
 
 @end
 
 @implementation TableViewController
 
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveConnectionTimedOutForAllLawmakersNotification" object:nil];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.backgroundColor = [ColorScheme backgroundColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.politicians = [[NSMutableArray alloc] init];
+    politicianDataRowsInSection = [[NSMutableArray alloc] init];
+    
+    [[UITableView appearance] setSectionIndexColor:[ColorScheme textColor]];
+    [[UITableView appearance] setSectionIndexBackgroundColor:[UIColor clearColor]];
     
     self.title = @"Members of Congress";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionTimedOut:) name:@"SunlightFactoryDidReceiveConnectionTimedOutForAllLawmakersNotification" object:nil];
-
-    self.tableView.alpha = 0;
+    
+    alphabetLetters = @[@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z"];
+    alphabetLetterPositions = [[NSMutableDictionary alloc] init];
+    
+    for(int i=0; i<alphabetLetters.count; i++){
+        [alphabetLetterPositions setObject:[NSNumber numberWithInt:i] forKey:[alphabetLetters objectAtIndex:i]];
+        [politicianDataRowsInSection addObject:[[NSMutableArray alloc] init]];
+    }
 }
 
 - (void)connectionTimedOut:(NSNotification*)notification{
@@ -48,11 +67,11 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 26;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.politicians.count;
+    return (NSInteger)[[politicianDataRowsInSection objectAtIndex:section] count];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -82,7 +101,7 @@
         [cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-largeTopMargin-[card]-0-|" options:0 metrics:metrics views:views]];
         [cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[card]-leftMargin-|" options:0 metrics:metrics views:views]];
         
-        Politician *thisPolitician = (Politician*)[self.politicians objectAtIndex:indexPath.row];
+        Politician *thisPolitician = (Politician*)[[politicianDataRowsInSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 //        int pictureWidth = 75;
         
         //Politician's Title and Name
@@ -110,6 +129,11 @@
 }
 
 -(NSMutableArray *)createPoliticiansFromDataArray:(NSArray *)politicianData{
+    //Sort politicians my name
+    NSSortDescriptor *sortLast = [NSSortDescriptor sortDescriptorWithKey:@"last_name" ascending:YES];
+    NSSortDescriptor *sortFirst = [NSSortDescriptor sortDescriptorWithKey:@"first_name" ascending:YES];
+    politicianData = [politicianData sortedArrayUsingDescriptors:@[sortLast, sortFirst]];
+    
     NSMutableArray *politiciansFromData = [[NSMutableArray alloc] init];
     
     for(int i=0; i<politicianData.count; i++){
@@ -127,6 +151,8 @@
         [aPolitician setYoutubeID: [thisPoliticiansData objectForKey:@"youtube_id"]];
         [aPolitician setWebsite: [thisPoliticiansData objectForKey:@"website"]];
         
+        NSString *firstLetterOfPoliticiansLastName = [aPolitician.lastName substringToIndex:1];
+        
         NSString *party = [thisPoliticiansData objectForKey:@"party"];
         if([party isEqual: @"D"]){
             [aPolitician setParty: @"Democrat"];
@@ -140,6 +166,9 @@
         
         if([aPolitician.title isEqualToString:@"Sen"] || [aPolitician.title isEqualToString:@"Rep"]){
             [politiciansFromData addObject:aPolitician];
+            int sectionNumber = (int)[self tableView:self.tableView sectionForSectionIndexTitle:firstLetterOfPoliticiansLastName atIndex:0];
+            NSMutableArray *sectionRow = [politicianDataRowsInSection objectAtIndex:sectionNumber];
+            [sectionRow addObject:aPolitician];
         }
     }
     return politiciansFromData;
@@ -148,18 +177,42 @@
 /* Show more details about the selected politician */
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     detailViewController = [[PoliticianDetailViewController alloc] init];
-    [detailViewController setPolitician:[self.politicians objectAtIndex:indexPath.row]];
+    [detailViewController setPolitician:[[politicianDataRowsInSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
     [[self navigationController] pushViewController:detailViewController animated:YES];
+}
+
+-(void)useFadeInAnimation:(bool)fadeIn{
+    self.tableView.alpha = 0;
+    useFadeInAnimation = fadeIn;
 }
 
 -(void)updateTableViewWithNewData:(NSMutableArray *)data{
     self.politicians = data;
     [self.tableView reloadData];
     
-    [UIView animateWithDuration:[ColorScheme fadeInTime] animations:^{
-        [self.tableView setAlpha:1.0f];
-    } completion:^(BOOL finished) {}];
+    if(useFadeInAnimation){
+        [UIView animateWithDuration:[ColorScheme fadeInTime] animations:^{
+            [self.tableView setAlpha:1.0f];
+        } completion:^(BOOL finished) {}];
+    }
 }
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+    if(hideSectionIndex){
+        return nil;
+    } else {
+        return alphabetLetters;
+    }
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString*)title atIndex:(NSInteger)index {
+    return [[alphabetLetterPositions objectForKey:title] integerValue];
+}
+
+-(void)hideSectionIndexBar:(BOOL)hide{
+    hideSectionIndex = hide;
+}
+
 
 /*
 // Override to support conditional editing of the table view.

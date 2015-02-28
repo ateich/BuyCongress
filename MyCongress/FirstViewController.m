@@ -252,9 +252,9 @@
 
 -(void)openTableOfPoliticians:(NSMutableArray*)data{
     tableViewController = [[TableViewController alloc] initWithStyle:UITableViewStylePlain];
+    [tableViewController hideSectionIndexBar:YES];
     [self.navigationController pushViewController:tableViewController animated:YES];
     
-    [tableViewController updateTableViewWithNewData:[tableViewController createPoliticiansFromDataArray:data]];
     [tableViewController updateTableViewWithNewData:[tableViewController createPoliticiansFromDataArray:data]];
 }
 
@@ -313,6 +313,7 @@
     //Stop listening for changes to Politician Data
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveGetLawmakersByZipCodeNotification" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveGetLawmakersByLatitudeAndLongitudeNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveConnectionTimedOutForSearchNotification" object:nil];
 }
 
 -(IBAction)showAttributions:(id)sender{

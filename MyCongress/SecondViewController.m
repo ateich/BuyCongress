@@ -48,6 +48,7 @@
     
     //Add table to display all politicians to the view
     tableVC = [[TableViewController alloc] initWithStyle:UITableViewStylePlain];
+    [tableVC useFadeInAnimation:YES];
     [self addChildViewController:tableVC];
     [tableVC didMoveToParentViewController:self];
     

@@ -13,5 +13,7 @@
 
 -(void)updateTableViewWithNewData:(NSMutableArray*)data;
 -(NSMutableArray *)createPoliticiansFromDataArray:(NSArray *)politicianData;
+-(void)useFadeInAnimation:(bool)fadeIn;
+-(void)hideSectionIndexBar:(BOOL)hide;
 
 @end

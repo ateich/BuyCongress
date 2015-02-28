@@ -484,6 +484,8 @@
     
     topDonorSectorsLoaded = @"SunlightFactoryDidReceiveGetTopDonorSectorsForLawmakerNotification";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:topDonorSectorsLoaded object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveConnectionTimedOutForDonationsNotification" object:nil];
 }
 
 @end

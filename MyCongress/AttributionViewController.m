@@ -52,7 +52,7 @@
     NSNumber *statusBarHeight = [NSNumber numberWithDouble:[UIApplication sharedApplication].statusBarFrame.size.height];
     NSNumber *verticalMargin = [NSNumber numberWithInt:10];
     NSNumber *topMargin = [NSNumber numberWithDouble:[statusBarHeight doubleValue] + [verticalMargin doubleValue]];
-    NSDictionary *metrics = @{@"statusBarHeight": statusBarHeight, @"verticalMargin":verticalMargin, @"topMargin":topMargin};
+    NSDictionary *metrics = @{@"statusBarHeight": statusBarHeight, @"verticalMargin":verticalMargin, @"topMargin":topMargin, @"cardSpacer":@20};
     
     //Scroll View Layout
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[navBar]-0-|" options:0 metrics:nil views:views]];
@@ -80,6 +80,11 @@
     UITextView *bottom;
     
     for (int i=0; i<attributions.count; i++) {
+        UIView *card = [[UIView alloc] init];
+        [card setBackgroundColor:[UIColor whiteColor]];
+        [card setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [contentView addSubview:card];
+        
         UITextView *attribution = [[UITextView alloc] init];
         [attribution setScrollEnabled:NO];
         [attribution setTextColor:[ColorScheme textColor]];
@@ -88,22 +93,26 @@
         [attribution setFont:[UIFont systemFontOfSize:12]];
         [attribution setTranslatesAutoresizingMaskIntoConstraints:NO];
         attribution.text = [attributions objectAtIndex:i];
-        [contentView addSubview:attribution];
+        [card addSubview:attribution];
         
-        NSDictionary *views = NSDictionaryOfVariableBindings(attribution);
+        NSDictionary *views = NSDictionaryOfVariableBindings(attribution, card);
         
         if(!bottom){
-            [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-verticalMargin-[attribution]" options:0 metrics:metrics views:views]];
+            [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-verticalMargin-[card]" options:0 metrics:metrics views:views]];
         } else {
-            views = NSDictionaryOfVariableBindings(attribution, bottom);
-            [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[bottom]-verticalMargin-[attribution]" options:0 metrics:metrics views:views]];
+            views = NSDictionaryOfVariableBindings(attribution, bottom, card);
+            [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[bottom]-cardSpacer-[card]" options:0 metrics:metrics views:views]];
         }
         
         if(i==attributions.count-1){
-            [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[attribution]-verticalMargin-|" options:0 metrics:metrics views:views]];
+            [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[card]-verticalMargin-|" options:0 metrics:metrics views:views]];
         }
         
-        [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-verticalMargin-[attribution]-verticalMargin-|" options:0 metrics:metrics views:views]];
+        [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-cardSpacer-[card]-cardSpacer-|" options:0 metrics:metrics views:views]];
+        
+        //Add attribution to card
+        [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-verticalMargin-[attribution]-verticalMargin-|" options:0 metrics:metrics views:views]];
+        [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-verticalMargin-[attribution]-verticalMargin-|" options:0 metrics:metrics views:views]];
         
         bottom = attribution;
     }

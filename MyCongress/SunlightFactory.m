@@ -87,6 +87,9 @@ NSMutableDictionary *entityLawmakerIdStore;
 }
 
 -(void)getLawmakerTransparencyIDFromFirstName:(NSString*)first andLastName:(NSString*)last{
+    //remove accents from names
+    first = [[NSString alloc] initWithData:[first dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES] encoding:NSASCIIStringEncoding];
+    last = [[NSString alloc] initWithData:[last dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES] encoding:NSASCIIStringEncoding];
     NSString *url = [NSString stringWithFormat:@"%@/entities.json%@&search=%@+%@&type=politician", transparencyURL, sunlightKey, first, last];
     [self getRequest:url withCallingMethod:@"getTransparencyID"];
 }
@@ -178,6 +181,12 @@ NSMutableDictionary *entityLawmakerIdStore;
             userInfo = extraInfo;
         }
     }
+//    else if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getAllLawmakers"]){
+//        if(jsonObjects){
+//            NSLog([jsonObjects description]);
+//            
+//        }
+//    }
     
     if(jsonObjects){
         [[NSNotificationCenter defaultCenter] postNotificationName:postNotificationName object:self userInfo:userInfo];
