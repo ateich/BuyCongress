@@ -10,5 +10,7 @@
 
 @interface SecondViewController : UIViewController
 
+-(IBAction)showAttributions:(id)sender;
+
 @end
 

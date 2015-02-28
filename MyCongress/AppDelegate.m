@@ -41,6 +41,10 @@
     for(UITabBarItem *tab in tabBar.items){
         tab.image = [tab.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         tab.selectedImage = [tab.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        
+        if([tab.title isEqualToString:@"Influence Explorer"]){
+            tab.image = [UIImage imageNamed:@"CongressIcon"];
+        }
     }
     
     //set nav bar back button and text color

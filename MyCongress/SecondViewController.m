@@ -10,10 +10,12 @@
 #import "SunlightFactory.h"
 #import "TableViewController.h"
 #import "Politician.h"
+#import "AttributionViewController.h"
 
 @interface SecondViewController (){
     NSString *politicianDataChanged;
     TableViewController *tableVC;
+    AttributionViewController *attributions;
 }
 
 @end
@@ -28,6 +30,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    attributions = [[AttributionViewController alloc] init];
     
     //Listen for changes to Politician Data
     politicianDataChanged = @"SunlightFactoryDidReceiveGetAllLawmakersNotification";
@@ -58,6 +62,10 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     NSLog(@"[SecondViewController.m] TEST: DID RECEIVE MEMORY WARNING - Testing Event Listening");
+}
+
+-(IBAction)showAttributions:(id)sender{
+    [self presentViewController:attributions animated:YES completion:nil];
 }
 
 @end

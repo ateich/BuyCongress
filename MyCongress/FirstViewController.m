@@ -11,6 +11,7 @@
 #import "SunlightFactory.h"
 #import "TableViewController.h"
 #import "ColorScheme.h"
+#import "AttributionViewController.h"
 
 @interface FirstViewController (){
     UITextField *zipCodeField;
@@ -24,6 +25,7 @@
     UIButton *locationSearchButton;
     
     UIActivityIndicatorView *loading;
+    AttributionViewController *attributions;
 }
 
 @end
@@ -35,6 +37,7 @@
     
     sunlightAPI = [[SunlightFactory alloc] init];
     locationManager = [[CLLocationManager alloc] init];
+    attributions = [[AttributionViewController alloc] init];
     
     UIView *containerView = [[UIView alloc] init];
     [containerView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -115,7 +118,6 @@
     [searchByCurrentLocation setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [searchByCurrentLocation setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
     [searchByCurrentLocation setTitle:@"Search By Current Location" forState:UIControlStateNormal];
-//    [searchByCurrentLocation addTarget:self action:@selector(searchForPoliticiansByLocation:) forControlEvents:UIControlEventTouchDown];
     [locationButton addSubview:searchByCurrentLocation];
     locationSearchButton = locationButton;
     
@@ -209,6 +211,7 @@
     
     locationManager.delegate = self;
     locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+    locationManager.distanceFilter = 500;
     
     [locationManager requestWhenInUseAuthorization];
     [locationManager startUpdatingLocation];
@@ -271,8 +274,9 @@
 {
     NSLog(@"didFailWithError: %@", error);
     UIAlertView *errorAlert = [[UIAlertView alloc]
-                               initWithTitle:@"Error" message:@"Failed to Get Your Location" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                               initWithTitle:@"Location Unavailable" message:@"We are unable to get your current location. Please enter your zip code instead." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [errorAlert show];
+    [loading stopAnimating];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
@@ -291,6 +295,10 @@
     //Stop listening for changes to Politician Data
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveGetLawmakersByZipCodeNotification" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveGetLawmakersByLatitudeAndLongitudeNotification" object:nil];
+}
+
+-(IBAction)showAttributions:(id)sender{
+    [self presentViewController:attributions animated:YES completion:nil];
 }
 
 @end

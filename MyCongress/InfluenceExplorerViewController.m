@@ -19,7 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [self setInstructions];
     
     [[UIPageControl appearance] setBackgroundColor:[ColorScheme headerColor]];

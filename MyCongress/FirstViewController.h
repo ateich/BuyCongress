@@ -11,6 +11,7 @@
 
 @interface FirstViewController : UIViewController<UITextFieldDelegate, CLLocationManagerDelegate>
 
+-(IBAction)showAttributions:(id)sender;
 
 @end
 

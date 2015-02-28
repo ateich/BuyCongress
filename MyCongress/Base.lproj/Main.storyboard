@@ -18,7 +18,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="My Congress" image="Location" id="acW-dT-cKf"/>
-                    <navigationItem key="navigationItem" title="BuyCongress" id="R9r-7I-jX7"/>
+                    <navigationItem key="navigationItem" title="BuyCongress" id="R9r-7I-jX7">
+                        <barButtonItem key="rightBarButtonItem" image="Attribution" id="YtX-hd-SXN">
+                            <connections>
+                                <action selector="showAttributions:" destination="9pv-A4-QxB" id="6Q2-Jo-q7K"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>
@@ -58,7 +64,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mwf-Ng-6AT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-55" y="1476"/>
+            <point key="canvasLocation" x="810" y="1419"/>
         </scene>
         <!--Members of Congress-->
         <scene sceneID="wg7-f3-ORb">
@@ -95,7 +101,13 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Browse Congress" image="Browse" id="cPa-gy-q4n"/>
-                    <navigationItem key="navigationItem" title="Members of Congress" id="6GB-af-Eyh"/>
+                    <navigationItem key="navigationItem" title="Members of Congress" id="6GB-af-Eyh">
+                        <barButtonItem key="rightBarButtonItem" image="Attribution" id="yQI-tg-csi">
+                            <connections>
+                                <action selector="showAttributions:" destination="8rJ-Kc-sve" id="6uq-cd-AXA"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
@@ -141,6 +153,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Attribution" width="22" height="22"/>
         <image name="Browse" width="25" height="25"/>
         <image name="Location" width="29" height="41"/>
     </resources>
