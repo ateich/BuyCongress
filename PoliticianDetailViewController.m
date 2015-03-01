@@ -222,12 +222,6 @@
     [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[header]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(header)]];
     
     NSMutableArray *contactMethods = [[NSMutableArray alloc] init];
-    if(politician.twitter){
-//        [contactMethods addObject:[NSArray arrayWithObjects:@"twitter", @"TEST", nil]];
-    }
-    if(politician.youtubeID){
-//        [contactMethods addObject:[NSArray arrayWithObjects:@"youtube", @"TEST", nil]];
-    }
     if(politician.phone){
         [contactMethods addObject:[NSArray arrayWithObjects:@"phone", @"makePhoneCall", nil]];
     }
@@ -235,7 +229,13 @@
         [contactMethods addObject:[NSArray arrayWithObjects:@"email", @"sendEmail", nil]];
     }
     if(politician.website){
-        //        [contactMethods addObject:[NSArray arrayWithObjects:@"website", @"loadWebsite", nil]];
+        [contactMethods addObject:[NSArray arrayWithObjects:@"website", @"loadWebsite", nil]];
+    }
+    if(politician.twitter){
+        [contactMethods addObject:[NSArray arrayWithObjects:@"twitter", @"openTwitter", nil]];
+    }
+    if(politician.youtubeID){
+        [contactMethods addObject:[NSArray arrayWithObjects:@"youtube", @"openYouTube", nil]];
     }
     
     
@@ -460,7 +460,17 @@
 }
 
 -(void)loadWebsite {
-    [contactActions loadWebsite:politician.website];
+    [self openUrlInSafari:politician.website];
+}
+
+-(void)openUrlInSafari:(NSString*)urlString{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: urlString]];
+}
+-(void)openTwitter{
+    [self openUrlInSafari:[NSString stringWithFormat:@"https://twitter.com/%@",politician.twitter]];
+}
+-(void)openYouTube{
+    [self openUrlInSafari:[NSString stringWithFormat:@"https://www.youtube.com/user/%@",politician.youtubeID]];
 }
 
 - (void)didReceiveMemoryWarning {

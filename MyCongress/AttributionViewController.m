@@ -70,7 +70,7 @@
                              @"Flatwork color palette created by ghepting at http://www.colourlovers.com/palette/2840713/Flatwork",
                              @"Federal campaign contribution records provided by OpenSecrets.org",
                              @"State campaign contribution records provided by FollowTheMoney.com",
-                             @"Politician and organization data is accessed through the Sunlight Foundation's Transparency Data and Transparency Data APIs",
+                             @"Politician and organization data is accessed through the Sunlight Foundation's Influence Explorer and Transparency Data APIs",
                              @"All data licensed under a Creative Commons BY-NC-SA license",
                              @"Photos of members of Congress are from the Government Printing Office and are public domain",
                              @"All other images © 2015 Cybellion LLC",
