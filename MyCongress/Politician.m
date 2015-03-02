@@ -25,4 +25,8 @@
 @synthesize state;
 @synthesize bioguideID;
 
+-(NSString*)description{
+    return [NSString stringWithFormat:@"Politican:\nName: %@ %@\nGender: %@\nEmail: %@\nPhone: %@\nTwitterID: %@\nWebsite: %@\nYouTubeID: %@\nParty: %@\nTitle: %@\nState: %@\nBioGuideID: %@\n\n", firstName, lastName, gender, email, phone, twitter, website, youtubeID, party, title, state, bioguideID];
+}
+
 @end
