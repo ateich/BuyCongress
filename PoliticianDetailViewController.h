@@ -12,7 +12,7 @@
 #import "SunlightFactory.h"
 
 @interface PoliticianDetailViewController : UIViewController
-@property (strong, nonatomic) ContactActionsFactory *contactActions;
+@property (nonatomic, strong) ContactActionsFactory *contactActions;
 
 -(void)setPolitician:(Politician *)newPolitician;
 

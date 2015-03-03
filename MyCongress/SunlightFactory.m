@@ -87,9 +87,11 @@ NSMutableDictionary *entityLawmakerIdStore;
 }
 
 -(void)getLawmakerTransparencyIDFromFirstName:(NSString*)first andLastName:(NSString*)last{
+    
     //remove accents from names
     first = [[NSString alloc] initWithData:[first dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES] encoding:NSASCIIStringEncoding];
     last = [[NSString alloc] initWithData:[last dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES] encoding:NSASCIIStringEncoding];
+    
     NSString *url = [NSString stringWithFormat:@"%@/entities.json%@&search=%@+%@&type=politician", transparencyURL, sunlightKey, first, last];
     [self getRequest:url withCallingMethod:@"getTransparencyID"];
 }
@@ -108,24 +110,22 @@ NSMutableDictionary *entityLawmakerIdStore;
 -(void)getRequest:(NSString*)url withCallingMethod:(NSString*)callingMethod{
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10.0];
     
-    
     [request setHTTPMethod:@"GET"];
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
     if([callingMethod isEqualToString:@"searchForEntity"]){
         long wordsInQuery = [[url componentsSeparatedByString:@"+"] count] -1;
-        [entityQueryStore setObject:[NSNumber numberWithLong:wordsInQuery] forKey:[connection description]];
+        entityQueryStore[[connection description]] = [NSNumber numberWithLong:wordsInQuery];
     } else if([callingMethod isEqualToString:@"getTopDonorIndustriesForLawmaker"]){
         
         //get politician id from url
-        //http://transparencydata.com/api/1.0/aggregates/pol/c343c50275e6481e9b7b0c9c0cc430e5/contributors/industries.json?apikey=d5ac2a8391d94345b8e93d5c69dd8739
         NSString *lawmakerID = [[url componentsSeparatedByString:@"http://transparencydata.com/api/1.0/aggregates/pol/"] objectAtIndex:1];
         lawmakerID = [[lawmakerID componentsSeparatedByString:@"/"] objectAtIndex:0];
         
-        [entityLawmakerIdStore setObject:lawmakerID forKey:[connection description]];
+        entityLawmakerIdStore[[connection description]] = lawmakerID;
     }
     
-    [reverseConnectionLookup setObject:callingMethod forKey:[connection description]];
+    reverseConnectionLookup[[connection description]] = callingMethod;
 }
 
 #pragma mark - NSURLConnection delegate methods
@@ -134,81 +134,93 @@ NSMutableDictionary *entityLawmakerIdStore;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
-    if(![asyncDataStore objectForKey:[connection description]]){
-        [asyncDataStore setObject:[[NSMutableData alloc] init] forKey:[connection description]];
+    if(!asyncDataStore[[connection description]]){
+        asyncDataStore[[connection description]] = [[NSMutableData alloc] init];
     }
-    [[asyncDataStore objectForKey:[connection description]] appendData:data];
+    [asyncDataStore[[connection description]] appendData:data];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection{
     NSError *error;
-    NSArray *jsonObjects = [NSJSONSerialization JSONObjectWithData:[asyncDataStore objectForKey:[connection description]]options:kNilOptions error:&error];
-    NSDictionary *userInfo = @{@"results": jsonObjects};
-    [asyncDataStore setObject:[[NSMutableData alloc] init] forKey:[connection description]];
+    NSArray *jsonObjects = [NSJSONSerialization JSONObjectWithData:asyncDataStore[[connection description]]options:kNilOptions error:&error];
     
-    NSString *methodName = [reverseConnectionLookup objectForKey:[connection description]];
+    if(error){
+        [self sendTimeoutNotification:connection withTitle:@"Politician Data Not Available" andMessage:@"The source of politician data is currently offline. Please try again later."];
+        return;
+    }
+    
+    NSDictionary *userInfo = @{@"results": jsonObjects};
+    asyncDataStore[[connection description]] = [[NSMutableData alloc] init];
+    
+    NSString *methodName = reverseConnectionLookup[[connection description]];
     NSString *firstCapChar = [[methodName substringToIndex:1] capitalizedString];
     NSString *cappedString = [methodName stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:firstCapChar];
     
     NSString *postNotificationName = [NSString stringWithFormat:@"SunlightFactoryDidReceive%@Notification", cappedString];
     
-    if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"searchForEntity"]){
-        NSNumber *queryWordCount = [entityQueryStore objectForKey:[connection description]];
+    if([reverseConnectionLookup[[connection description]] isEqualToString:@"searchForEntity"]){
+        NSNumber *queryWordCount = entityQueryStore[[connection description]];
         if(jsonObjects){
             NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] initWithDictionary:userInfo];
-            [extraInfo setObject:queryWordCount forKey:@"numberOfWordsInQuery"];
+            extraInfo[@"numberOfWordsInQuery"] = queryWordCount;
             userInfo = extraInfo;
         }
-    } else if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getTopDonorIndustriesForLawmaker"]){
+    } else if([reverseConnectionLookup[[connection description]] isEqualToString:@"getTopDonorIndustriesForLawmaker"]){
         if(jsonObjects){
             NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] initWithDictionary:userInfo];
-            [extraInfo setObject:[entityLawmakerIdStore objectForKey:[connection description]] forKey:@"callingLawmakerId"];
+            extraInfo[@"callingLawmakerId"] = entityLawmakerIdStore[[connection description]];
             userInfo = extraInfo;
         }
-    } else if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getContributionsFromOrganizationToPolitician"]){
+    } else if([reverseConnectionLookup[[connection description]] isEqualToString:@"getContributionsFromOrganizationToPolitician"]){
         if(jsonObjects){
-            
             //split URL to get contributor_ft & recipient_ft
             NSString *urlPath = [[[connection currentRequest] URL] description];
             urlPath = [[urlPath componentsSeparatedByString:@"contributor_ft="] objectAtIndex:1];
             NSArray *parts = [urlPath componentsSeparatedByString:@"&recipient_ft="];
-            NSString *contributor_ft = [[parts objectAtIndex:0] stringByReplacingOccurrencesOfString:@"%20" withString:@" "];
-            NSString *recipient_ft = [[parts objectAtIndex:1] stringByReplacingOccurrencesOfString:@"%20" withString:@" "];
+            NSString *contributor_ft = [parts[0] stringByReplacingOccurrencesOfString:@"%20" withString:@" "];
+            NSString *recipient_ft = [parts[1] stringByReplacingOccurrencesOfString:@"%20" withString:@" "];
             
             NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] initWithDictionary:userInfo];
-            [extraInfo setObject:recipient_ft forKey:@"politician"];
-            [extraInfo setObject:contributor_ft forKey:@"organization"];
+            extraInfo[@"politician"] = recipient_ft;
+            extraInfo[@"organization"] = contributor_ft;
             userInfo = extraInfo;
         }
     }
-//    else if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getAllLawmakers"]){
-//        if(jsonObjects){
-//            NSLog([jsonObjects description]);
-//            
-//        }
-//    }
     
     if(jsonObjects){
         [[NSNotificationCenter defaultCenter] postNotificationName:postNotificationName object:self userInfo:userInfo];
     }
 }
 
+-(void)sendTimeoutNotification:(NSURLConnection*)connection withTitle:(NSString*)title andMessage:(NSString*)message{
+    NSDictionary *userInfo;
+    
+    if(title && message){
+        userInfo = @{@"title":title, @"message":message};
+    }
+    
+    //Send notification that tells calling view that a timeout has occurred for a call for essential data
+    if([reverseConnectionLookup[[connection description]] isEqualToString:@"getTransparencyID"] ||
+       [reverseConnectionLookup[[connection description]] isEqualToString:@"getTopDonorsForLawmaker"]){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SunlightFactoryDidReceiveConnectionTimedOutForDonationsNotification" object:self userInfo:userInfo];
+    } else if([reverseConnectionLookup[[connection description]] isEqualToString:@"getLawmakersByLatitudeAndLongitude"] ||
+              [reverseConnectionLookup[[connection description]] isEqualToString:@"getLawmakersByZipCode"]){
+        NSLog(@"timed out for search");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SunlightFactoryDidReceiveConnectionTimedOutForSearchNotification" object:self userInfo:userInfo];
+    } else if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getAllLawmakers"]){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SunlightFactoryDidReceiveConnectionTimedOutForAllLawmakersNotification" object:self userInfo:userInfo];
+    }
+}
+
+-(void)sendTimeoutNotification:(NSURLConnection*)connection{
+    [self sendTimeoutNotification:connection withTitle:nil andMessage:nil];
+}
+
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     NSLog(@"[SunlightFactory.m] ERROR: Connection Failed - %@", connection);
     
-    NSLog(@"%@", [reverseConnectionLookup objectForKey:[connection description]]);
-    
-    //Send notification that tells calling view that a timeout has occurred for a call for essential data
-    if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getTransparencyID"] || [[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getTopDonorsForLawmaker"]){
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SunlightFactoryDidReceiveConnectionTimedOutForDonationsNotification" object:self userInfo:nil];
-    } else if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getLawmakersByLatitudeAndLongitude"] ||
-              [[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getLawmakersByZipCode"]){
-        NSLog(@"timed out for search");
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SunlightFactoryDidReceiveConnectionTimedOutForSearchNotification" object:self userInfo:nil];
-    } else if([[reverseConnectionLookup objectForKey:[connection description]] isEqualToString:@"getAllLawmakers"]){
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SunlightFactoryDidReceiveConnectionTimedOutForAllLawmakersNotification" object:self userInfo:nil];
-    }
-    
+    NSLog(@"%@", reverseConnectionLookup[[connection description]]);
+    [self sendTimeoutNotification:connection];
 }
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse*)cachedResponse {

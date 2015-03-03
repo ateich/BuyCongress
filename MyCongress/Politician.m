@@ -10,23 +10,8 @@
 
 @implementation Politician
 
-@synthesize firstName;
-@synthesize lastName;
-@synthesize gender;
-
-@synthesize email;
-@synthesize phone;
-@synthesize twitter;
-@synthesize website;
-@synthesize youtubeID;
-
-@synthesize party;
-@synthesize title;
-@synthesize state;
-@synthesize bioguideID;
-
 -(NSString*)description{
-    return [NSString stringWithFormat:@"Politican:\nName: %@ %@\nGender: %@\nEmail: %@\nPhone: %@\nTwitterID: %@\nWebsite: %@\nYouTubeID: %@\nParty: %@\nTitle: %@\nState: %@\nBioGuideID: %@\n\n", firstName, lastName, gender, email, phone, twitter, website, youtubeID, party, title, state, bioguideID];
+    return [NSString stringWithFormat:@"Politican:\nName: %@ %@\nGender: %@\nEmail: %@\nPhone: %@\nTwitterID: %@\nWebsite: %@\nYouTubeID: %@\nParty: %@\nTitle: %@\nState: %@\nBioGuideID: %@\n\n", _firstName, _lastName, _gender, _email, _phone, _twitter, _website, _youtubeID, _party, _title, _state, _bioguideID];
 }
 
 @end

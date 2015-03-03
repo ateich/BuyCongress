@@ -35,8 +35,8 @@
     self.politicians = [[NSMutableArray alloc] init];
     politicianDataRowsInSection = [[NSMutableArray alloc] init];
     
-    [[UITableView appearance] setSectionIndexColor:[ColorScheme textColor]];
-    [[UITableView appearance] setSectionIndexBackgroundColor:[UIColor clearColor]];
+    [UITableView appearance].sectionIndexColor = [ColorScheme textColor];
+    [UITableView appearance].sectionIndexBackgroundColor = [UIColor clearColor];
     
     self.title = @"Members of Congress";
     
@@ -46,13 +46,21 @@
     alphabetLetterPositions = [[NSMutableDictionary alloc] init];
     
     for(int i=0; i<alphabetLetters.count; i++){
-        [alphabetLetterPositions setObject:[NSNumber numberWithInt:i] forKey:[alphabetLetters objectAtIndex:i]];
+        alphabetLetterPositions[alphabetLetters[i]] = [NSNumber numberWithInt:i];
         [politicianDataRowsInSection addObject:[[NSMutableArray alloc] init]];
     }
 }
 
 - (void)connectionTimedOut:(NSNotification*)notification{
-    UIAlertController *alertController = [UIAlertController  alertControllerWithTitle:@"Cannot gather data"  message:@"Please check your internet connection and try again."  preferredStyle:UIAlertControllerStyleAlert];
+    NSString *title = @"Cannot gather data";
+    NSString *message = @"Please check your internet connection and try again.";
+    
+    if (notification.userInfo) {
+        title = notification.userInfo[@"title"];
+        message = notification.userInfo[@"message"];
+    }
+    
+    UIAlertController *alertController = [UIAlertController  alertControllerWithTitle:title  message:message  preferredStyle:UIAlertControllerStyleAlert];
     [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }]];
@@ -67,11 +75,11 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 26;
+    return alphabetLetters.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (NSInteger)[[politicianDataRowsInSection objectAtIndex:section] count];
+    return (NSInteger)[politicianDataRowsInSection[section] count];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -79,16 +87,16 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *cellIdentifier = [NSString stringWithFormat:@"Cell%ld%ld",(long)indexPath.section,(long)indexPath.row];
+    NSString *cellIdentifier = [NSString stringWithFormat:@"Cell%ld%ld", (long)indexPath.section, (long)indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if(cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        [cell setBackgroundColor:[UIColor clearColor]];
+        cell.backgroundColor = [UIColor clearColor];
         
         UIView *card = [[UIView alloc] init];
-        [card setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [card setBackgroundColor:[ColorScheme cardColor]];
+        card.translatesAutoresizingMaskIntoConstraints = NO;
+        card.backgroundColor = [ColorScheme cardColor];
         [cell addSubview:card];
         
         NSNumber *leftMargin = @15;
@@ -101,19 +109,18 @@
         [cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-largeTopMargin-[card]-0-|" options:0 metrics:metrics views:views]];
         [cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[card]-leftMargin-|" options:0 metrics:metrics views:views]];
         
-        Politician *thisPolitician = (Politician*)[[politicianDataRowsInSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-//        int pictureWidth = 75;
+        Politician *thisPolitician = (Politician*)politicianDataRowsInSection[indexPath.section][indexPath.row];
         
         //Politician's Title and Name
         UILabel *name = [[UILabel alloc] init];
-        [name setTranslatesAutoresizingMaskIntoConstraints:NO];
+        name.translatesAutoresizingMaskIntoConstraints = NO;
         name.text = [NSString stringWithFormat:@"%@. %@ %@", thisPolitician.title, thisPolitician.firstName, thisPolitician.lastName];
         
         
         //Politician's Party and State
         UILabel *state = [[UILabel alloc] init];
-        [state setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [state setTextColor:[UIColor grayColor]];
+        state.translatesAutoresizingMaskIntoConstraints = NO;
+        state.textColor = [UIColor grayColor];
         state.text = [NSString stringWithFormat:@"%@ - %@", thisPolitician.party, thisPolitician.state];
         
         [card addSubview:name];
@@ -137,32 +144,31 @@
     NSMutableArray *politiciansFromData = [[NSMutableArray alloc] init];
     
     for(int i=0; i<politicianData.count; i++){
-        NSDictionary *thisPoliticiansData = [politicianData objectAtIndex:i];
+        NSDictionary *thisPoliticiansData = politicianData[i];
         Politician *aPolitician = [[Politician alloc] init];
         
-        [aPolitician setFirstName: [thisPoliticiansData objectForKey:@"first_name"]];
-        [aPolitician setLastName: [thisPoliticiansData objectForKey:@"last_name"]];
-        [aPolitician setGender: [thisPoliticiansData objectForKey:@"gender"]]; //May have an issue, check this
+        aPolitician.firstName = thisPoliticiansData[@"first_name"];
+        aPolitician.lastName = thisPoliticiansData[@"last_name"];
+        aPolitician.gender = thisPoliticiansData[@"gender"];
         
-        [aPolitician setEmail: [thisPoliticiansData objectForKey:@"oc_email"]];
-        [aPolitician setPhone: [thisPoliticiansData objectForKey:@"phone"]];
-        [aPolitician setEmail: [thisPoliticiansData objectForKey:@"oc_email"]];
-        [aPolitician setTwitter: [thisPoliticiansData objectForKey:@"twitter_id"]];
-        [aPolitician setYoutubeID: [thisPoliticiansData objectForKey:@"youtube_id"]];
-        [aPolitician setWebsite: [thisPoliticiansData objectForKey:@"website"]];
+        aPolitician.email = thisPoliticiansData[@"oc_email"];
+        aPolitician.phone = thisPoliticiansData[@"phone"];
+        aPolitician.twitter = thisPoliticiansData[@"twitter_id"];
+        aPolitician.youtubeID = thisPoliticiansData[@"youtube_id"];
+        aPolitician.website = thisPoliticiansData[@"website"];
         
         NSString *firstLetterOfPoliticiansLastName = [aPolitician.lastName substringToIndex:1];
         
-        NSString *party = [thisPoliticiansData objectForKey:@"party"];
+        NSString *party = thisPoliticiansData[@"party"];
         if([party isEqual: @"D"]){
-            [aPolitician setParty: @"Democrat"];
+            aPolitician.party = @"Democrat";
         } else {
-            [aPolitician setParty: @"Republican"];
+            aPolitician.party = @"Republican";
         }
         
-        [aPolitician setTitle: [thisPoliticiansData objectForKey:@"title"]];
-        [aPolitician setState: [thisPoliticiansData objectForKey:@"state_name"]];
-        [aPolitician setBioguideID:[thisPoliticiansData objectForKey:@"bioguide_id"]];
+        aPolitician.title = thisPoliticiansData[@"title"];
+        aPolitician.state = thisPoliticiansData[@"state_name"];
+        aPolitician.bioguideID = thisPoliticiansData[@"bioguide_id"];
         
         if([aPolitician.title isEqualToString:@"Sen"] || [aPolitician.title isEqualToString:@"Rep"]){
             [politiciansFromData addObject:aPolitician];
@@ -192,7 +198,7 @@
     
     if(useFadeInAnimation){
         [UIView animateWithDuration:[ColorScheme fadeInTime] animations:^{
-            [self.tableView setAlpha:1.0f];
+            self.tableView.alpha = 1.0;
         } completion:^(BOOL finished) {}];
     }
 }
@@ -206,7 +212,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString*)title atIndex:(NSInteger)index {
-    return [[alphabetLetterPositions objectForKey:title] integerValue];
+    return [alphabetLetterPositions[title] integerValue];
 }
 
 -(void)hideSectionIndexBar:(BOOL)hide{

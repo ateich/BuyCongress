@@ -36,7 +36,7 @@
     
     attributions = [[AttributionViewController alloc] init];
     
-    [self.view setBackgroundColor:[ColorScheme backgroundColor]];
+    self.view.backgroundColor = [ColorScheme backgroundColor];
     
     //Listen for changes to Politician Data
     politicianDataChanged = @"SunlightFactoryDidReceiveGetAllLawmakersNotification";
@@ -60,10 +60,10 @@
     
     //Loading indicator
     loading = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    [loading setColor:[ColorScheme headerColor]];
-    [loading setTranslatesAutoresizingMaskIntoConstraints:NO];
+    loading.translatesAutoresizingMaskIntoConstraints = NO;
+    loading.color = [ColorScheme headerColor];
+    loading.hidesWhenStopped = YES;
     [self.view addSubview:loading];
-    [loading setHidesWhenStopped:YES];
     
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
@@ -82,7 +82,7 @@
 - (void)didReceivePoliticianData:(NSNotification*)notification {
     gatheredData = true;
     NSDictionary *userInfo = [notification userInfo];
-    NSArray *politicianData = [[userInfo objectForKey:@"results"] objectForKey:@"results"];
+    NSArray *politicianData = userInfo[@"results"][@"results"];
     [tableVC updateTableViewWithNewData:[tableVC createPoliticiansFromDataArray:politicianData]];
     [loading stopAnimating];
 }

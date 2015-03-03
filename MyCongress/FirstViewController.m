@@ -14,10 +14,12 @@
 #import "AttributionViewController.h"
 
 @interface FirstViewController (){
-    UITextField *zipCodeField;
-    SunlightFactory *sunlightAPI;
+    
     #define NUMBERS_ONLY @"1234567890"
     #define CHARACTER_LIMIT 5
+    
+    UITextField *zipCodeField;
+    SunlightFactory *sunlightAPI;
     CLLocationManager *locationManager;
     TableViewController *tableViewController;
     
@@ -40,63 +42,62 @@
     attributions = [[AttributionViewController alloc] init];
     
     UIView *containerView = [[UIView alloc] init];
-    [containerView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [containerView setBackgroundColor:[ColorScheme backgroundColor]];
+    containerView.translatesAutoresizingMaskIntoConstraints = NO;
+    containerView.backgroundColor = [ColorScheme backgroundColor];
     [self.view addSubview:containerView];
     
     UILabel *instructions = [[UILabel alloc] init];
-    [instructions setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [instructions setTextAlignment:NSTextAlignmentCenter];
-    [instructions setFont:[UIFont boldSystemFontOfSize:16.0]];
-//    [instructions setBackgroundColor:[UIColor blueColor]];
-    [instructions setTextColor:[ColorScheme headerColor]];
+    instructions.translatesAutoresizingMaskIntoConstraints = NO;
+    instructions.textAlignment = NSTextAlignmentCenter;
+    instructions.font = [UIFont boldSystemFontOfSize:16.0];
+    instructions.textColor = [ColorScheme headerColor];
     instructions.numberOfLines = 0;
     instructions.text = @"Search representatives by zip code";
     instructions.text = [instructions.text capitalizedString];
     [containerView addSubview:instructions];
     
     UIView *zipCard = [[UIView alloc] init];
-    [zipCard setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [zipCard setBackgroundColor:[ColorScheme cardColor]];
+    zipCard.translatesAutoresizingMaskIntoConstraints = NO;
+    zipCard.backgroundColor = [ColorScheme cardColor];
     [containerView addSubview:zipCard];
     
     UIView *locationCard = [[UIView alloc] init];
-    [locationCard setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [locationCard setBackgroundColor:[ColorScheme cardColor]];
+    locationCard.translatesAutoresizingMaskIntoConstraints = NO;
+    locationCard.backgroundColor = [ColorScheme cardColor];
     [containerView addSubview:locationCard];
     
     zipCodeField = [[UITextField alloc] init];
-    [zipCodeField setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [zipCodeField setFont:[UIFont systemFontOfSize:15.0]];
-    [zipCodeField setTextColor:[ColorScheme headerColor]];
-    [zipCodeField setDelegate:self];
-    [zipCodeField setPlaceholder:@"Tap Here To Enter Your Zip Code"];
-    [zipCodeField setTextAlignment:NSTextAlignmentCenter];
-    [zipCodeField setKeyboardType:UIKeyboardTypeNumberPad];
-    [zipCodeField setBackgroundColor:[ColorScheme backgroundColor]];
+    zipCodeField.translatesAutoresizingMaskIntoConstraints = NO;
+    zipCodeField.font = [UIFont systemFontOfSize:15.0];
+    zipCodeField.textColor = [ColorScheme headerColor];
+    zipCodeField.delegate = self;
+    zipCodeField.placeholder = @"Tap Here To Enter Your Zip Code";
+    zipCodeField.textAlignment = NSTextAlignmentCenter;
+    zipCodeField.keyboardType = UIKeyboardTypeNumberPad;
+    zipCodeField.backgroundColor = [ColorScheme backgroundColor];
     [zipCard addSubview:zipCodeField];
     
     UIButton *searchByZipCode = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    searchByZipCode.translatesAutoresizingMaskIntoConstraints = NO;
     [searchByZipCode setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme subTextColor]]forState:UIControlStateNormal];
     [searchByZipCode setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme selectedButtonColor]]forState:UIControlStateHighlighted];
     [searchByZipCode setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme selectedButtonColor]]forState:UIControlStateSelected];
     [searchByZipCode setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [searchByZipCode setTranslatesAutoresizingMaskIntoConstraints:NO];
     [searchByZipCode setTitle:@"Search By Zip Code" forState:UIControlStateNormal];
     [searchByZipCode addTarget:self action:@selector(searchForPoliticiansByZipCode:) forControlEvents:UIControlEventTouchUpInside];
     [zipCard addSubview:searchByZipCode];
     zipCodeSearchButton = searchByZipCode;
     
     UILabel *or = [[UILabel alloc] init];
-    [or setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [or setFont:[UIFont boldSystemFontOfSize:16.0]];
-    [or setTextColor:[ColorScheme headerColor]];
-    [or setText:[@"or use your current location" capitalizedString]];
-    [or setTextAlignment:NSTextAlignmentCenter];
+    or.translatesAutoresizingMaskIntoConstraints = NO;
+    or.font = [UIFont boldSystemFontOfSize:16.0];
+    or.textColor = [ColorScheme headerColor];
+    or.text = @"or use your current location".capitalizedString;
+    or.textAlignment = NSTextAlignmentCenter;
     [containerView addSubview:or];
     
     UIButton *locationButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [locationButton setTranslatesAutoresizingMaskIntoConstraints:NO];
+    locationButton.translatesAutoresizingMaskIntoConstraints = NO;
     [locationButton setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme subTextColor]]forState:UIControlStateNormal];
     [locationButton setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme selectedButtonColor]]forState:UIControlStateHighlighted];
     [locationButton setBackgroundImage:[ColorScheme imageWithColor:[ColorScheme selectedButtonColor]]forState:UIControlStateSelected];
@@ -104,19 +105,20 @@
     [locationCard addSubview:locationButton];
     
     UIButton *locationIcon = [UIButton buttonWithType:UIButtonTypeCustom];
-    [locationIcon setUserInteractionEnabled:NO];
-    [locationIcon setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [locationIcon setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
+    locationIcon.translatesAutoresizingMaskIntoConstraints = NO;
+    locationIcon.userInteractionEnabled = NO;
+    locationIcon.contentVerticalAlignment = UIControlContentVerticalAlignmentBottom;
+    
     UIImage *locationImage = [[UIImage imageNamed:@"location.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [locationIcon setImage:locationImage forState:UIControlStateNormal];
-    [locationIcon setTintColor:[UIColor whiteColor]];
+    locationIcon.tintColor = [UIColor whiteColor];
     [locationButton addSubview:locationIcon];
     
     UIButton *searchByCurrentLocation = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [searchByCurrentLocation setUserInteractionEnabled:NO];
-    [searchByCurrentLocation setTranslatesAutoresizingMaskIntoConstraints:NO];
+    searchByCurrentLocation.userInteractionEnabled = NO;
+    searchByCurrentLocation.translatesAutoresizingMaskIntoConstraints = NO;
+    searchByCurrentLocation.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
     [searchByCurrentLocation setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [searchByCurrentLocation setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
     [searchByCurrentLocation setTitle:@"Search By Current Location" forState:UIControlStateNormal];
     [locationButton addSubview:searchByCurrentLocation];
     locationSearchButton = locationButton;
@@ -133,9 +135,9 @@
     UIView *spacer2 = [[UIView alloc] init];
     UIView *spacer3 = [[UIView alloc] init];
     
-    [spacer1 setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [spacer2 setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [spacer3 setTranslatesAutoresizingMaskIntoConstraints:NO];
+    spacer1.translatesAutoresizingMaskIntoConstraints = NO;
+    spacer2.translatesAutoresizingMaskIntoConstraints = NO;
+    spacer3.translatesAutoresizingMaskIntoConstraints = NO;
     
     [zipCard addSubview:spacer1];
     [zipCard addSubview:spacer2];
@@ -145,8 +147,8 @@
     UIView *spacer4 = [[UIView alloc] init];
     UIView *spacer5 = [[UIView alloc] init];
     
-    [spacer4 setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [spacer5 setTranslatesAutoresizingMaskIntoConstraints:NO];
+    spacer4.translatesAutoresizingMaskIntoConstraints = NO;
+    spacer5.translatesAutoresizingMaskIntoConstraints = NO;
     
     [locationButton addSubview:spacer4];
     [locationButton addSubview:spacer5];
@@ -185,37 +187,45 @@
     
     //Loading indicator
     loading = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    [loading setColor:[ColorScheme headerColor]];
-    [loading setTranslatesAutoresizingMaskIntoConstraints:NO];
+    loading.color = [ColorScheme headerColor];
+    loading.translatesAutoresizingMaskIntoConstraints = NO;
+    loading.hidesWhenStopped = YES;
     [self.view addSubview:loading];
-    [loading setHidesWhenStopped:YES];
 
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
 }
 
 - (void)connectionTimedOut:(NSNotification*)notification{
-    UIAlertController *alertController = [UIAlertController  alertControllerWithTitle:@"Cannot gather data"  message:@"Please check your internet connection and try again."  preferredStyle:UIAlertControllerStyleAlert];
+    NSString *title = @"Cannot gather data";
+    NSString *message = @"Please check your internet connection and try again.";
+    
+    if ([notification userInfo]) {
+        title = notification.userInfo[@"title"];
+        message = notification.userInfo[@"message"];
+    }
+    
+    UIAlertController *alertController = [UIAlertController  alertControllerWithTitle:title  message:message  preferredStyle:UIAlertControllerStyleAlert];
     [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }]];
     [self.view.window.rootViewController presentViewController:alertController animated:YES completion:nil];
     
     [loading stopAnimating];
-    [zipCodeSearchButton setEnabled:YES];
-    [locationSearchButton setEnabled:YES];
+    zipCodeSearchButton.enabled = YES;
+    locationSearchButton.enabled = YES;
 }
 
 - (void)searchForPoliticiansByZipCode:(UIButton *)sender{
-    [sender setUserInteractionEnabled:NO];
+    sender.userInteractionEnabled = NO;
+    
     if(zipCodeField.text.length != 5){
         UIAlertController *alertController = [UIAlertController  alertControllerWithTitle:@"Incorrect Zip Code"  message:@"Please enter a 5 digit zip code."  preferredStyle:UIAlertControllerStyleAlert];
         [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [self dismissViewControllerAnimated:YES completion:nil];
         }]];
         [self presentViewController:alertController animated:YES completion:nil];
-        
-        [sender setUserInteractionEnabled:YES];
+        sender.userInteractionEnabled = YES;
     } else {
         [loading startAnimating];
         [sunlightAPI getLawmakersByZipCode:zipCodeField.text];
@@ -223,7 +233,7 @@
 }
 
 - (void)searchForPoliticiansByLocation:(UIButton *)sender{
-    [sender setUserInteractionEnabled:NO];
+    sender.userInteractionEnabled = NO;
     [loading startAnimating];
     
     locationManager.delegate = self;
@@ -235,18 +245,18 @@
 }
 
 - (void)didReceivePoliticiansForZip:(NSNotification*)notification {
-    NSDictionary *userInfo = [notification userInfo];
-    NSMutableArray *politicianData = [[userInfo objectForKey:@"results"] objectForKey:@"results"];
+    NSDictionary *userInfo = notification.userInfo;
+    NSMutableArray *politicianData = userInfo[@"results"][@"results"];
     [self openTableOfPoliticians:politicianData];
-    [zipCodeSearchButton setUserInteractionEnabled:YES];
+    zipCodeSearchButton.userInteractionEnabled = YES;
     [loading stopAnimating];
 }
 
 - (void)didReceivePoliticiansForLocation:(NSNotification*)notification {
-    NSDictionary *userInfo = [notification userInfo];
-    NSMutableArray *politicianData = [[userInfo objectForKey:@"results"] objectForKey:@"results"];
+    NSDictionary *userInfo = notification.userInfo;
+    NSMutableArray *politicianData = userInfo[@"results"][@"results"];
     [self openTableOfPoliticians:politicianData];
-    [locationSearchButton setUserInteractionEnabled:YES];
+    locationSearchButton.userInteractionEnabled = YES;
     [loading stopAnimating];
 }
 
@@ -260,8 +270,8 @@
 
 //Limit text field length to 5 numbers, no letters (Zip Code)
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    NSUInteger newLength = [textField.text length] + [string length] - range.length;
-    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:NUMBERS_ONLY] invertedSet];
+    NSUInteger newLength = textField.text.length + string.length - range.length;
+    NSCharacterSet *cs = [NSCharacterSet characterSetWithCharactersInString:NUMBERS_ONLY].invertedSet;
     NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
     return (([string isEqualToString:filtered])&&(newLength <= CHARACTER_LIMIT));
 }
@@ -272,7 +282,7 @@
 
 #pragma mark - Hide keyboard
 -(void)viewWillDisappear:(BOOL)animated{
-    if ([zipCodeField isFirstResponder]) {
+    if (zipCodeField.isFirstResponder) {
         [zipCodeField resignFirstResponder];
     }
 }
@@ -280,7 +290,7 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
     UITouch *touch = [[event allTouches] anyObject];
-    if ([zipCodeField isFirstResponder] && [touch view] != zipCodeField) {
+    if (zipCodeField.isFirstResponder && touch.view != zipCodeField) {
         [zipCodeField resignFirstResponder];
     }
     [super touchesBegan:touches withEvent:event];
@@ -295,6 +305,9 @@
     }]];
     [self presentViewController:alertController animated:YES completion:nil];
     
+    
+    [locationManager stopUpdatingLocation];
+    locationSearchButton.userInteractionEnabled = YES;
     [loading stopAnimating];
 }
 

@@ -19,11 +19,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Set tab and navigation bar color
     
-    [[UITabBar appearance] setTranslucent:NO];
-    [[UITabBar appearance] setBarTintColor:[ColorScheme navBarColor]];
+    [UITabBar appearance].translucent = NO;
+    [UITabBar appearance].barTintColor = [ColorScheme navBarColor];
     
-    [[UINavigationBar appearance] setTranslucent:NO];
-    [[UINavigationBar appearance] setBarTintColor:[ColorScheme navBarColor]];
+    [UINavigationBar appearance].translucent = NO;
+    [UINavigationBar appearance].barTintColor = [ColorScheme navBarColor];
     
     // set the text color for selected state
     [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
@@ -32,7 +32,7 @@
     [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor grayColor], NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
     
     // set the selected icon color
-    [[UITabBar appearance] setTintColor:[UIColor whiteColor]];
+    [UITabBar appearance].tintColor = [UIColor whiteColor];
     
     
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
@@ -48,13 +48,9 @@
     }
     
     //set nav bar back button and text color
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
-    
-    // Set the dark color to selected tab (the dimmed background)
-//    [[UITabBar appearance] setSelectionIndicatorImage:[AppDelegate imageFromColor:[UIColor colorWithRed:26/255.0 green:163/255.0 blue:133/255.0 alpha:1] forSize:CGSizeMake(64, 49) withCornerRadius:0]];
+    [UINavigationBar appearance].tintColor = [UIColor whiteColor];
+    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     
     return YES;

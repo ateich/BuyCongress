@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface TableViewController : UITableViewController
-@property (nonatomic,strong) NSMutableArray *politicians;
+@property (nonatomic, strong) NSMutableArray *politicians;
 
 -(void)updateTableViewWithNewData:(NSMutableArray*)data;
 -(NSMutableArray *)createPoliticiansFromDataArray:(NSArray *)politicianData;

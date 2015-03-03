@@ -8,36 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Politician : NSObject {
-    NSString *firstName;
-    NSString *lastName;
-    NSString *gender;
-    
-    NSString *email;
-    NSString *phone;
-    NSString *twitter;
-    NSString *website;
-    NSString *youtubeID;
-    
-    NSString *party;
-    NSString *title;
-    NSString *state;
-    NSString *bioguideID;
-}
+@interface Politician : NSObject
 
-@property (nonatomic, retain) NSString *firstName;
-@property (nonatomic, retain) NSString *lastName;
-@property (nonatomic, retain) NSString *gender;
+@property (nonatomic, copy) NSString *firstName;
+@property (nonatomic, copy) NSString *lastName;
+@property (nonatomic, copy) NSString *gender;
 
-@property (nonatomic, retain) NSString *email;
-@property (nonatomic, retain) NSString *phone;
-@property (nonatomic, retain) NSString *twitter;
-@property (nonatomic, retain) NSString *website;
-@property (nonatomic, retain) NSString *youtubeID;
+@property (nonatomic, copy) NSString *email;
+@property (nonatomic, copy) NSString *phone;
+@property (nonatomic, copy) NSString *twitter;
+@property (nonatomic, copy) NSString *website;
+@property (nonatomic, copy) NSString *youtubeID;
 
-@property (nonatomic, retain) NSString *party;
-@property (nonatomic, retain) NSString *title;
-@property (nonatomic, retain) NSString *state;
-@property (nonatomic, retain) NSString *bioguideID;
+@property (nonatomic, copy) NSString *party;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *state;
+@property (nonatomic, copy) NSString *bioguideID;
 
 @end

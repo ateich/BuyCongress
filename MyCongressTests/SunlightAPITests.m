@@ -10,8 +10,10 @@
 #import <XCTest/XCTest.h>
 #import "SunlightFactory.h"
 #import "OCMock.h"
+#import "Tokens.h"
 
-NSString *TRANSPARENCY_ID = @"42ccd9758603419ba38a2546d96a0f02";
+NSString *TRANSPARENCY_ID;
+
 
 @interface SunlightAPITests : XCTestCase{
     SunlightFactory *api;
@@ -25,6 +27,8 @@ NSString *TRANSPARENCY_ID = @"42ccd9758603419ba38a2546d96a0f02";
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     api = [[SunlightFactory alloc] init];
+    TRANSPARENCY_ID = [Tokens getSunlightToken];
+    //42ccd9758603419ba38a2546d96a0f02
 }
 
 - (void)tearDown {

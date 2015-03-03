@@ -22,12 +22,12 @@
     [super viewDidLoad];
     
     UIView *statusBarBackground = [[UIView alloc] init];
-    [statusBarBackground setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [statusBarBackground setBackgroundColor:[ColorScheme navBarColor]];
+    statusBarBackground.translatesAutoresizingMaskIntoConstraints = NO;
+    statusBarBackground.backgroundColor = [ColorScheme navBarColor];
     [self.view addSubview:statusBarBackground];
     
     UINavigationBar *navBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
-    [navBar setTranslatesAutoresizingMaskIntoConstraints:NO];
+    navBar.translatesAutoresizingMaskIntoConstraints = NO;
     navBar.backgroundColor = [UIColor whiteColor];
     
     UINavigationItem *navItem = [[UINavigationItem alloc] init];
@@ -41,17 +41,17 @@
     
     //Set up scroll view
     scrollView = [[UIScrollView alloc] init];
-    [scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:scrollView];
     
     contentView = [[UIView alloc] init];
-    [contentView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    contentView.translatesAutoresizingMaskIntoConstraints = NO;
     [scrollView addSubview:contentView];
     
     NSDictionary *views = NSDictionaryOfVariableBindings(scrollView, contentView, navBar, statusBarBackground);
     NSNumber *statusBarHeight = [NSNumber numberWithDouble:[UIApplication sharedApplication].statusBarFrame.size.height];
     NSNumber *verticalMargin = [NSNumber numberWithInt:10];
-    NSNumber *topMargin = [NSNumber numberWithDouble:[statusBarHeight doubleValue] + [verticalMargin doubleValue]];
+    NSNumber *topMargin = [NSNumber numberWithDouble:statusBarHeight.doubleValue + verticalMargin.doubleValue];
     NSDictionary *metrics = @{@"statusBarHeight": statusBarHeight, @"verticalMargin":verticalMargin, @"topMargin":topMargin, @"cardSpacer":@20};
     
     //Scroll View Layout
@@ -63,8 +63,8 @@
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[contentView]-0-|" options:0 metrics:nil views:views]];
     [scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView(==scrollView)]|" options:0 metrics:nil views:views]];
     
-    [self.view setBackgroundColor:[ColorScheme backgroundColor]];
-    [contentView setBackgroundColor:[ColorScheme backgroundColor]];
+    self.view.backgroundColor = [ColorScheme backgroundColor];
+    contentView.backgroundColor = [ColorScheme backgroundColor];
     
     NSArray *attributions = [NSArray arrayWithObjects:
                              @"Flatwork color palette created by ghepting at http://www.colourlovers.com/palette/2840713/Flatwork",
@@ -81,17 +81,17 @@
     
     for (int i=0; i<attributions.count; i++) {
         UIView *card = [[UIView alloc] init];
-        [card setBackgroundColor:[UIColor whiteColor]];
-        [card setTranslatesAutoresizingMaskIntoConstraints:NO];
+        card.backgroundColor = [UIColor whiteColor];
+        card.translatesAutoresizingMaskIntoConstraints = NO;
         [contentView addSubview:card];
         
         UITextView *attribution = [[UITextView alloc] init];
-        [attribution setScrollEnabled:NO];
-        [attribution setTextColor:[ColorScheme textColor]];
-        [attribution setEditable:NO];
-        [attribution setDataDetectorTypes:UIDataDetectorTypeLink];
-        [attribution setFont:[UIFont systemFontOfSize:12]];
-        [attribution setTranslatesAutoresizingMaskIntoConstraints:NO];
+        attribution.scrollEnabled = NO;
+        attribution.textColor = [ColorScheme textColor];
+        attribution.editable = NO;
+        attribution.dataDetectorTypes = UIDataDetectorTypeLink;
+        attribution.font = [UIFont systemFontOfSize:12];
+        attribution.translatesAutoresizingMaskIntoConstraints = NO;
         attribution.text = [attributions objectAtIndex:i];
         [card addSubview:attribution];
         

@@ -39,10 +39,6 @@
     
     int attemptsToGetTransparencyId;
     
-    UIColor *textColor;
-    UIColor *subTextColor;
-    UIColor *headerColor;
-    
     NSNumber *leftMargin;
     UIActivityIndicatorView *loading;
 }
@@ -58,35 +54,28 @@
     
     leftMargin = @15;
     
-    headerColor = [ColorScheme headerColor];
-    textColor = [ColorScheme textColor];
-    subTextColor = [ColorScheme subTextColor];
-    UIColor *backgroundColor = [ColorScheme backgroundColor];
-    
     attemptsToGetTransparencyId = 0;
-    [self.view setBackgroundColor:backgroundColor];
+    self.view.backgroundColor  = [ColorScheme backgroundColor];
     self.title = [NSString stringWithFormat:@"%@. %@ %@", politician.title, politician.firstName, politician.lastName];
     
     scrollView = [[UIScrollView alloc] init];
-    [scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:scrollView];
     
     contentView = [[UIView alloc] init];
-    [contentView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    contentView.translatesAutoresizingMaskIntoConstraints = NO;
     [scrollView addSubview:contentView];
     
     UIImageView *photo = [[UIImageView alloc] init];
-//    [photo setBackgroundColor:textColor];
-    [photo setTranslatesAutoresizingMaskIntoConstraints:NO];
-    UIImage *politicianPhoto = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png", politician.bioguideID]];
-    [photo setImage:politicianPhoto];
-    [photo setContentMode:UIViewContentModeScaleAspectFit];
-    [photo setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"background.jpg"]]];
+    photo.translatesAutoresizingMaskIntoConstraints = NO;
     
+    UIImage *politicianPhoto = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png", politician.bioguideID]];
+    photo.contentMode = UIViewContentModeScaleAspectFit;
+    photo.image = politicianPhoto;
+
     double photoSize = 112.5;
     
-    UIColor *bgAndBorderColor = textColor;
-//    photo.layer.backgroundColor=[bgAndBorderColor CGColor];
+    UIColor *bgAndBorderColor = [ColorScheme textColor];
     photo.layer.cornerRadius=photoSize/2;
     photo.layer.borderWidth=2.0;
     photo.layer.masksToBounds = YES;
@@ -101,29 +90,28 @@
         UIImage *noPhoto = [UIImage imageNamed:@"MissingImage.png"];
         noPhoto = [noPhoto imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         
-        [photo setImage:noPhoto];
-        [photo setTintColor:[ColorScheme placeholderImageColor]];
+        photo.image = noPhoto;
+        photo.tintColor = [ColorScheme placeholderImageColor];
     }
     
     //Contact Section
     contactSection =[[UIView alloc] init];
-    [contactSection setTranslatesAutoresizingMaskIntoConstraints:NO];
+    contactSection.translatesAutoresizingMaskIntoConstraints = NO;
     [contentView addSubview:contactSection];
     
     //Individual Donors Section
-    individualDonorsSection =[[UIView alloc] init];
-    [individualDonorsSection setTranslatesAutoresizingMaskIntoConstraints:NO];
+    individualDonorsSection = [[UIView alloc] init];
+    individualDonorsSection.translatesAutoresizingMaskIntoConstraints = NO;
     [contentView addSubview:individualDonorsSection];
-//    [individualDonorsSection setBackgroundColor:[UIColor orangeColor]];
     
     //Industry Donors Section
     industryDonorsSection =[[UIView alloc] init];
-    [industryDonorsSection setTranslatesAutoresizingMaskIntoConstraints:NO];
+    industryDonorsSection.translatesAutoresizingMaskIntoConstraints = NO;
     [contentView addSubview:industryDonorsSection];
     
     //Sector Donors Section
     sectorDonorsSection =[[UIView alloc] init];
-    [sectorDonorsSection setTranslatesAutoresizingMaskIntoConstraints:NO];
+    sectorDonorsSection.translatesAutoresizingMaskIntoConstraints = NO;
     [contentView addSubview:sectorDonorsSection];
     
     //AUTO LAYOUT (VFL)
@@ -151,7 +139,6 @@
     [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[sectorDonorsSection]-0-|" options:0 metrics:metrics views:views]];
     
     [self createContactSection];
-
     
     
     //Enable sharing actions
@@ -181,10 +168,10 @@
     
     //Loading indicator
     loading = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    [loading setColor:[ColorScheme headerColor]];
-    [loading setTranslatesAutoresizingMaskIntoConstraints:NO];
+    loading.translatesAutoresizingMaskIntoConstraints = NO;
+    loading.color = [ColorScheme headerColor];
+    loading.hidesWhenStopped = YES;
     [self.view addSubview:loading];
-    [loading setHidesWhenStopped:YES];
     
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:loading attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
@@ -193,11 +180,17 @@
 }
 
 - (void)connectionTimedOut:(NSNotification*)notification{
-    UIAlertController *alertController = [UIAlertController  alertControllerWithTitle:@"Cannot gather data"  message:@"Please check your internet connection and try again."  preferredStyle:UIAlertControllerStyleAlert];
+    NSString *title = @"Cannot gather data";
+    NSString *message = @"Please check your internet connection and try again.";
     
+    if ([notification userInfo]) {
+        title = notification.userInfo[@"title"];
+        message = notification.userInfo[@"message"];
+    }
+    
+    UIAlertController *alertController = [UIAlertController  alertControllerWithTitle:title  message:message  preferredStyle:UIAlertControllerStyleAlert];
     [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self dismissViewControllerAnimated:YES completion:nil];
-        [[self navigationController] popViewControllerAnimated:YES];
     }]];
     [self.view.window.rootViewController presentViewController:alertController animated:YES completion:nil];
     
@@ -205,7 +198,7 @@
 }
 
 -(void)createContactSection{
-    [contactSection setTranslatesAutoresizingMaskIntoConstraints:NO];
+    contactSection.translatesAutoresizingMaskIntoConstraints = NO;
     contactSection.alpha = 0;
     
     NSNumber *halfMargin = @([leftMargin intValue]/2);
@@ -213,58 +206,56 @@
     
     //create section header
     UILabel *header = [[UILabel alloc] init];
-    [header setTextColor:headerColor];
-    [header setTranslatesAutoresizingMaskIntoConstraints:NO];
+    header.translatesAutoresizingMaskIntoConstraints = NO;
+    header.font = [UIFont boldSystemFontOfSize:16];
+    header.textColor = [ColorScheme headerColor];
     header.text = @"Contact";
-    [header setFont:[UIFont boldSystemFontOfSize:16]];
     [contactSection addSubview:header];
 
     [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[header]-0-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(header)]];
     
     NSMutableArray *contactMethods = [[NSMutableArray alloc] init];
     if(politician.phone){
-        [contactMethods addObject:[NSArray arrayWithObjects:@"phone", @"makePhoneCall", nil]];
+        [contactMethods addObject:@[@"phone", @"makePhoneCall"]];
     }
     if(politician.email){
-        [contactMethods addObject:[NSArray arrayWithObjects:@"email", @"sendEmail", nil]];
+        [contactMethods addObject:@[@"email", @"sendEmail"]];
     }
     if(politician.website){
-        [contactMethods addObject:[NSArray arrayWithObjects:@"website", @"loadWebsite", nil]];
+        [contactMethods addObject:@[@"website", @"loadWebsite"]];
     }
     if(politician.twitter){
-        [contactMethods addObject:[NSArray arrayWithObjects:@"twitter", @"openTwitter", nil]];
+        [contactMethods addObject:@[@"twitter", @"openTwitter"]];
     }
     if(politician.youtubeID){
-        [contactMethods addObject:[NSArray arrayWithObjects:@"youtube", @"openYouTube", nil]];
+        [contactMethods addObject:@[@"youtube", @"openYouTube"]];
     }
     
-    
     id leftSide;
-
     
     UIView *buttonsView = [[UIView alloc] init];
-    [buttonsView setBackgroundColor:[UIColor whiteColor]];
+    buttonsView.translatesAutoresizingMaskIntoConstraints = NO;
+    buttonsView.backgroundColor = [UIColor whiteColor];
     [contactSection addSubview:buttonsView];
-    [buttonsView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
     [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[header]-halfMargin-[buttonsView]|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(buttonsView, header)]];
     [contactSection addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[buttonsView]-leftMargin-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(buttonsView, header)]];
     
     
     //Create a contact button for each available contact method
     for(int i=0; i<contactMethods.count; i++){
-        UIButton *contactButton = [UIButton buttonWithType:UIButtonTypeSystem];//[[UIButton alloc] init];
+        UIButton *contactButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        contactButton.translatesAutoresizingMaskIntoConstraints = NO;
+        contactButton.tintColor = [ColorScheme textColor];
         
         //set button selector with variable?
-        SEL aSelector = NSSelectorFromString([[contactMethods objectAtIndex:i] objectAtIndex:1]);
+        SEL aSelector = NSSelectorFromString(contactMethods[i][1]);
         [contactButton addTarget:self action:aSelector forControlEvents:UIControlEventTouchDown];
-        [contactButton setTranslatesAutoresizingMaskIntoConstraints:NO];
         
         //Change button color
-        UIImage *buttonImage = [UIImage imageNamed:[[contactMethods objectAtIndex:i] objectAtIndex:0]];
+        UIImage *buttonImage = [UIImage imageNamed:contactMethods[i][0]];
         [buttonImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        
         [contactButton setImage:buttonImage forState:UIControlStateNormal];
-        [contactButton setTintColor:[ColorScheme textColor]];
         
         [buttonsView addSubview:contactButton];
         
@@ -281,17 +272,17 @@
     }
     
     [UIView animateWithDuration:[ColorScheme fadeInTime] animations:^{
-        [contactSection setAlpha:1.0f];
+        contactSection.alpha = 1.0f;
     } completion:^(BOOL finished) {}];
 }
 
 -(void)createDonorDataSectionWithDonors:(NSArray*)donors andSection:(UIView*)section andTitle:(NSString*)title {
     UILabel *top = [[UILabel alloc] init];
-    [top setTextColor:headerColor];
-    [top setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [top setFont:[UIFont boldSystemFontOfSize:16]];
-    [section addSubview:top];
+    top.translatesAutoresizingMaskIntoConstraints = NO;
+    top.font = [UIFont boldSystemFontOfSize:16];
+    top.textColor = [ColorScheme headerColor];
     top.text = title;
+    [section addSubview:top];
     
     UIView *topCard = top;
     
@@ -304,34 +295,35 @@
     
     for(int i=0; i<donors.count; i++){
         UIView *card = [[UIView alloc] init];
-        [card setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [card setBackgroundColor:[ColorScheme cardColor]];
+        card.translatesAutoresizingMaskIntoConstraints = NO;
+        card.backgroundColor = [ColorScheme cardColor];
         [section addSubview:card];
         
-        NSDictionary *donor = [donors objectAtIndex:i];
+        NSDictionary *donor = donors[i];
         NSString *totalAmount;
         
         if(section == individualDonorsSection){
-            totalAmount = [donor objectForKey:@"total_amount"];
+            totalAmount = donor[@"total_amount"];
         } else if (section == industryDonorsSection || section == sectorDonorsSection){
-            totalAmount = [donor objectForKey:@"amount"];
+            totalAmount = donor[@"amount"];
         }
-        NSString *donorName = [donor objectForKey:@"name"];
+        
+        NSString *donorName = donor[@"name"];
         if(section == sectorDonorsSection){
-            donorName = [sunlightAPI convertSectorCode:[donor objectForKey:@"sector"]];
+            donorName = [sunlightAPI convertSectorCode:donor[@"sector"]];
         }
         
         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        numberFormatter.numberStyle = NSNumberFormatterDecimalStyle;
         NSNumber *total = [numberFormatter numberFromString:totalAmount];
         
-        [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+        numberFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
         totalAmount = [numberFormatter stringFromNumber:total];
         
         NSString *labelText = donorName;
         
         //If donor is written in ALL CAPS, make it proper nouns (All Caps)
-        if ([[labelText uppercaseStringWithLocale:[NSLocale currentLocale]] isEqualToString:labelText])
+        if ([[labelText uppercaseString] isEqualToString:labelText])
         {
             labelText = [[labelText lowercaseString] capitalizedString];
         }
@@ -343,18 +335,18 @@
         }
         
         UILabel *label = [[UILabel alloc] init];
-        [label setTextColor:textColor];
-        [label setNumberOfLines:0];
-        [label setTranslatesAutoresizingMaskIntoConstraints:NO];
-        label.text = labelText;
+        label.translatesAutoresizingMaskIntoConstraints = NO;
+        label.textColor = [ColorScheme textColor];
         label.adjustsFontSizeToFitWidth = YES;
+        label.numberOfLines = 0;
+        label.text = labelText;
         
         UILabel *moneyLabel = [[UILabel alloc] init];
-        [moneyLabel setTextColor:subTextColor];
-        [moneyLabel setNumberOfLines:0];
-        [moneyLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-        moneyLabel.text = totalAmount;
+        moneyLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        moneyLabel.textColor = [ColorScheme subTextColor];
         moneyLabel.adjustsFontSizeToFitWidth = YES;
+        moneyLabel.numberOfLines = 0;
+        moneyLabel.text = totalAmount;
         
         
         NSDictionary *views = NSDictionaryOfVariableBindings(topCard, moneyLabel, label, card);
@@ -380,51 +372,47 @@
     
     [loading stopAnimating];
     [UIView animateWithDuration:[ColorScheme fadeInTime] animations:^{
-        [section setAlpha:1.0f];
+        section.alpha = 1.0f;
     } completion:^(BOOL finished) {}];
 }
 
 - (void)didReceivePoliticianData:(NSNotification*)notification {
-    NSDictionary *userInfo = [notification userInfo];
-    NSArray *donors = [userInfo objectForKey:@"results"];
+    NSArray *donors = notification.userInfo[@"results"];
     
     topDonorLoaded = @"SunlightFactoryDidReceiveGetTopDonorsForLawmakerNotification";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:topDonorLoaded object:nil];
     
-    [individualDonorsSection setAlpha:0.0f];
+    individualDonorsSection.alpha = 0.0f;
     [self createDonorDataSectionWithDonors:donors andSection:individualDonorsSection andTitle:@"Top Individual Donors"];
 }
 
 -(void)didReceivePoliticianIndustryData:(NSNotification*)notification{
-    NSDictionary *userInfo = [notification userInfo];
-    NSArray *donorIndustries = [userInfo objectForKey:@"results"];
+    NSArray *donorIndustries = notification.userInfo[@"results"];
     
     topDonorIndustriesLoaded = @"SunlightFactoryDidReceiveGetTopDonorIndustriesForLawmakerNotification";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:topDonorIndustriesLoaded object:nil];
     
-    [industryDonorsSection setAlpha:0.0f];
+    industryDonorsSection.alpha = 0.0f;
     [self createDonorDataSectionWithDonors:donorIndustries andSection:industryDonorsSection andTitle:@"Top Donors by Industry"];
 }
 
 -(void)didReceivePoliticianDataSectorData:(NSNotification*)notification{
-    NSDictionary *userInfo = [notification userInfo];
-    NSArray *donorSectors = [userInfo objectForKey:@"results"];
+    NSArray *donorSectors = notification.userInfo [@"results"];
     
     topDonorSectorsLoaded = @"SunlightFactoryDidReceiveGetTopDonorSectorsForLawmakerNotification";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:topDonorSectorsLoaded object:nil];
     
-    [sectorDonorsSection setAlpha:0.0f];
+    sectorDonorsSection.alpha = 0.0f;
     [self createDonorDataSectionWithDonors:donorSectors andSection:sectorDonorsSection andTitle:@"Top Donors by Sector"];
 }
 
 -(void)didReceiveTransparencyId:(NSNotification*)notification{
-    NSDictionary *userInfo = [notification userInfo];
-    NSArray *politicians = [userInfo objectForKey:@"results"];
+    NSArray *politicians = notification.userInfo[@"results"];
     
     attemptsToGetTransparencyId++;
     
     if(politicians.count > 0){
-        NSString *transparencyID = [[politicians objectAtIndex:0] objectForKey:@"id"];
+        NSString *transparencyID = politicians[0][@"id"];
         
         transparencyIdLoaded = @"SunlightFactoryDidReceiveGetTransparencyIDNotification";
         [[NSNotificationCenter defaultCenter] removeObserver:self name:transparencyIdLoaded object:nil];
@@ -447,10 +435,6 @@
 }
 
 #pragma mark - Contact Delegate Methods
--(void)TEST{
-    NSLog(@"TEST");
-}
-
 -(void)sendEmail {
     [contactActions composeEmail:politician.email];
 }
@@ -467,16 +451,15 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: urlString]];
 }
 -(void)openTwitter{
-    [self openUrlInSafari:[NSString stringWithFormat:@"https://twitter.com/%@",politician.twitter]];
+    [self openUrlInSafari:[NSString stringWithFormat:@"https://twitter.com/%@", politician.twitter]];
 }
 -(void)openYouTube{
-    [self openUrlInSafari:[NSString stringWithFormat:@"https://www.youtube.com/user/%@",politician.youtubeID]];
+    [self openUrlInSafari:[NSString stringWithFormat:@"https://www.youtube.com/user/%@", politician.youtubeID]];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
-
 
 -(void)setPolitician:(Politician *)newPolitician{
     politician = newPolitician;
