@@ -214,6 +214,13 @@
     [loading stopAnimating];
     zipCodeSearchButton.enabled = YES;
     locationSearchButton.enabled = YES;
+    
+    zipCodeSearchButton.userInteractionEnabled = YES;
+    locationSearchButton.userInteractionEnabled = YES;
+    
+    [locationManager stopUpdatingLocation];
+    
+    NSLog(@"lsb: %i", locationSearchButton.enabled);
 }
 
 - (void)searchForPoliticiansByZipCode:(UIButton *)sender{
