@@ -427,6 +427,16 @@
             NSString *shortenedFirstName = [politician.firstName substringToIndex:3];
             [sunlightAPI getLawmakerTransparencyIDFromFirstName:shortenedFirstName andLastName:politician.lastName];
         } else {
+            NSString *title = @"Donor data unavailable";
+            NSString *message = [NSString stringWithFormat:@"Could not find donor data for %@. %@ %@", politician.title, politician.firstName, politician.lastName];
+            UIAlertController *alertController = [UIAlertController  alertControllerWithTitle:title  message:message  preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self dismissViewControllerAnimated:YES completion:nil];
+            }]];
+            [self.view.window.rootViewController presentViewController:alertController animated:YES completion:nil];
+            [loading stopAnimating];
+
+            
             transparencyIdLoaded = @"SunlightFactoryDidReceiveGetTransparencyIDNotification";
             [[NSNotificationCenter defaultCenter] removeObserver:self name:transparencyIdLoaded object:nil];
         }
