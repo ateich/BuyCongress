@@ -24,5 +24,6 @@
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *state;
 @property (nonatomic, copy) NSString *bioguideID;
+@property (readonly, nonatomic, copy) NSString *partyAbbreviated;
 
 @end
