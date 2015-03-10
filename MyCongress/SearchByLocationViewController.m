@@ -1,19 +1,19 @@
 //
-//  FirstViewController.m
+//  SearchByLocationViewController.m
 //  MyCongress
 //
 //  Created by Andrew Teich on 12/11/14.
 //  Copyright (c) 2014 Andrew Teich. All rights reserved.
 //
 
-#import "FirstViewController.h"
+#import "SearchByLocationViewController.h"
 #import "SunlightFactory.h"
 #import "SunlightFactory.h"
-#import "TableViewController.h"
+#import "PoliticianTableViewController.h"
 #import "ColorScheme.h"
 #import "AttributionViewController.h"
 
-@interface FirstViewController (){
+@interface SearchByLocationViewController (){
     
     #define NUMBERS_ONLY @"1234567890"
     #define CHARACTER_LIMIT 5
@@ -21,7 +21,7 @@
     UITextField *zipCodeField;
     SunlightFactory *sunlightAPI;
     CLLocationManager *locationManager;
-    TableViewController *tableViewController;
+    PoliticianTableViewController *politicianTableVC;
     
     UIButton *zipCodeSearchButton;
     UIButton *locationSearchButton;
@@ -32,7 +32,7 @@
 
 @end
 
-@implementation FirstViewController
+@implementation SearchByLocationViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -268,11 +268,10 @@
 }
 
 -(void)openTableOfPoliticians:(NSMutableArray*)data{
-    tableViewController = [[TableViewController alloc] initWithStyle:UITableViewStylePlain];
-    [tableViewController hideSectionIndexBar:YES];
-    [self.navigationController pushViewController:tableViewController animated:YES];
-    
-    [tableViewController updateTableViewWithNewData:[tableViewController createPoliticiansFromDataArray:data]];
+    politicianTableVC = [[PoliticianTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    [politicianTableVC hideSectionIndexBar:YES];
+    [self.navigationController pushViewController:politicianTableVC animated:YES];
+    [politicianTableVC updateTableViewWithNewData:[politicianTableVC createPoliticiansFromDataArray:data]];
 }
 
 //Limit text field length to 5 numbers, no letters (Zip Code)

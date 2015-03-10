@@ -1,5 +1,5 @@
 //
-//  FirstViewController.h
+//  SearchByLocationViewController.h
 //  MyCongress
 //
 //  Created by Andrew Teich on 12/11/14.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface FirstViewController : UIViewController<UITextFieldDelegate, CLLocationManagerDelegate>
+@interface SearchByLocationViewController : UIViewController<UITextFieldDelegate, CLLocationManagerDelegate>
 
 -(IBAction)showAttributions:(id)sender;
 

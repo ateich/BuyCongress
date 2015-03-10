@@ -1,5 +1,5 @@
 //
-//  TableViewController.h
+//  PoliticianTableViewController.h
 //  MyCongress
 //
 //  Created by HackReactor on 1/5/15.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TableViewController : UITableViewController
+@interface PoliticianTableViewController : UITableViewController
 @property (nonatomic, strong) NSMutableArray *politicians;
 
 -(void)updateTableViewWithNewData:(NSMutableArray*)data;

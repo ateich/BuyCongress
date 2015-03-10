@@ -1,21 +1,21 @@
 //
-//  SecondViewController.m
+//  BrowseViewController.m
 //  MyCongress
 //
 //  Created by Andrew Teich on 12/11/14.
 //  Copyright (c) 2014 Andrew Teich. All rights reserved.
 //
 
-#import "SecondViewController.h"
+#import "BrowseViewController.h"
 #import "SunlightFactory.h"
-#import "TableViewController.h"
+#import "PoliticianTableViewController.h"
 #import "Politician.h"
 #import "AttributionViewController.h"
 #import "ColorScheme.h"
 
-@interface SecondViewController (){
+@interface BrowseViewController (){
     NSString *politicianDataChanged;
-    TableViewController *tableVC;
+    PoliticianTableViewController *tableVC;
     AttributionViewController *attributions;
     bool gatheredData;
     UIActivityIndicatorView *loading;
@@ -23,11 +23,11 @@
 
 @end
 
-@implementation SecondViewController
+@implementation BrowseViewController
 
 - (void) dealloc {
     //Stop listening for changes to Politician Data
-    NSLog(@"[SecondViewController.m] TEST: Stop Listening for Politician Data Changes");
+    NSLog(@"[BrowseViewController.m] TEST: Stop Listening for Politician Data Changes");
     [[NSNotificationCenter defaultCenter] removeObserver:self name:politicianDataChanged object:nil];
 }
 
@@ -47,7 +47,7 @@
     [sunlight getAllLawmakers];
     
     //Add table to display all politicians to the view
-    tableVC = [[TableViewController alloc] initWithStyle:UITableViewStylePlain];
+    tableVC = [[PoliticianTableViewController alloc] initWithStyle:UITableViewStylePlain];
     [tableVC useFadeInAnimation:YES];
     [self addChildViewController:tableVC];
     [tableVC didMoveToParentViewController:self];
@@ -89,7 +89,7 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    NSLog(@"[SecondViewController.m] TEST: DID RECEIVE MEMORY WARNING - Testing Event Listening");
+    NSLog(@"[BrowseViewController.m] TEST: DID RECEIVE MEMORY WARNING - Testing Event Listening");
 }
 
 -(IBAction)showAttributions:(id)sender{

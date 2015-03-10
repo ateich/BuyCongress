@@ -1,18 +1,18 @@
 //
-//  TableViewController.m
+//  PoliticianTableViewController.m
 //  MyCongress
 //
 //  Created by HackReactor on 1/5/15.
 //  Copyright (c) 2015 HackReactor. All rights reserved.
 //
 
-#import "TableViewController.h"
+#import "PoliticianTableViewController.h"
 #import "Politician.h"
 #import "PoliticianDetailViewController.h"
 #import "ColorScheme.h"
 #import "PoliticianTableViewCell.h"
 
-@interface TableViewController (){
+@interface PoliticianTableViewController (){
     PoliticianDetailViewController *detailViewController;
     NSMutableDictionary *alphabetLetterPositions;
     NSArray *alphabetLetters;
@@ -23,7 +23,7 @@
 
 @end
 
-@implementation TableViewController
+@implementation PoliticianTableViewController
 
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SunlightFactoryDidReceiveConnectionTimedOutForAllLawmakersNotification" object:nil];

@@ -15,8 +15,8 @@
 		9513E86C1A70847F00304A5F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9513E86B1A70847F00304A5F /* CoreLocation.framework */; };
 		952DCE6D1A3A678B0000DCF5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE6C1A3A678B0000DCF5 /* main.m */; };
 		952DCE701A3A678B0000DCF5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE6F1A3A678B0000DCF5 /* AppDelegate.m */; };
-		952DCE731A3A678B0000DCF5 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE721A3A678B0000DCF5 /* FirstViewController.m */; };
-		952DCE761A3A678B0000DCF5 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE751A3A678B0000DCF5 /* SecondViewController.m */; };
+		952DCE731A3A678B0000DCF5 /* SearchByLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE721A3A678B0000DCF5 /* SearchByLocationViewController.m */; };
+		952DCE761A3A678B0000DCF5 /* BrowseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 952DCE751A3A678B0000DCF5 /* BrowseViewController.m */; };
 		952DCE791A3A678B0000DCF5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 952DCE771A3A678B0000DCF5 /* Main.storyboard */; };
 		952DCE7B1A3A678B0000DCF5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 952DCE7A1A3A678B0000DCF5 /* Images.xcassets */; };
 		952DCE7E1A3A678B0000DCF5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 952DCE7C1A3A678B0000DCF5 /* LaunchScreen.xib */; };
@@ -953,7 +953,7 @@
 		95D4654C1A7216CF00E20411 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 95D4654B1A7216CF00E20411 /* MainInterface.storyboard */; };
 		95D465501A7216CF00E20411 /* Influence Explorer.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 95D465441A7216CF00E20411 /* Influence Explorer.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		95D4655B1A72F4ED00E20411 /* Tokens.m in Sources */ = {isa = PBXBuildFile; fileRef = 95D4655A1A72F4ED00E20411 /* Tokens.m */; };
-		95DECD881A5B2CF100111AEC /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95DECD871A5B2CF100111AEC /* TableViewController.m */; };
+		95DECD881A5B2CF100111AEC /* PoliticianTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95DECD871A5B2CF100111AEC /* PoliticianTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -997,10 +997,10 @@
 		952DCE6C1A3A678B0000DCF5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		952DCE6E1A3A678B0000DCF5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		952DCE6F1A3A678B0000DCF5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		952DCE711A3A678B0000DCF5 /* FirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
-		952DCE721A3A678B0000DCF5 /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
-		952DCE741A3A678B0000DCF5 /* SecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
-		952DCE751A3A678B0000DCF5 /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
+		952DCE711A3A678B0000DCF5 /* SearchByLocationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SearchByLocationViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		952DCE721A3A678B0000DCF5 /* SearchByLocationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SearchByLocationViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		952DCE741A3A678B0000DCF5 /* BrowseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BrowseViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		952DCE751A3A678B0000DCF5 /* BrowseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BrowseViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		952DCE781A3A678B0000DCF5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		952DCE7A1A3A678B0000DCF5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		952DCE7D1A3A678B0000DCF5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -1958,8 +1958,8 @@
 		95D465541A7217F400E20411 /* Influence Explorer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Influence Explorer.entitlements"; path = "Influence Explorer/Influence Explorer.entitlements"; sourceTree = "<group>"; };
 		95D465591A72F4ED00E20411 /* Tokens.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tokens.h; sourceTree = "<group>"; };
 		95D4655A1A72F4ED00E20411 /* Tokens.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tokens.m; sourceTree = "<group>"; };
-		95DECD861A5B2CF100111AEC /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
-		95DECD871A5B2CF100111AEC /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
+		95DECD861A5B2CF100111AEC /* PoliticianTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PoliticianTableViewController.h; sourceTree = "<group>"; };
+		95DECD871A5B2CF100111AEC /* PoliticianTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PoliticianTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2105,6 +2105,8 @@
 			children = (
 				952DCE771A3A678B0000DCF5 /* Main.storyboard */,
 				952DCE7C1A3A678B0000DCF5 /* LaunchScreen.xib */,
+				959A038A1AAE691600B0156A /* PoliticianTableViewCell.h */,
+				959A038B1AAE691600B0156A /* PoliticianTableViewCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2115,14 +2117,12 @@
 				957BACEF1AA0123C009362E6 /* AttributionViewController.h */,
 				957BACF01AA0123C009362E6 /* AttributionViewController.m */,
 				957BACEE1A9FFBAF009362E6 /* Influence Explorer Instructions */,
-				952DCE711A3A678B0000DCF5 /* FirstViewController.h */,
-				952DCE721A3A678B0000DCF5 /* FirstViewController.m */,
-				952DCE741A3A678B0000DCF5 /* SecondViewController.h */,
-				952DCE751A3A678B0000DCF5 /* SecondViewController.m */,
-				95DECD861A5B2CF100111AEC /* TableViewController.h */,
-				95DECD871A5B2CF100111AEC /* TableViewController.m */,
-				959A038A1AAE691600B0156A /* PoliticianTableViewCell.h */,
-				959A038B1AAE691600B0156A /* PoliticianTableViewCell.m */,
+				952DCE711A3A678B0000DCF5 /* SearchByLocationViewController.h */,
+				952DCE721A3A678B0000DCF5 /* SearchByLocationViewController.m */,
+				952DCE741A3A678B0000DCF5 /* BrowseViewController.h */,
+				952DCE751A3A678B0000DCF5 /* BrowseViewController.m */,
+				95DECD861A5B2CF100111AEC /* PoliticianTableViewController.h */,
+				95DECD871A5B2CF100111AEC /* PoliticianTableViewController.m */,
 				956F1D681A5CAE4900AAA14C /* PoliticianDetailViewController.h */,
 				956F1D691A5CAE4900AAA14C /* PoliticianDetailViewController.m */,
 			);
@@ -4210,15 +4210,15 @@
 				95D4655B1A72F4ED00E20411 /* Tokens.m in Sources */,
 				9548F68E1A5F3E6F00AC6565 /* ContactActionsFactory.m in Sources */,
 				959A038C1AAE691600B0156A /* PoliticianTableViewCell.m in Sources */,
-				952DCE761A3A678B0000DCF5 /* SecondViewController.m in Sources */,
+				952DCE761A3A678B0000DCF5 /* BrowseViewController.m in Sources */,
 				953F71C91A98130D00DAA47A /* ColorScheme.m in Sources */,
 				956F1D6A1A5CAE4900AAA14C /* PoliticianDetailViewController.m in Sources */,
 				957BACD61A9FAA42009362E6 /* InfluenceExplorerViewController.m in Sources */,
 				952DCE701A3A678B0000DCF5 /* AppDelegate.m in Sources */,
-				952DCE731A3A678B0000DCF5 /* FirstViewController.m in Sources */,
+				952DCE731A3A678B0000DCF5 /* SearchByLocationViewController.m in Sources */,
 				952DCE6D1A3A678B0000DCF5 /* main.m in Sources */,
 				9501750C1A73255600989F9D /* ReadabilityFactory.m in Sources */,
-				95DECD881A5B2CF100111AEC /* TableViewController.m in Sources */,
+				95DECD881A5B2CF100111AEC /* PoliticianTableViewController.m in Sources */,
 				9564E3311A5757ED0040F1D6 /* Politician.m in Sources */,
 				957BACF11AA0123C009362E6 /* AttributionViewController.m in Sources */,
 				957BACDD1A9FB0AF009362E6 /* PageViewController.m in Sources */,

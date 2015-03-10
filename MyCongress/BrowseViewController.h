@@ -1,5 +1,5 @@
 //
-//  SecondViewController.h
+//  BrowseViewController.h
 //  MyCongress
 //
 //  Created by Andrew Teich on 12/11/14.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SecondViewController : UIViewController
+@interface BrowseViewController : UIViewController
 
 -(IBAction)showAttributions:(id)sender;
 
