@@ -840,6 +840,7 @@
 		957BAD6B1AA13F1E009362E6 /* Z000018.png in Resources */ = {isa = PBXBuildFile; fileRef = 957BAD2F1AA13F1E009362E6 /* Z000018.png */; };
 		958DD7F11A9B02D800C633B1 /* location.png in Resources */ = {isa = PBXBuildFile; fileRef = 958DD7F01A9B02D800C633B1 /* location.png */; };
 		958E23411A757D51008C733F /* SunlightFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9564E3281A570A9A0040F1D6 /* SunlightFactory.m */; };
+		959A038C1AAE691600B0156A /* PoliticianTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 959A038B1AAE691600B0156A /* PoliticianTableViewCell.m */; };
 		959D4C0A1A858679006804F6 /* map-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = 959D48C21A858677006804F6 /* map-marker.png */; };
 		95C2F3731A9A45D600C7D05D /* MissingImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 95C2F3711A9A45D600C7D05D /* MissingImage.png */; };
 		95C2F3741A9A45D600C7D05D /* MissingImageInverted.png in Resources */ = {isa = PBXBuildFile; fileRef = 95C2F3721A9A45D600C7D05D /* MissingImageInverted.png */; };
@@ -1839,6 +1840,8 @@
 		957BAD2E1AA13F1E009362E6 /* Z000017.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Z000017.png; sourceTree = "<group>"; };
 		957BAD2F1AA13F1E009362E6 /* Z000018.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Z000018.png; sourceTree = "<group>"; };
 		958DD7F01A9B02D800C633B1 /* location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location.png; sourceTree = "<group>"; };
+		959A038A1AAE691600B0156A /* PoliticianTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PoliticianTableViewCell.h; sourceTree = "<group>"; };
+		959A038B1AAE691600B0156A /* PoliticianTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PoliticianTableViewCell.m; sourceTree = "<group>"; };
 		959D48C21A858677006804F6 /* map-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-marker.png"; sourceTree = "<group>"; };
 		95C2F3711A9A45D600C7D05D /* MissingImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MissingImage.png; sourceTree = "<group>"; };
 		95C2F3721A9A45D600C7D05D /* MissingImageInverted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MissingImageInverted.png; sourceTree = "<group>"; };
@@ -2118,6 +2121,8 @@
 				952DCE751A3A678B0000DCF5 /* SecondViewController.m */,
 				95DECD861A5B2CF100111AEC /* TableViewController.h */,
 				95DECD871A5B2CF100111AEC /* TableViewController.m */,
+				959A038A1AAE691600B0156A /* PoliticianTableViewCell.h */,
+				959A038B1AAE691600B0156A /* PoliticianTableViewCell.m */,
 				956F1D681A5CAE4900AAA14C /* PoliticianDetailViewController.h */,
 				956F1D691A5CAE4900AAA14C /* PoliticianDetailViewController.m */,
 			);
@@ -4204,6 +4209,7 @@
 				9564E3291A570A9A0040F1D6 /* SunlightFactory.m in Sources */,
 				95D4655B1A72F4ED00E20411 /* Tokens.m in Sources */,
 				9548F68E1A5F3E6F00AC6565 /* ContactActionsFactory.m in Sources */,
+				959A038C1AAE691600B0156A /* PoliticianTableViewCell.m in Sources */,
 				952DCE761A3A678B0000DCF5 /* SecondViewController.m in Sources */,
 				953F71C91A98130D00DAA47A /* ColorScheme.m in Sources */,
 				956F1D6A1A5CAE4900AAA14C /* PoliticianDetailViewController.m in Sources */,

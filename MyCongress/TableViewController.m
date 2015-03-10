@@ -10,6 +10,7 @@
 #import "Politician.h"
 #import "PoliticianDetailViewController.h"
 #import "ColorScheme.h"
+#import "PoliticianTableViewCell.h"
 
 @interface TableViewController (){
     PoliticianDetailViewController *detailViewController;
@@ -34,6 +35,8 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.politicians = [[NSMutableArray alloc] init];
     politicianDataRowsInSection = [[NSMutableArray alloc] init];
+    
+    [self.tableView registerClass:[PoliticianTableViewCell class] forCellReuseIdentifier:@"politicianTableViewCell"];
     
     [UITableView appearance].sectionIndexColor = [ColorScheme textColor];
     [UITableView appearance].sectionIndexBackgroundColor = [UIColor clearColor];
@@ -87,51 +90,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *cellIdentifier = [NSString stringWithFormat:@"Cell%ld%ld", (long)indexPath.section, (long)indexPath.row];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    if(cell == nil){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.backgroundColor = [UIColor clearColor];
-        
-        UIView *card = [[UIView alloc] init];
-        card.translatesAutoresizingMaskIntoConstraints = NO;
-        card.backgroundColor = [ColorScheme cardColor];
-        [cell addSubview:card];
-        
-        NSNumber *leftMargin = @15;
-        NSNumber *halfMargin = @([leftMargin intValue]/2);
-        NSNumber *quarterMargin = @([halfMargin intValue]/2);
-        
-        NSDictionary *views = NSDictionaryOfVariableBindings(card);
-        NSDictionary *metrics = @{@"leftMargin":leftMargin, @"topMargin":halfMargin, @"largeTopMargin":halfMargin, @"sideMargin":@10, @"quarterMargin":quarterMargin};
-        
-        [cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-largeTopMargin-[card]-0-|" options:0 metrics:metrics views:views]];
-        [cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[card]-leftMargin-|" options:0 metrics:metrics views:views]];
-        
-        Politician *thisPolitician = (Politician*)politicianDataRowsInSection[indexPath.section][indexPath.row];
-        
-        //Politician's Title and Name
-        UILabel *name = [[UILabel alloc] init];
-        name.translatesAutoresizingMaskIntoConstraints = NO;
-        name.text = [NSString stringWithFormat:@"%@. %@ %@", thisPolitician.title, thisPolitician.firstName, thisPolitician.lastName];
-        
-        
-        //Politician's Party and State
-        UILabel *state = [[UILabel alloc] init];
-        state.translatesAutoresizingMaskIntoConstraints = NO;
-        state.textColor = [UIColor grayColor];
-        state.text = [NSString stringWithFormat:@"%@ - %@", thisPolitician.party, thisPolitician.state];
-        
-        [card addSubview:name];
-        [card addSubview:state];
-        views = NSDictionaryOfVariableBindings(name, state);
-        
-        [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topMargin-[name]-quarterMargin-[state]-topMargin-|" options:0 metrics:metrics views:views]];
-        [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[name]-|" options:0 metrics:metrics views:views]];
-        [card addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-leftMargin-[state]-|" options:0 metrics:metrics views:views]];
-    }
-    
+    PoliticianTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"politicianTableViewCell" forIndexPath:indexPath];
+    Politician *thisPolitician = (Politician*)politicianDataRowsInSection[indexPath.section][indexPath.row];
+    [cell setPolitician:thisPolitician];    
     return cell;
 }
 
