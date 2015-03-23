@@ -10,7 +10,7 @@
 #import "Tokens.h"
 
 NSString *sunlightKey;
-NSString *sunlightURL = @"http://congress.api.sunlightfoundation.com";
+NSString *sunlightURL = @"https://congress.api.sunlightfoundation.com";
 NSString *transparencyURL = @"http://transparencydata.com/api/1.0";
 NSMutableDictionary *sectorCodes;
 NSMutableDictionary *asyncDataStore;
